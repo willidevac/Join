@@ -171,6 +171,7 @@ async function navigateToPage(page, params = {}) {
 function initPage(page) {
   if (page === "login") initLoginValidation();
   if (page === "signup") initSignupValidation();
+  if (page === "summary") initSummaryUser();
   if (page === "privacy-policy") initPrivacyLanguageSwitch();
 }
 
