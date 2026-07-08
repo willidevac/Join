@@ -29,11 +29,6 @@ function handleLogout() {
 }
 
 
-function protectPage() {
-  if (!getStoredUser()) {
-    navigateToPage('login');
-  }
-}
 
 
 function initSignupValidation() {
@@ -153,5 +148,3 @@ function getSignupButton() {
 function showSignupMessage(message) {
   document.getElementById('signupMessage').textContent = message;
 }
-
-
