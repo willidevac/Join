@@ -18,6 +18,8 @@ const routes = {
   summary: {
     title: "Join | Summary",
     template: "./components/html/pages/summary.html",
+    // Protected route: requires the temporary dummy user until Firebase/Auth is added.
+    protected: true,
   },
 };
 
@@ -44,7 +46,7 @@ async function initApp() {
 }
 
 async function renderCurrentPage(options = {}) {
-  const page = getValidPage();
+  const page = getAuthorizedPage();
   const route = routes[page];
   const response = await fetch(route.template);
 
@@ -75,6 +77,21 @@ function bindPageLinks() {
 function getValidPage() {
   const page = new URLSearchParams(window.location.search).get("page");
   return routes[page] ? page : "login";
+}
+
+function getAuthorizedPage() {
+  const page = getValidPage();
+  if (isProtectedPage(page) && !getStoredUser()) return redirectToLoginPage();
+  return page;
+}
+
+function isProtectedPage(page) {
+  return Boolean(routes[page].protected);
+}
+
+function redirectToLoginPage() {
+  window.history.replaceState({}, "", "?page=login");
+  return "login";
 }
 
 function handlePageLinkClick(event) {
@@ -125,7 +142,6 @@ function initPage(page) {
   if (page === "login") initLoginValidation();
   if (page === "signup") initSignupValidation();
   if (page === "privacy-policy") initPrivacyLanguageSwitch();
-  if (page === "summary") protectPage();
 }
 
 window.navigateToPage = navigateToPage;
