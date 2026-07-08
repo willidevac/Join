@@ -23,22 +23,59 @@ const routes = {
   },
 };
 
+const signupTransition = {
+  renderDelay: 240,
+  exitDelay: 600,
+  template: "./components/html/molecules/signup-transition-loader.html",
+};
+
+let pageTransitionRunning = false;
+
 document.addEventListener("DOMContentLoaded", initApp);
 window.addEventListener("popstate", () => renderCurrentPage());
 
 async function initApp() {
   document.addEventListener("click", handlePageLinkClick);
+
+  if (shouldStartWithSignupTransition()) {
+    await renderSignupWithTransition();
+    return;
+  }
+
   await renderCurrentPage();
 }
 
-async function renderCurrentPage() {
+async function renderCurrentPage(options = {}) {
   const page = getAuthorizedPage();
   const route = routes[page];
   const response = await fetch(route.template);
 
   document.title = route.title;
-  document.getElementById("app").innerHTML = await response.text();
+  renderPageContent(await response.text(), options.animate);
   initPage(page);
+}
+
+function renderPageContent(content, shouldAnimate) {
+  const app = document.getElementById("app");
+  const animatePage = Boolean(shouldAnimate);
+
+  app.classList.toggle("app-view--entering", animatePage);
+  app.classList.remove("app-view--visible");
+  app.innerHTML = content;
+  bindPageLinks();
+
+  if (animatePage) {
+    requestAnimationFrame(() => {
+      app.classList.add("app-view--visible");
+      app.classList.remove("app-view--entering");
+    });
+  }
+}
+
+function bindPageLinks() {
+  document.querySelectorAll("[data-page]").forEach((link) => {
+    link.addEventListener("click", handlePageLinkClick);
+  });
 }
 
 function getValidPage() {
@@ -62,7 +99,10 @@ function redirectToLoginPage() {
 }
 
 function handlePageLinkClick(event) {
-  const link = event.target.closest("[data-page]");
+  const target = event.target.nodeType === Node.ELEMENT_NODE
+    ? event.target
+    : event.target.parentElement;
+  const link = target.closest("[data-page]");
 
   if (!link) {
     return;
@@ -73,6 +113,10 @@ function handlePageLinkClick(event) {
 }
 
 function getLinkParams(link) {
+  if (link.dataset.transition === "signup") {
+    return { transition: "signup" };
+  }
+
   if (link.dataset.privacyOpened !== "true") {
     return {};
   }
@@ -82,9 +126,20 @@ function getLinkParams(link) {
 
 async function navigateToPage(page, params = {}) {
   const query = new URLSearchParams({ page, ...params });
+  const shouldAnimateSignup = page === "signup" && getValidPage() !== "signup";
+
+  if (pageTransitionRunning) {
+    return;
+  }
+
+  if (shouldAnimateSignup) {
+    window.history.pushState({}, "", `?${query.toString()}`);
+    await renderSignupWithTransition();
+    return;
+  }
 
   window.history.pushState({}, "", `?${query.toString()}`);
-  await renderCurrentPage();
+  await renderCurrentPage({ animate: shouldAnimateSignup });
 }
 
 function initPage(page) {
@@ -94,3 +149,63 @@ function initPage(page) {
 }
 
 window.navigateToPage = navigateToPage;
+
+async function renderSignupWithTransition() {
+  pageTransitionRunning = true;
+  const loader = await createSignupTransitionLoader();
+
+  setTransitionOverflow(true);
+  document.body.append(loader);
+  requestAnimationFrame(() => loader.classList.add("is-active"));
+
+  try {
+    await wait(signupTransition.renderDelay);
+    await renderCurrentPage({ animate: true });
+    await wait(signupTransition.exitDelay);
+  } finally {
+    removeTransitionLoader(loader);
+    cleanSignupTransitionParam();
+    pageTransitionRunning = false;
+  }
+}
+
+function shouldStartWithSignupTransition() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("page") === "signup" && params.get("transition") === "signup";
+}
+
+function cleanSignupTransitionParam() {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("transition") !== "signup") {
+    return;
+  }
+
+  params.delete("transition");
+  window.history.replaceState({}, "", `?${params.toString()}`);
+}
+
+function removeTransitionLoader(loader) {
+  loader.classList.add("is-leaving");
+  setTimeout(() => {
+    loader.remove();
+    setTransitionOverflow(false);
+  }, 180);
+}
+
+function setTransitionOverflow(isLocked) {
+  document.documentElement.classList.toggle("is-page-transitioning", isLocked);
+  document.body.classList.toggle("is-page-transitioning", isLocked);
+}
+
+async function createSignupTransitionLoader() {
+  const response = await fetch(signupTransition.template);
+  const wrapper = document.createElement("div");
+
+  wrapper.innerHTML = await response.text();
+  return wrapper.firstElementChild;
+}
+
+function wait(duration) {
+  return new Promise((resolve) => setTimeout(resolve, duration));
+}

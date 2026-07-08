@@ -1,5 +1,6 @@
 @import url("./components/css/molecules/buttons.css");
 @import url("./components/css/molecules/language-switch.css");
+@import url("./components/css/molecules/page-transition.css");
 @import url("./components/css/pages/login.css");
 @import url("./components/css/pages/signup.css");
 @import url("./components/css/pages/privacy-policy.css");
