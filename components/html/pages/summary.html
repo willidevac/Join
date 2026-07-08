@@ -1,8 +1,144 @@
-<main class="app">
-  <section class="start-screen">
-    <h1>Summary</h1>
-    <p id="summaryGreeting">Welcome back.</p>
-    <p id="summaryUserType">Signed in user is being checked.</p>
-    <button type="button" onclick="handleLogout()">Log out</button>
+<main class="summary-shell">
+  <aside class="summary-sidebar" aria-label="Main navigation">
+    <a
+      class="summary-sidebar__logo"
+      href="?page=summary"
+      data-page="summary"
+      aria-label="Go to summary"
+    >
+      <img src="./components/assets/icons/Join logo vector.svg" alt="" />
+    </a>
+
+    <nav class="summary-nav">
+      <a
+        class="summary-nav__item summary-nav__item--active"
+        href="?page=summary"
+        data-page="summary"
+      >
+        <span class="summary-nav__icon" aria-hidden="true"
+          ><img src="./components/assets/icons/summary_icons.svg" alt=""
+        /></span>
+        <span>Summary</span>
+      </a>
+      <button class="summary-nav__item" type="button" disabled>
+        <span class="summary-nav__icon" aria-hidden="true"
+          ><img src="./components/assets/icons/add_task_icons.svg" alt=""
+        /></span>
+        <span>Add Task</span>
+      </button>
+      <button class="summary-nav__item" type="button" disabled>
+        <span class="summary-nav__icon" aria-hidden="true"
+          ><img src="./components/assets/icons/board_icons.svg" alt=""
+        /></span>
+        <span>Board</span>
+      </button>
+      <button class="summary-nav__item" type="button" disabled>
+        <span class="summary-nav__icon" aria-hidden="true"
+          ><img src="./components/assets/icons/contacts_icons.svg" alt=""
+        /></span>
+        <span>Contacts</span>
+      </button>
+    </nav>
+
+    <footer class="summary-sidebar__footer">
+      <a href="?page=privacy-policy" data-page="privacy-policy"
+        >Privacy Policy</a
+      >
+      <a href="?page=legal-notice" data-page="legal-notice">Legal notice</a>
+    </footer>
+  </aside>
+
+  <section class="summary-main">
+    <header class="summary-topbar">
+      <p>Kanban Project Management Tool</p>
+      <div class="summary-user-actions">
+        <button class="summary-help" type="button" aria-label="Help">?</button>
+        <button
+          class="summary-avatar"
+          type="button"
+          onclick="handleLogout()"
+          aria-label="Log out"
+        >
+          <span id="summaryUserInitials">?</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="summary-content" aria-labelledby="summaryTitle">
+      <div class="summary-heading">
+        <h1 id="summaryTitle">Join 360</h1>
+        <p>Key Metrics at a Glance</p>
+      </div>
+
+      <div class="summary-dashboard">
+        <section class="summary-metrics" aria-label="Task overview">
+          <!-- Dummy metrics: these values are placeholders until real task data exists. -->
+          <div class="summary-card summary-card--small">
+            <div class="summary-card__main">
+              <span class="summary-card__icon" aria-hidden="true">
+                <img
+                  src="./components/assets/icons/to_do_pen_icons.svg"
+                  alt=""
+                />
+              </span>
+              <div class="summary-card__text">
+                <strong>1</strong>
+                <span>To-do</span>
+              </div>
+            </div>
+          </div>
+          <div class="summary-card summary-card--small">
+            <div class="summary-card__main">
+              <span class="summary-card__icon" aria-hidden="true">
+                <img
+                  src="./components/assets/icons/check_done_icons.svg"
+                  alt=""
+                />
+              </span>
+              <div class="summary-card__text">
+                <strong>1</strong>
+                <span>Done</span>
+              </div>
+            </div>
+          </div>
+          <div class="summary-card summary-card--urgent">
+            <div class="summary-card__main">
+              <span
+                class="summary-card__icon summary-card__icon--urgent"
+                aria-hidden="true"
+              >
+                <img src="./components/assets/icons/urgent_icons.svg" alt="" />
+              </span>
+              <div class="summary-card__text">
+                <strong>1</strong>
+                <span>Urgent</span>
+              </div>
+            </div>
+            <div class="summary-deadline">
+              <strong>October 16, 2022</strong>
+              <span>Upcoming Deadline</span>
+            </div>
+          </div>
+          <div class="summary-card summary-card--count">
+            <strong>5</strong>
+            <span>Tasks in Board</span>
+          </div>
+          <div class="summary-card summary-card--count">
+            <strong>2</strong>
+            <span>Tasks in Progress</span>
+          </div>
+          <div class="summary-card summary-card--count">
+            <strong>2</strong>
+            <span>Awaiting Feedback</span>
+          </div>
+        </section>
+
+        <section class="summary-greeting" aria-label="Signed in user">
+          <p id="summaryGreetingTime">Good morning,</p>
+          <h2 id="summaryGreeting">Guest</h2>
+          <p id="summaryUserType">Signed in user is being checked.</p>
+        </section>
+      </div>
+    </section>
   </section>
 </main>

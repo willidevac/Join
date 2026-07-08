@@ -4,6 +4,7 @@
 @import url("./components/css/pages/login.css");
 @import url("./components/css/pages/signup.css");
 @import url("./components/css/pages/privacy-policy.css");
+@import url("./components/css/pages/summary.css");
 
 :root {
   --color-background: #f7f8fa;

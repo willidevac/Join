@@ -5,15 +5,28 @@ function initSummaryUser() {
   const user = getStoredUser();
   if (!user) return;
 
-  setSummaryText("summaryGreeting", getSummaryGreeting(user));
+  setSummaryText("summaryGreeting", getSummaryDisplayName(user));
   setSummaryText("summaryUserType", getSummaryUserTypeText(user));
+  setSummaryText("summaryUserInitials", getSummaryInitials(user));
 }
 
 /**
- * Builds the greeting text from the stored Firebase or guest user.
+ * Returns the display name for the summary greeting.
  */
-function getSummaryGreeting(user) {
-  return `Welcome back, ${user.name}.`;
+function getSummaryDisplayName(user) {
+  return user.name || "Guest";
+}
+
+/**
+ * Builds short initials for the user button in the header.
+ */
+function getSummaryInitials(user) {
+  return getSummaryDisplayName(user)
+    .split(" ")
+    .map((namePart) => namePart.charAt(0))
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 }
 
 /**
