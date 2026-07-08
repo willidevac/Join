@@ -44,6 +44,7 @@ function protectPage() {
 function initSignupValidation() {
   const form = document.getElementById('signupForm');
   if (!form) return;
+  rememberPrivacyReturn();
   form.addEventListener('input', updateSignupButton);
   getPrivacyLink().addEventListener('click', rememberPrivacyOpened);
   getPrivacyCheckbox().addEventListener('change', updateSignupButton);
@@ -53,6 +54,15 @@ function initSignupValidation() {
 
 function rememberPrivacyOpened() {
   sessionStorage.setItem('joinPrivacyOpened', 'true');
+}
+
+
+function rememberPrivacyReturn() {
+  if (new URLSearchParams(window.location.search).get('privacy') !== 'opened') {
+    return;
+  }
+  rememberPrivacyOpened();
+  window.history.replaceState({}, '', window.location.pathname);
 }
 
 
