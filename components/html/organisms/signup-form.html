@@ -1,0 +1,82 @@
+<form class="auth-form" data-component="signup-form" id="signupForm" novalidate>
+  <label class="form-field" data-component="auth-form-field" for="signupName">
+    <span class="form-field__label">Name</span>
+    <input
+      class="form-field__input"
+      id="signupName"
+      name="name"
+      type="text"
+      placeholder="Name"
+      autocomplete="name"
+    />
+    <span class="form-field__icon" data-icon="user" aria-hidden="true"></span>
+  </label>
+
+  <label class="form-field" data-component="auth-form-field" for="signupEmail">
+    <span class="form-field__label">Email</span>
+    <input
+      class="form-field__input"
+      id="signupEmail"
+      name="email"
+      type="email"
+      placeholder="Email"
+      autocomplete="email"
+    />
+    <span class="form-field__icon" data-icon="mail" aria-hidden="true"></span>
+  </label>
+
+  <label class="form-field" data-component="auth-form-field" for="signupPassword">
+    <span class="form-field__label">Password</span>
+    <input
+      class="form-field__input"
+      id="signupPassword"
+      name="password"
+      type="password"
+      placeholder="Password"
+      autocomplete="new-password"
+    />
+    <span class="form-field__icon" data-icon="lock" aria-hidden="true"></span>
+  </label>
+
+  <label
+    class="form-field"
+    data-component="auth-form-field"
+    for="signupConfirmPassword"
+  >
+    <span class="form-field__label">Confirm Password</span>
+    <input
+      class="form-field__input"
+      id="signupConfirmPassword"
+      name="confirmPassword"
+      type="password"
+      placeholder="Confirm Password"
+      autocomplete="new-password"
+    />
+    <span class="form-field__icon" data-icon="lock" aria-hidden="true"></span>
+  </label>
+
+  <div class="privacy-consent" data-component="privacy-consent">
+    <input
+      class="privacy-consent__checkbox"
+      id="privacyAccepted"
+      name="privacyAccepted"
+      type="checkbox"
+      disabled
+      aria-describedby="privacyConsentHint"
+    />
+    <label class="privacy-consent__label" for="privacyAccepted">
+      I accept the
+      <a class="privacy-consent__link" id="privacyPolicyLink" href="./privacy-policy.html">
+        Privacy policy
+      </a>
+    </label>
+  </div>
+
+  <p class="auth-form__message" id="privacyConsentHint">
+    Open the Privacy policy before accepting it.
+  </p>
+
+  <button class="auth-form__submit" data-component="auth-submit-button" type="submit" disabled>
+    Sign up
+  </button>
+</form>

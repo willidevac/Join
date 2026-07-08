@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in | Join</title>
+    <link rel="stylesheet" href="../../../base.css" />
+</head>
+<body>
+    <main class="auth-page auth-page--login">
+        <a class="auth-logo" href="../../../index.html" aria-label="Go to start page">
+            <span class="auth-logo__mark" aria-hidden="true">J</span>
+            <span class="auth-logo__text" aria-hidden="true">OIN</span>
+        </a>
+
+        <div class="auth-signup-hint">
+            <span>Not a Join user?</span>
+            <a href="./signup.html" class="auth-signup-hint__button">Sign up</a>
+        </div>
+
+        <section class="auth-card" aria-labelledby="login-title">
+            <h1 class="auth-card__title" id="login-title">Log in</h1>
+
+            <form class="auth-form" id="loginForm" novalidate>
+                <label class="form-field" for="loginEmail">
+                    <span class="form-field__label">Email</span>
+                    <input
+                        class="form-field__input"
+                        id="loginEmail"
+                        name="email"
+                        type="email"
+                        placeholder="Email"
+                        autocomplete="email"
+                    />
+                    <span
+                        class="form-field__icon"
+                        data-icon="mail"
+                        aria-hidden="true"
+                    ></span>
+                </label>
+
+                <label class="form-field" for="loginPassword">
+                    <span class="form-field__label">Password</span>
+                    <input
+                        class="form-field__input"
+                        id="loginPassword"
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                    />
+                    <span
+                        class="form-field__icon"
+                        data-icon="lock"
+                        aria-hidden="true"
+                    ></span>
+                </label>
+
+                <div class="auth-form__actions">
+                    <button class="auth-form__submit" type="submit">
+                        Log in
+                    </button>
+                    <button
+                        class="auth-form__guest"
+                        id="guestLoginButton"
+                        type="button"
+                    >
+                        Guest Log in
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <footer class="auth-footer">
+            <a href="./privacy-policy.html">Privacy Policy</a>
+            <a href="./legal-notice.html">Legal notice</a>
+        </footer>
+    </main>
+</body>
+</html>
