@@ -37,7 +37,7 @@ window.addEventListener("popstate", () => renderCurrentPage());
 async function initApp() {
   document.addEventListener("click", handlePageLinkClick);
 
-  if (shouldStartWithSignupTransition()) {
+  if (shouldStartWithSignupTransition() || shouldStartWithLoginTransition()) {
     await renderSignupWithTransition();
     return;
   }
@@ -89,10 +89,10 @@ function getValidPage() {
  */
 function getAuthorizedPage() {
   const page = getValidPage();
-  if (isProtectedPage(page) && !isUserAuthenticated()) return redirectToLoginPage();
+  if (isProtectedPage(page) && !isUserAuthenticated())
+    return redirectToLoginPage();
   return page;
 }
-
 
 /**
  * Checks the user object synchronized from Firebase into localStorage.
@@ -100,7 +100,6 @@ function getAuthorizedPage() {
 function isUserAuthenticated() {
   return Boolean(getStoredUser());
 }
-
 
 /**
  * Waits for Firebase Auth before protected routes are rendered.
@@ -125,9 +124,10 @@ function redirectToLoginPage() {
 }
 
 function handlePageLinkClick(event) {
-  const target = event.target.nodeType === Node.ELEMENT_NODE
-    ? event.target
-    : event.target.parentElement;
+  const target =
+    event.target.nodeType === Node.ELEMENT_NODE
+      ? event.target
+      : event.target.parentElement;
   const link = target.closest("[data-page]");
 
   if (!link) {
@@ -197,7 +197,16 @@ async function renderSignupWithTransition() {
 
 function shouldStartWithSignupTransition() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("page") === "signup" && params.get("transition") === "signup";
+  return (
+    params.get("page") === "signup" && params.get("transition") === "signup"
+  );
+}
+
+/**
+ * Tells whether the intro transition should run for a fresh login page load.
+ */
+function shouldStartWithLoginTransition() {
+  return getValidPage() === "login";
 }
 
 function cleanSignupTransitionParam() {
