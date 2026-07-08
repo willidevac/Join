@@ -21,6 +21,12 @@ const routes = {
     // Protected route: requires a Firebase or fallback user before rendering.
     protected: true,
   },
+  "add-task": {
+    title: "Join | Add Task",
+    template: "./components/html/pages/add-task.html",
+    // Protected route: task creation is only available after login.
+    protected: true,
+  },
 };
 
 const signupTransition = {
@@ -171,7 +177,8 @@ async function navigateToPage(page, params = {}) {
 function initPage(page) {
   if (page === "login") initLoginValidation();
   if (page === "signup") initSignupValidation();
-  if (page === "summary") initSummaryUser();
+  if (page === "summary" || page === "add-task") initSummaryUser();
+  if (page === "add-task") initAddTaskValidation();
   if (page === "privacy-policy") initPrivacyLanguageSwitch();
 }
 

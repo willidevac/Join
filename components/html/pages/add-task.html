@@ -1,0 +1,141 @@
+<main class="summary-shell add-task-shell">
+  <aside class="summary-sidebar" aria-label="Main navigation">
+    <a
+      class="summary-sidebar__logo"
+      href="?page=summary"
+      data-page="summary"
+      aria-label="Go to summary"
+    >
+      <img src="./components/assets/icons/Join logo vector.svg" alt="" />
+    </a>
+
+    <nav class="summary-nav">
+      <a class="summary-nav__item" href="?page=summary" data-page="summary">
+        <span class="summary-nav__icon" aria-hidden="true">
+          <img src="./components/assets/icons/summary_icons.svg" alt="" />
+        </span>
+        <span>Summary</span>
+      </a>
+      <a
+        class="summary-nav__item summary-nav__item--active"
+        href="?page=add-task"
+        data-page="add-task"
+      >
+        <span class="summary-nav__icon" aria-hidden="true">
+          <img src="./components/assets/icons/add_task_icons.svg" alt="" />
+        </span>
+        <span>Add Task</span>
+      </a>
+      <button class="summary-nav__item" type="button" disabled>
+        <span class="summary-nav__icon" aria-hidden="true">
+          <img src="./components/assets/icons/board_icons.svg" alt="" />
+        </span>
+        <span>Board</span>
+      </button>
+      <button class="summary-nav__item" type="button" disabled>
+        <span class="summary-nav__icon" aria-hidden="true">
+          <img src="./components/assets/icons/contacts_icons.svg" alt="" />
+        </span>
+        <span>Contacts</span>
+      </button>
+    </nav>
+
+    <footer class="summary-sidebar__footer">
+      <a href="?page=privacy-policy" data-page="privacy-policy">Privacy Policy</a>
+      <a href="?page=legal-notice" data-page="legal-notice">Legal notice</a>
+    </footer>
+  </aside>
+
+  <section class="summary-main">
+    <header class="summary-topbar">
+      <p>Kanban Project Management Tool</p>
+      <div class="summary-user-actions">
+        <button class="summary-help" type="button" aria-label="Help">?</button>
+        <button class="summary-avatar" type="button" onclick="handleLogout()" aria-label="Log out">
+          <span id="summaryUserInitials">?</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="add-task-content" aria-labelledby="addTaskTitle">
+      <h1 id="addTaskTitle">Add Task</h1>
+
+      <form class="add-task-form" id="addTaskForm" aria-label="Add task form">
+        <!-- Dummy form structure: saving tasks will be implemented in a later step. -->
+        <div class="add-task-form__fields">
+          <div class="add-task-form__column">
+            <label class="add-task-field" for="taskTitle">
+              <span>Title<strong>*</strong></span>
+              <input id="taskTitle" name="taskTitle" type="text" placeholder="Enter a title" />
+            </label>
+
+            <label class="add-task-field" for="taskDescription">
+              <span>Description</span>
+              <textarea id="taskDescription" name="taskDescription" rows="5" placeholder="Enter a Description"></textarea>
+            </label>
+
+            <label class="add-task-field" for="taskDueDate">
+              <span>Due date<strong>*</strong></span>
+              <span class="add-task-date-input">
+                <input id="taskDueDate" name="taskDueDate" type="text" placeholder="dd/mm/yyyy" />
+                <img src="./components/assets/icons/event_icons.svg" alt="" aria-hidden="true" />
+              </span>
+            </label>
+          </div>
+
+          <div class="add-task-form__divider" aria-hidden="true"></div>
+
+          <div class="add-task-form__column">
+            <fieldset class="add-task-priority">
+              <legend>Priority</legend>
+              <div class="add-task-priority__options">
+                <label class="add-task-priority__option add-task-priority__option--urgent">
+                  <input type="radio" name="taskPriority" value="urgent" />
+                  <span>Urgent <img src="./components/assets/icons/red_arrow_up.svg" alt="" aria-hidden="true" /></span>
+                </label>
+                <label class="add-task-priority__option add-task-priority__option--medium">
+                  <input type="radio" name="taskPriority" value="medium" checked />
+                  <span>Medium <img src="./components/assets/icons/medium_even.svg" alt="" aria-hidden="true" /></span>
+                </label>
+                <label class="add-task-priority__option add-task-priority__option--low">
+                  <input type="radio" name="taskPriority" value="low" />
+                  <span>Low <img src="./components/assets/icons/green_arrow_down.svg" alt="" aria-hidden="true" /></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <label class="add-task-field" for="taskAssignees">
+              <span>Assigned to</span>
+              <select id="taskAssignees" name="taskAssignees">
+                <option value="">Select contacts to assign</option>
+              </select>
+            </label>
+
+            <label class="add-task-field" for="taskCategory">
+              <span>Category<strong>*</strong></span>
+              <select id="taskCategory" name="taskCategory">
+                <option value="">Select task category</option>
+                <option value="technical-task">Technical Task</option>
+                <option value="user-story">User Story</option>
+              </select>
+            </label>
+
+            <label class="add-task-field" for="taskSubtasks">
+              <span>Subtasks</span>
+              <input id="taskSubtasks" name="taskSubtasks" type="text" placeholder="Add new subtask" />
+            </label>
+          </div>
+        </div>
+
+        <div class="add-task-form__footer">
+          <p><strong>*</strong>This field is required</p>
+          <div class="add-task-form__actions">
+            <button class="add-task-button add-task-button--secondary" type="reset">Clear x</button>
+            <button class="add-task-button add-task-button--primary" id="createTaskButton" type="submit" disabled>Create Task +</button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </section>
+</main>
+
