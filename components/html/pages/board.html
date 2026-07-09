@@ -126,6 +126,10 @@
                 <dd id="boardTaskDetailPriority">-</dd>
               </div>
               <div>
+                <dt>Status</dt>
+                <dd id="boardTaskDetailStatus">-</dd>
+              </div>
+              <div>
                 <dt>Assigned to</dt>
                 <dd id="boardTaskDetailAssignee">-</dd>
               </div>
@@ -170,6 +174,15 @@
                 <option value="urgent">Urgent</option>
                 <option value="medium">Medium</option>
                 <option value="low">Low</option>
+              </select>
+            </label>
+            <label>
+              <span>Status</span>
+              <select id="boardTaskEditStatus" required>
+                <option value="todo">To do</option>
+                <option value="in-progress">In progress</option>
+                <option value="feedback">Await feedback</option>
+                <option value="done">Done</option>
               </select>
             </label>
             <label>

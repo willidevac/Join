@@ -74,7 +74,7 @@
   display: block;
   padding: 8px 16px;
   font-size: 24px;
-  border-bottom: 1px solid var(--color-border)
+  border-bottom: 1px solid var(--color-border);
 }
 
 .contacts-group-list {
@@ -119,6 +119,45 @@
   color: var(--color-accent-link);
   font-size: 16px;
 }
+
+.contacts-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin: 40px 0 32px;
+}
+
+.contacts-detail-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--color-white);
+  font-size: 48px;
+  font-weight: 500;
+  border: 3px solid var(--color-white);
+  flex-shrink: 0;
+}
+
+.contacts-detail-name {
+  margin: 0;
+  font-size: 48px;
+  font-weight: 500;
+}
+
+.contacts-detail-subheading {
+  font-size: 20px;
+  font-weight: 400;
+  margin: 24px 0;
+}
+
+.contacts-detail-label {
+  font-weight: 700;
+  margin: 16px 0 8px;
+}
+
+#contactDetail a { color: var(--color-accent-link); text-decoration: none; }
 
 @media (max-width: 900px) {
   .contacts-content {

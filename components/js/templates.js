@@ -1,6 +1,6 @@
 function getContactItemTemplate(contact) {
   return `
-  <li class="contacts-item">
+  <li class="contacts-item" data-contact-id="${contact.id}">
     <span
       class="contacts-item-avatar"
       style="background-color: ${contact.color}"

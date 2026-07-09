@@ -108,6 +108,7 @@ function fillBoardTaskDetail(task) {
   setBoardDetailText("boardTaskDetailDescription", task.description || "No description");
   setBoardDetailText("boardTaskDetailDueDate", task.dueDate || "-");
   setBoardDetailText("boardTaskDetailPriority", task.priority || "-");
+  setBoardDetailText("boardTaskDetailStatus", formatBoardStatus(task.status));
   setBoardDetailText("boardTaskDetailAssignee", task.assignedTo || "Not assigned");
   setBoardDetailText("boardTaskDetailSubtasks", formatBoardSubtasks(task.subtasks));
 }
@@ -132,6 +133,7 @@ function fillBoardTaskEditForm(task) {
   getBoardEditField("DueDate").value = task.dueDate || "";
   getBoardEditField("Category").value = task.category || "user-story";
   getBoardEditField("Priority").value = task.priority || "medium";
+  getBoardEditField("Status").value = task.status || "todo";
   getBoardEditField("Assignee").value = task.assignedTo || "";
   getBoardEditField("Subtasks").value = formatBoardSubtasksForEdit(task.subtasks);
 }
@@ -162,6 +164,7 @@ function getBoardEditedTask(task) {
     dueDate: getBoardEditField("DueDate").value,
     category: getBoardEditField("Category").value,
     priority: getBoardEditField("Priority").value,
+    status: getBoardEditField("Status").value,
     assignedTo: getBoardEditField("Assignee").value.trim(),
     subtasks: getBoardEditedSubtasks(),
   };

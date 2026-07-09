@@ -11,6 +11,7 @@ function initContacts() {
   contactsList.innerHTML = Object.keys(groups)
   .map((letter) => getContactGroupTemplate(letter, groups[letter]))
   .join("");
+  initContactDetails(contacts);
 }
 
 /**
@@ -49,3 +50,38 @@ function groupContactsByLetter(contacts) {
   }
   return groups;
 }
+
+/**
+ * Adds click handling to every contact list entry for opening its details.
+ */
+function initContactDetails(contacts) {
+  document.querySelectorAll(".contacts-item").forEach((item) => {
+    item.addEventListener("click", () => openContactDetail(item.dataset.contactId, contacts));  
+  });
+}
+
+/**
+ * Writes the contact data into the static detail view elements.
+ */
+function fillContactDetail(contact) {
+  const avatar = document.getElementById("contactDetailAvatar");
+  avatar.textContent = getContactInitials(contact.name);
+  avatar.style.backgroundColor = contact.color;
+  document.getElementById("contactDetailName").textContent = contact.name;      
+  document.getElementById("contactDetailPhone").textContent = contact.phone;    
+  const email = document.getElementById("contactDetailEmail");                  
+  email.textContent = contact.email;                                            
+  email.href = "mailto:" + contact.email;                                       
+}
+
+/**
+ * Looks up the clicked contact and shows its filled detail view.
+ */
+function openContactDetail(contactId, contacts) {
+  const contact = contacts.find((currentContact) => currentContact.id === contactId);
+  if (!contact) return;
+  fillContactDetail(contact);
+  document.getElementById("contactDetail").hidden = false;
+}
+
+
