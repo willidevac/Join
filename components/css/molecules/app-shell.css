@@ -21,7 +21,6 @@
   padding: 32px;
 }
 
-
 .summary-nav {
   display: grid;
   gap: 2px;
@@ -38,11 +37,16 @@
   color: var(--color-white);
   text-decoration: none;
   text-align: left;
-  cursor: default;
+  cursor: pointer;
+  transition: background-color 120ms ease;
 }
 
 .summary-nav__item--active {
   background: var(--color-primary-dark);
+}
+
+.summary-nav__item:not(.summary-nav__item--active):hover {
+  background: var(--color-hover-subtle);
 }
 
 .summary-nav__item:disabled {
@@ -55,7 +59,6 @@
   display: inline-grid;
   place-items: center;
 }
-
 
 .summary-sidebar__footer {
   margin-top: auto;
