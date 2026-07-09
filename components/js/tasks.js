@@ -32,3 +32,12 @@ function updateStoredTask(updatedTask) {
   const updatedTasks = tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task));
   saveStoredTasks(updatedTasks);
 }
+
+/**
+ * Removes one task from the locally saved task list.
+ */
+function deleteStoredTask(taskId) {
+  const tasks = getStoredTasks();
+  const remainingTasks = tasks.filter((task) => task.id !== taskId);
+  saveStoredTasks(remainingTasks);
+}

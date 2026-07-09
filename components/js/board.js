@@ -65,6 +65,7 @@ function initBoardDetailControls() {
   overlay.addEventListener("click", handleBoardDetailBackdrop);
   document.addEventListener("keydown", handleBoardDetailEscape);
   getBoardEditButton().addEventListener("click", showBoardEditMode);
+  getBoardDeleteButton().addEventListener("click", handleBoardDeleteClick);
   getBoardEditCancelButton().addEventListener("click", showBoardDetailViewMode);
   getBoardEditForm().addEventListener("submit", handleBoardEditSubmit);
   overlay.dataset.eventsReady = "true";
@@ -107,6 +108,7 @@ function fillBoardTaskDetail(task) {
   setBoardDetailText("boardTaskDetailDescription", task.description || "No description");
   setBoardDetailText("boardTaskDetailDueDate", task.dueDate || "-");
   setBoardDetailText("boardTaskDetailPriority", task.priority || "-");
+  setBoardDetailText("boardTaskDetailStatus", formatBoardStatus(task.status));
   setBoardDetailText("boardTaskDetailAssignee", task.assignedTo || "Not assigned");
   setBoardDetailText("boardTaskDetailSubtasks", formatBoardSubtasks(task.subtasks));
 }
@@ -131,7 +133,17 @@ function fillBoardTaskEditForm(task) {
   getBoardEditField("DueDate").value = task.dueDate || "";
   getBoardEditField("Category").value = task.category || "user-story";
   getBoardEditField("Priority").value = task.priority || "medium";
+  getBoardEditField("Status").value = task.status || "todo";
+  getBoardEditField("Assignee").value = task.assignedTo || "";
   getBoardEditField("Subtasks").value = formatBoardSubtasksForEdit(task.subtasks);
+}
+
+function handleBoardDeleteClick() {
+  if (!activeBoardTaskId) return;
+
+  deleteStoredTask(activeBoardTaskId);
+  closeBoardTaskDetail();
+  initBoardTasks();
 }
 
 function handleBoardEditSubmit(event) {
@@ -152,6 +164,8 @@ function getBoardEditedTask(task) {
     dueDate: getBoardEditField("DueDate").value,
     category: getBoardEditField("Category").value,
     priority: getBoardEditField("Priority").value,
+    status: getBoardEditField("Status").value,
+    assignedTo: getBoardEditField("Assignee").value.trim(),
     subtasks: getBoardEditedSubtasks(),
   };
 }
@@ -203,6 +217,10 @@ function getBoardDetailView() {
 
 function getBoardEditButton() {
   return document.getElementById("boardTaskEditButton");
+}
+
+function getBoardDeleteButton() {
+  return document.getElementById("boardTaskDeleteButton");
 }
 
 function getBoardEditCancelButton() {
