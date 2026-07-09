@@ -18,6 +18,7 @@
   --color-primary: #2f3949;
   --color-primary-dark: #101b33;
   --color-primary-auth: #2a3647;
+  --color-primary-hover: #29abe2;
   --color-accent: #2a7de1;
   --color-accent-light: #29abe2;
   --color-accent-line: #6aa7e8;
@@ -35,6 +36,7 @@
   --color-priority-medium: #eea830;
 
   --shadow-soft: 0 0 14px rgba(0, 0, 0, 0.12);
+  --shadow-side-panel: 4px 0 6px rgba(0, 0, 0, 0.08);
   --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.12);
   --shadow-card-strong: 0 2px 4px rgba(0, 0, 0, 0.14);
   --shadow-topbar: 0 2px 8px rgba(0, 0, 0, 0.12);

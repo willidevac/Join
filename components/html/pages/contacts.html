@@ -22,11 +22,7 @@
         </span>
         <span>Add Task</span>
       </a>
-      <a
-        class="summary-nav__item"
-        href="?page=board"
-        data-page="board"
-      >
+      <a class="summary-nav__item" href="?page=board" data-page="board">
         <span class="summary-nav__icon" aria-hidden="true">
           <img src="./components/assets/icons/board_icons.svg" alt="" />
         </span>
@@ -68,9 +64,20 @@
       </div>
     </header>
     <section class="contacts-content">
-        <h1>Contacts</h1>
-        <p>Better with a team</p>
+      <aside class="contacts-list-panel">
+        <button class="contacts-add-button" type="button">
+          Add new contact
+          <img src="./components/assets/icons/person.svg" alt="" />
+        </button>
+        <ul class="contacts-list" id="contactsList"></ul>
+      </aside>
+      <section class="contacts-detail">
+        <header class="contacts-heading">
+          <h1>Contacts</h1>
+          <p>Better with a team</p>
+        </header>
+        <div id="contactDetail"></div>
+      </section>
     </section>
   </section>
 </main>
-

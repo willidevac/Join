@@ -1,7 +1,10 @@
-﻿.auth-form button {
+﻿button {
+    border: unset;
+    cursor: pointer;
+}
+
+.auth-form button {
   padding: 12px;
-  border: unset;
   border-radius: 8px;
-  cursor: pointer;
   transition: background-color 100ms ease, color 100ms ease;
 }

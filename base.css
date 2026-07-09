@@ -8,6 +8,7 @@
 @import url("./components/css/pages/summary.css");
 @import url("./components/css/pages/add-task.css");
 @import url("./components/css/pages/board.css");
+@import url("./components/css/pages/contacts.css");
 
 :root {
   --font-body: Arial, Helvetica, sans-serif;
