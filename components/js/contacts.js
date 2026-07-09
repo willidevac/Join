@@ -1,4 +1,6 @@
 const CONTACT_STORAGE_KEY = "joinContacts";
+let activeContactId = "";
+
 
 /**
  * Renders the alphabetically grouped contact list on the contacts page.
@@ -12,7 +14,9 @@ function initContacts() {
   .map((letter) => getContactGroupTemplate(letter, groups[letter]))
   .join("");
   initContactDetails(contacts);
+  initContactActions();
 }
+
 
 /**
  * Reads the locally saved contact list for the temporary localStorage step.
@@ -21,6 +25,7 @@ function getContacts() {
   const storedContact = localStorage.getItem(CONTACT_STORAGE_KEY);
   return storedContact ? JSON.parse(storedContact) : [];
 }
+
 
 /**
  * Builds the avatar initials from the first and last name part.
@@ -31,12 +36,14 @@ function getContactInitials(name) {
   return initials.toUpperCase();
 }
 
+
 /**
  * Returns a copy of the contact list sorted alphabetically by name.
  */
 function sortContactsByName(contacts) {
   return [...contacts].sort((a, b) => a.name.localeCompare(b.name));
 }
+
 
 /**
  * Groups sorted contacts by the first letter of their name.
@@ -51,14 +58,16 @@ function groupContactsByLetter(contacts) {
   return groups;
 }
 
+
 /**
  * Adds click handling to every contact list entry for opening its details.
  */
 function initContactDetails(contacts) {
   document.querySelectorAll(".contacts-item").forEach((item) => {
-    item.addEventListener("click", () => openContactDetail(item.dataset.contactId, contacts));  
+    item.addEventListener("click", () => openContactDetail(item.dataset.contactId, contacts));
   });
 }
+
 
 /**
  * Writes the contact data into the static detail view elements.
@@ -74,14 +83,43 @@ function fillContactDetail(contact) {
   email.href = "mailto:" + contact.email;                                       
 }
 
+
 /**
  * Looks up the clicked contact and shows its filled detail view.
  */
 function openContactDetail(contactId, contacts) {
   const contact = contacts.find((currentContact) => currentContact.id === contactId);
   if (!contact) return;
+  activeContactId = contact.id;
   fillContactDetail(contact);
   document.getElementById("contactDetail").hidden = false;
 }
 
+/**
+ * Saves the complete contact list in localStorage.
+ */
+function saveContacts(contacts) {
+  localStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify(contacts));
+}
 
+/**
+ * Removes the currently shown contact and refreshes the list.
+ */
+function deleteActiveContact() {
+  const remainingContacts = getContacts().filter((contact) => contact.id !== activeContactId);
+  saveContacts(remainingContacts);
+  activeContactId = "";
+  document.getElementById("contactDetail").hidden = true;
+  initContacts();
+}
+
+
+/**
+ * Wires the static delete button once per page load.
+ */
+function initContactActions() {
+  const deleteButton = document.getElementById("contactDeleteButton");
+  if (!deleteButton || deleteButton.dataset.eventsReady === "true") return;
+  deleteButton.addEventListener("click", deleteActiveContact);
+  deleteButton.dataset.eventsReady = "true";
+}
