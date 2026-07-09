@@ -55,6 +55,8 @@
   display: grid;
   align-content: start;
   gap: 16px;
+  border-radius: 16px;
+  transition: background-color 120ms ease, box-shadow 120ms ease;
 }
 
 .board-card,
@@ -322,8 +324,11 @@
 }
 
 .board-task-list--dragover {
-  outline: 2px dashed var(--color-accent-light);
-  outline-offset: 4px;
-  border-radius: 16px;
   background: var(--color-background-soft);
+  box-shadow: inset 0 0 0 2px var(--color-accent-light);
+}
+
+.board-task-list--dragover .board-empty-state {
+  border-color: var(--color-accent-light);
+  color: var(--color-text-main);
 }

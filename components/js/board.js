@@ -74,8 +74,8 @@ function initBoardDropZones(taskLists) {
     taskList.addEventListener("dragover", (event) =>
       handleBoardDragOver(event, taskList),
     );
-    taskList.addEventListener("dragleave", () =>
-      clearBoardDropFeedback(taskList),
+    taskList.addEventListener("dragleave", (event) =>
+      handleBoardDragLeave(event, taskList),
     );
     taskList.addEventListener("drop", (event) =>
       handleBoardDrop(event, taskList),
@@ -90,6 +90,12 @@ function handleBoardDragOver(event, taskList) {
   event.preventDefault();
   event.dataTransfer.dropEffect = "move";
   taskList.classList.add("board-task-list--dragover");
+}
+
+function handleBoardDragLeave(event, taskList) {
+  if (event.relatedTarget && taskList.contains(event.relatedTarget)) return;
+
+  clearBoardDropFeedback(taskList);
 }
 
 function handleBoardDrop(event, taskList) {
