@@ -383,6 +383,18 @@ function handleBoardSearchInput(event) {
 
   renderBoardColumns(filteredTasks);
   initBoardTaskDetails(filteredTasks);
+  toggleBoardNoResultsMessage(searchTerm, filteredTasks);
+}
+
+function toggleBoardNoResultsMessage(searchTerm, filteredTasks) {
+  let noResultsElement = document.getElementById("boardSearchNoResults");
+  let columnsElement = document.querySelector(".board-columns");
+  if (!noResultsElement || !columnsElement) return;
+
+  let showMessage = searchTerm.length >= 2 && filteredTasks.length === 0;
+
+  noResultsElement.hidden = !showMessage;
+  columnsElement.hidden = showMessage;
 }
 
 function taskMatchesSearch(task, searchTerm) {

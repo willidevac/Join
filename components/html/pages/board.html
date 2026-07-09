@@ -51,21 +51,21 @@
 
 
     <section class="board-content" aria-labelledby="boardTitle">
-   <div class="board-header">
-  <h1 id="boardTitle">Board</h1>
-  <div class="board-header__right">
-    <div class="board-search">
-      <input type="text" id="boardSearchInput" placeholder="Find Task" />
-      <button type="button" class="board-search__btn" aria-label="Search">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </button>
-    </div>
-    <a class="board-add-task" href="?page=add-task" data-page="add-task">Add task +</a>
-  </div>
-</div>
+      <div class="board-header">
+        <h1 id="boardTitle">Board</h1>
+        <div class="board-header__right">
+          <div class="board-search">
+            <input type="text" id="boardSearchInput" placeholder="Find Task" />
+            <button type="button" class="board-search__btn" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </button>
+          </div>
+          <a class="board-add-task" href="?page=add-task" data-page="add-task">Add task +</a>
+        </div>
+      </div>
 
       <div class="board-columns" aria-label="Saved tasks">
         <section class="board-column" aria-labelledby="boardTodoTitle">
@@ -86,6 +86,10 @@
         <section class="board-column" aria-labelledby="boardDoneTitle">
           <h2 id="boardDoneTitle">Done</h2>
           <div class="board-task-list" data-board-status="done"></div>
+
+          <p class="board-search-no-results" id="boardSearchNoResults" hidden>
+            No matching tasks found.
+          </p>
         </section>
       </div>
 
