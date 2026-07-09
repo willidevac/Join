@@ -1,5 +1,3 @@
-const BOARD_TASK_STORAGE_KEY = "joinTasks";
-
 /**
  * Renders locally saved tasks into the board columns.
  */
@@ -7,16 +5,8 @@ function initBoardTasks() {
   const taskLists = document.querySelectorAll("[data-board-status]");
   if (!taskLists.length) return;
 
-  const tasks = getBoardTasks();
+  const tasks = getStoredTasks();
   taskLists.forEach((taskList) => renderBoardColumn(taskList, tasks));
-}
-
-/**
- * Reads the local task list for the first board implementation step.
- */
-function getBoardTasks() {
-  const storedTasks = localStorage.getItem(BOARD_TASK_STORAGE_KEY);
-  return storedTasks ? JSON.parse(storedTasks) : [];
 }
 
 function renderBoardColumn(taskList, tasks) {
