@@ -1,3 +1,11 @@
+.contacts-shell {
+  height: 100vh;
+}
+
+.contacts-shell .summary-main {
+  min-height: 0;
+}
+
 .contacts-content {
   flex: 1;
   min-height: 0;
@@ -178,6 +186,24 @@
 }
 
 #contactDetail a { color: var(--color-accent-link); text-decoration: none; }
+
+.contacts-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-25%);
+  padding: 24px 32px;
+  border-radius: 20px;
+  background: var(--color-primary-auth);
+  color: var(--color-white);
+  font-size: 20px;
+  box-shadow: var(--shadow-card);
+  z-index: 10;
+}
+
+.contacts-toast[hidden] {
+  display: none;
+}
 
 @media (max-width: 900px) {
   .contacts-content {

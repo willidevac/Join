@@ -111,6 +111,7 @@ function deleteActiveContact() {
   activeContactId = "";
   document.getElementById("contactDetail").hidden = true;
   initContacts();
+  showContactToast("Contact successfully deleted");
 }
 
 
@@ -122,4 +123,15 @@ function initContactActions() {
   if (!deleteButton || deleteButton.dataset.eventsReady === "true") return;
   deleteButton.addEventListener("click", deleteActiveContact);
   deleteButton.dataset.eventsReady = "true";
+}
+
+/**
+ * Shows a short feedback popup that hides itself after three seconds.
+ */
+function showContactToast(message) {
+  const toast = document.getElementById("contactToast");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.hidden = false;
+  setTimeout(() => (toast.hidden = true), 3000);
 }
