@@ -1,0 +1,41 @@
+:root {
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+
+  --color-background: #f7f8fa;
+  --color-background-soft: #f6f7f8;
+  --color-surface: #ffffff;
+  --color-text: #1f2937;
+  --color-text-dark: #000000;
+  --color-text-main: #2a3140;
+  --color-text-auth: #2a3647;
+  --color-muted: #667085;
+  --color-placeholder: #71747a;
+  --color-placeholder-light: #d1d1d1;
+  --color-link-muted: #d5dae3;
+
+  --color-primary: #2f3949;
+  --color-primary-dark: #101b33;
+  --color-primary-auth: #2a3647;
+  --color-accent: #2a7de1;
+  --color-accent-light: #29abe2;
+  --color-accent-line: #6aa7e8;
+  --color-accent-link: #007cee;
+  --color-greeting: #24465a;
+
+  --color-border: #dde3ea;
+  --color-border-medium: #d6d6d6;
+  --color-border-dark: #8a8f98;
+  --color-border-auth: #a8a8a8;
+  --color-border-strong: #6f6f6f;
+
+  --color-required: #d45b6a;
+  --color-error: #d12b2b;
+  --color-priority-medium: #eea830;
+
+  --shadow-soft: 0 0 14px rgba(0, 0, 0, 0.12);
+  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.12);
+  --shadow-card-strong: 0 2px 4px rgba(0, 0, 0, 0.14);
+  --shadow-topbar: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
