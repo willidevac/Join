@@ -134,9 +134,14 @@
                 <dd id="boardTaskDetailSubtasks">-</dd>
               </div>
             </dl>
-            <button class="board-detail-primary" type="button" id="boardTaskEditButton">
-              Edit
-            </button>
+            <div class="board-detail-actions board-detail-actions--between">
+              <button class="board-detail-danger" type="button" id="boardTaskDeleteButton">
+                Delete
+              </button>
+              <button class="board-detail-primary" type="button" id="boardTaskEditButton">
+                Edit
+              </button>
+            </div>
           </div>
 
           <form class="board-detail-edit-form" id="boardTaskEditForm" hidden>
@@ -166,6 +171,14 @@
                 <option value="medium">Medium</option>
                 <option value="low">Low</option>
               </select>
+            </label>
+            <label>
+              <span>Assigned to</span>
+              <input
+                id="boardTaskEditAssignee"
+                type="text"
+                placeholder="Name of assigned contact"
+              />
             </label>
             <label>
               <span>Subtasks</span>

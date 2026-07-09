@@ -299,3 +299,17 @@
   background: var(--color-white);
   color: var(--color-primary);
 }
+
+.board-detail-actions--between {
+  justify-content: space-between;
+}
+
+.board-detail-danger {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--color-error);
+  border-radius: 8px;
+  background: var(--color-white);
+  color: var(--color-error);
+  font-weight: 700;
+}
