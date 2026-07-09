@@ -146,6 +146,26 @@
   font-weight: 500;
 }
 
+.contacts-detail-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.contacts-detail-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-transparent);
+  font-size: 16px;
+  color: var(--color-text-main);
+  transition: color 100ms ease;
+}
+
+.contacts-detail-action:hover {
+  color: var(--color-primary-hover);
+}
+
 .contacts-detail-subheading {
   font-size: 20px;
   font-weight: 400;
