@@ -10,6 +10,20 @@
   line-height: 1;
 }
 
+
+.add-task-success-message {
+  width: fit-content;
+  margin: -24px 0 32px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--color-primary-auth);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.add-task-success-message[hidden] {
+  display: none;
+}
 .add-task-form {
   display: grid;
   gap: 112px;
@@ -214,6 +228,3 @@
     grid-template-columns: 1fr;
   }
 }
-
-
-

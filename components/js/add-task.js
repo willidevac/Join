@@ -1,3 +1,6 @@
+const ADD_TASK_REDIRECT_DELAY = 900;
+let addTaskRedirectTimer;
+
 /**
  * Wires the Add Task dummy form so Create Task unlocks only when required fields are filled.
  */
@@ -5,30 +8,40 @@ function initAddTaskValidation() {
   const form = document.getElementById("addTaskForm");
   if (!form) return;
 
-  form.addEventListener("input", updateCreateTaskButton);
-  form.addEventListener("change", updateCreateTaskButton);
+  form.addEventListener("input", handleAddTaskFormChange);
+  form.addEventListener("change", handleAddTaskFormChange);
   form.addEventListener("reset", handleAddTaskReset);
   form.addEventListener("submit", handleAddTaskSubmit);
   updateCreateTaskButton();
 }
 
 /**
- * Stops the form reload, saves the task locally and resets the dummy form.
+ * Stops the form reload, saves the task locally and shows feedback before opening the board.
  */
 function handleAddTaskSubmit(event) {
   event.preventDefault();
   if (!isAddTaskFormValid()) return;
 
-  const task = getAddTaskData();
-  saveCreatedTask(task);
+  saveCreatedTask(getAddTaskData());
   event.target.reset();
+  showAddTaskSuccessMessage();
+  redirectToBoardAfterSuccess();
+}
+
+/**
+ * Clears stale success feedback when the user edits the form again.
+ */
+function handleAddTaskFormChange() {
+  hideAddTaskSuccessMessage();
+  clearAddTaskRedirect();
+  updateCreateTaskButton();
 }
 
 /**
  * Updates the button state after the form was reset.
  */
 function handleAddTaskReset() {
-  setTimeout(updateCreateTaskButton);
+  setTimeout(updateCreateTaskButton, 0);
 }
 
 /**
@@ -49,6 +62,42 @@ function isAddTaskFormValid() {
 }
 
 /**
+ * Shows the short confirmation before the board route opens.
+ */
+function showAddTaskSuccessMessage() {
+  const message = getAddTaskSuccessMessage();
+  if (!message) return;
+
+  message.hidden = false;
+}
+
+/**
+ * Hides the confirmation while the form is being edited.
+ */
+function hideAddTaskSuccessMessage() {
+  const message = getAddTaskSuccessMessage();
+  if (!message) return;
+
+  message.hidden = true;
+}
+
+/**
+ * Opens the board after the user had a short moment to see the confirmation.
+ */
+function redirectToBoardAfterSuccess() {
+  clearAddTaskRedirect();
+  addTaskRedirectTimer = setTimeout(() => navigateToPage("board"), ADD_TASK_REDIRECT_DELAY);
+}
+
+function clearAddTaskRedirect() {
+  if (addTaskRedirectTimer) clearTimeout(addTaskRedirectTimer);
+}
+
+function getAddTaskSuccessMessage() {
+  return document.getElementById("addTaskSuccessMessage");
+}
+
+/**
  * Reads the current form values and creates the task object for local test data.
  */
 function getAddTaskData() {
@@ -65,7 +114,6 @@ function getAddTaskData() {
     createdAt: new Date().toISOString(),
   };
 }
-
 
 function createTaskId() {
   return `task-${Date.now()}`;

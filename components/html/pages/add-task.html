@@ -71,6 +71,15 @@
     <section class="add-task-content" aria-labelledby="addTaskTitle">
       <h1 id="addTaskTitle">Add Task</h1>
 
+      <p
+        class="add-task-success-message"
+        id="addTaskSuccessMessage"
+        role="status"
+        aria-live="polite"
+        hidden
+      >
+        Task created successfully. Opening board...
+      </p>
       <form class="add-task-form" id="addTaskForm" aria-label="Add task form">
         <!-- Dummy form structure: saving tasks will be implemented in a later step. -->
         <div class="add-task-form__fields">
