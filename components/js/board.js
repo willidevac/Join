@@ -31,20 +31,6 @@ function renderBoardColumn(taskList, tasks) {
     : getBoardEmptyTemplate(status);
 }
 
-function getBoardTaskTemplate(task) {
-  return `
-    <article class="board-card" data-task-id="${escapeBoardText(task.id)}" draggable="true" tabindex="0">
-      <span class="board-card__category">${formatBoardCategory(task.category)}</span>
-      <h3>${escapeBoardText(task.title)}</h3>
-      <p>${escapeBoardText(task.description || "No description")}</p>
-      <div class="board-card__meta">
-        <span class="board-card__date">${escapeBoardText(task.dueDate)}</span>
-        <span class="board-card__priority">${escapeBoardText(task.priority)}</span>
-      </div>
-    </article>
-  `;
-}
-
 function getBoardEmptyTemplate(status) {
   return `<p class="board-empty-state">No tasks ${formatBoardStatus(status)}</p>`;
 }

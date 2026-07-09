@@ -69,22 +69,33 @@
 
       <div class="board-columns" aria-label="Saved tasks">
         <section class="board-column" aria-labelledby="boardTodoTitle">
-          <h2 id="boardTodoTitle">To do</h2>
+          <div class="board-column__header">
+            <h2 id="boardTodoTitle">To do</h2>
+            <a class="board-column__add" href="?page=add-task" data-page="add-task" aria-label="Add task to To do">+</a>
+          </div>
           <div class="board-task-list" data-board-status="todo"></div>
         </section>
 
         <section class="board-column" aria-labelledby="boardProgressTitle">
-          <h2 id="boardProgressTitle">In progress</h2>
+          <div class="board-column__header">
+            <h2 id="boardProgressTitle">In progress</h2>
+            <a class="board-column__add" href="?page=add-task" data-page="add-task" aria-label="Add task to In progress">+</a>
+          </div>
           <div class="board-task-list" data-board-status="in-progress"></div>
         </section>
 
         <section class="board-column" aria-labelledby="boardFeedbackTitle">
-          <h2 id="boardFeedbackTitle">Await feedback</h2>
+          <div class="board-column__header">
+            <h2 id="boardFeedbackTitle">Await feedback</h2>
+            <a class="board-column__add" href="?page=add-task" data-page="add-task" aria-label="Add task to Await feedback">+</a>
+          </div>
           <div class="board-task-list" data-board-status="feedback"></div>
         </section>
 
         <section class="board-column" aria-labelledby="boardDoneTitle">
-          <h2 id="boardDoneTitle">Done</h2>
+          <div class="board-column__header">
+            <h2 id="boardDoneTitle">Done</h2>
+          </div>
           <div class="board-task-list" data-board-status="done"></div>
         </section>
       </div>
