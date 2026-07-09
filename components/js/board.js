@@ -131,6 +131,7 @@ function fillBoardTaskEditForm(task) {
   getBoardEditField("DueDate").value = task.dueDate || "";
   getBoardEditField("Category").value = task.category || "user-story";
   getBoardEditField("Priority").value = task.priority || "medium";
+  getBoardEditField("Subtasks").value = formatBoardSubtasksForEdit(task.subtasks);
 }
 
 function handleBoardEditSubmit(event) {
@@ -151,7 +152,16 @@ function getBoardEditedTask(task) {
     dueDate: getBoardEditField("DueDate").value,
     category: getBoardEditField("Category").value,
     priority: getBoardEditField("Priority").value,
+    subtasks: getBoardEditedSubtasks(),
   };
+}
+
+function getBoardEditedSubtasks() {
+  return getBoardEditField("Subtasks").value.split("\n").map(getTrimmedText).filter(Boolean);
+}
+
+function getTrimmedText(text) {
+  return text.trim();
 }
 
 function refreshBoardAfterEdit(taskId) {
@@ -163,6 +173,11 @@ function refreshBoardAfterEdit(taskId) {
 
 function getActiveBoardTask() {
   return activeBoardTasks.find((task) => task.id === activeBoardTaskId);
+}
+
+function formatBoardSubtasksForEdit(subtasks) {
+  if (!subtasks || !subtasks.length) return "";
+  return subtasks.join("\n");
 }
 
 function setBoardDetailText(elementId, text) {
