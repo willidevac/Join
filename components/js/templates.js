@@ -1,3 +1,6 @@
+/**
+ * Returns the list item markup for a single contact.
+ */
 function getContactItemTemplate(contact) {
   return `
   <li class="contacts-item" data-contact-id="${contact.id}">
