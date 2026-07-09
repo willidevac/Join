@@ -1,11 +1,6 @@
 <main class="summary-shell board-shell">
   <aside class="summary-sidebar" aria-label="Main navigation">
-    <a
-      class="summary-sidebar__logo"
-      href="?page=summary"
-      data-page="summary"
-      aria-label="Go to summary"
-    >
+    <a class="summary-sidebar__logo" href="?page=summary" data-page="summary" aria-label="Go to summary">
       <img src="./components/assets/icons/Join logo vector.svg" alt="" />
     </a>
 
@@ -22,11 +17,7 @@
         </span>
         <span>Add Task</span>
       </a>
-      <a
-        class="summary-nav__item summary-nav__item--active"
-        href="?page=board"
-        data-page="board"
-      >
+      <a class="summary-nav__item summary-nav__item--active" href="?page=board" data-page="board">
         <span class="summary-nav__icon" aria-hidden="true">
           <img src="./components/assets/icons/board_icons.svg" alt="" />
         </span>
@@ -41,9 +32,7 @@
     </nav>
 
     <footer class="summary-sidebar__footer">
-      <a href="?page=privacy-policy" data-page="privacy-policy"
-        >Privacy Policy</a
-      >
+      <a href="?page=privacy-policy" data-page="privacy-policy">Privacy Policy</a>
       <a href="?page=legal-notice" data-page="legal-notice">Legal notice</a>
     </footer>
   </aside>
@@ -53,24 +42,30 @@
       <p>Kanban Project Management Tool</p>
       <div class="summary-user-actions">
         <button class="summary-help" type="button" aria-label="Help">?</button>
-        <button
-          class="summary-avatar"
-          type="button"
-          onclick="handleLogout()"
-          aria-label="Log out"
-        >
+        <button class="summary-avatar" type="button" onclick="handleLogout()" aria-label="Log out">
           <span id="summaryUserInitials">?</span>
         </button>
       </div>
     </header>
 
+
+
     <section class="board-content" aria-labelledby="boardTitle">
-      <div class="board-header">
-        <h1 id="boardTitle">Board</h1>
-        <a class="board-add-task" href="?page=add-task" data-page="add-task"
-          >Add task +</a
-        >
-      </div>
+   <div class="board-header">
+  <h1 id="boardTitle">Board</h1>
+  <div class="board-header__right">
+    <div class="board-search">
+      <input type="text" id="boardSearchInput" placeholder="Find Task" />
+      <button type="button" class="board-search__btn" aria-label="Search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+    </div>
+    <a class="board-add-task" href="?page=add-task" data-page="add-task">Add task +</a>
+  </div>
+</div>
 
       <div class="board-columns" aria-label="Saved tasks">
         <section class="board-column" aria-labelledby="boardTodoTitle">
@@ -94,21 +89,10 @@
         </section>
       </div>
 
-      <section
-        class="board-detail-overlay"
-        id="boardTaskDetail"
-        aria-labelledby="boardTaskDetailTitle"
-        aria-modal="true"
-        role="dialog"
-        hidden
-      >
+      <section class="board-detail-overlay" id="boardTaskDetail" aria-labelledby="boardTaskDetailTitle"
+        aria-modal="true" role="dialog" hidden>
         <article class="board-detail-card">
-          <button
-            class="board-detail-close"
-            type="button"
-            id="boardTaskDetailClose"
-            aria-label="Close task details"
-          >
+          <button class="board-detail-close" type="button" id="boardTaskDetailClose" aria-label="Close task details">
             x
           </button>
 
@@ -187,19 +171,11 @@
             </label>
             <label>
               <span>Assigned to</span>
-              <input
-                id="boardTaskEditAssignee"
-                type="text"
-                placeholder="Name of assigned contact"
-              />
+              <input id="boardTaskEditAssignee" type="text" placeholder="Name of assigned contact" />
             </label>
             <label>
               <span>Subtasks</span>
-              <textarea
-                id="boardTaskEditSubtasks"
-                rows="3"
-                placeholder="One subtask per line"
-              ></textarea>
+              <textarea id="boardTaskEditSubtasks" rows="3" placeholder="One subtask per line"></textarea>
             </label>
             <div class="board-detail-actions">
               <button class="board-detail-secondary" type="button" id="boardTaskEditCancel">

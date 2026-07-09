@@ -13,6 +13,7 @@ function initBoardTasks() {
   renderBoardColumns(activeBoardTasks);
   initBoardTaskDetails(activeBoardTasks);
   initBoardDropZones(taskLists);
+  initBoardSearch();
 }
 
 function renderBoardColumns(tasks) {
@@ -362,4 +363,30 @@ function escapeBoardText(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function initBoardSearch() {
+  let searchInput = document.getElementById("boardSearchInput");
+  if (!searchInput || searchInput.dataset.searchReady === "true") return;
+
+  searchInput.addEventListener("input", handleBoardSearchInput);
+  searchInput.dataset.searchReady = "true";
+}
+
+function handleBoardSearchInput(event) {
+  let searchTerm = event.target.value.trim().toLowerCase();
+
+  let filteredTasks =
+    searchTerm.length >= 2
+      ? activeBoardTasks.filter((task) => taskMatchesSearch(task, searchTerm))
+      : activeBoardTasks;
+
+  renderBoardColumns(filteredTasks);
+  initBoardTaskDetails(filteredTasks);
+}
+
+function taskMatchesSearch(task, searchTerm) {
+  let title = (task.title || "").toLowerCase();
+  let description = (task.description || "").toLowerCase();
+  return title.includes(searchTerm) || description.includes(searchTerm);
 }
