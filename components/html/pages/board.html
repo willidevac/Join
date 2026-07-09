@@ -93,6 +93,46 @@
           <div class="board-task-list" data-board-status="done"></div>
         </section>
       </div>
+      <section
+        class="board-detail-overlay"
+        id="boardTaskDetail"
+        aria-labelledby="boardTaskDetailTitle"
+        aria-modal="true"
+        role="dialog"
+        hidden
+      >
+        <article class="board-detail-card">
+          <button
+            class="board-detail-close"
+            type="button"
+            id="boardTaskDetailClose"
+            aria-label="Close task details"
+          >
+            x
+          </button>
+          <span class="board-detail-category" id="boardTaskDetailCategory">Task</span>
+          <h2 id="boardTaskDetailTitle">Task title</h2>
+          <p id="boardTaskDetailDescription">Task description</p>
+          <dl class="board-detail-list">
+            <div>
+              <dt>Due date</dt>
+              <dd id="boardTaskDetailDueDate">-</dd>
+            </div>
+            <div>
+              <dt>Priority</dt>
+              <dd id="boardTaskDetailPriority">-</dd>
+            </div>
+            <div>
+              <dt>Assigned to</dt>
+              <dd id="boardTaskDetailAssignee">-</dd>
+            </div>
+            <div>
+              <dt>Subtasks</dt>
+              <dd id="boardTaskDetailSubtasks">-</dd>
+            </div>
+          </dl>
+        </article>
+      </section>
     </section>
   </section>
 </main>

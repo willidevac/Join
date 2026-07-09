@@ -1,5 +1,5 @@
 /**
- * Renders locally saved tasks into the board columns.
+ * Renders locally saved tasks into the board columns and wires the detail view.
  */
 function initBoardTasks() {
   const taskLists = document.querySelectorAll("[data-board-status]");
@@ -7,6 +7,7 @@ function initBoardTasks() {
 
   const tasks = getStoredTasks();
   taskLists.forEach((taskList) => renderBoardColumn(taskList, tasks));
+  initBoardTaskDetails(tasks);
 }
 
 function renderBoardColumn(taskList, tasks) {
@@ -20,7 +21,7 @@ function renderBoardColumn(taskList, tasks) {
 
 function getBoardTaskTemplate(task) {
   return `
-    <article class="board-card">
+    <article class="board-card" data-task-id="${escapeBoardText(task.id)}" tabindex="0">
       <span class="board-card__category">${formatBoardCategory(task.category)}</span>
       <h3>${escapeBoardText(task.title)}</h3>
       <p>${escapeBoardText(task.description || "No description")}</p>
@@ -34,6 +35,73 @@ function getBoardTaskTemplate(task) {
 
 function getBoardEmptyTemplate(status) {
   return `<p class="board-empty-state">No tasks ${formatBoardStatus(status)}</p>`;
+}
+
+/**
+ * Adds click and keyboard handling for opening and closing task details.
+ */
+function initBoardTaskDetails(tasks) {
+  document.querySelectorAll(".board-card").forEach((card) => {
+    card.addEventListener("click", () => openBoardTaskDetail(card.dataset.taskId, tasks));
+    card.addEventListener("keydown", (event) => handleBoardCardKey(event, card, tasks));
+  });
+  getBoardDetailCloseButton().addEventListener("click", closeBoardTaskDetail);
+  getBoardDetailOverlay().addEventListener("click", handleBoardDetailBackdrop);
+  document.addEventListener("keydown", handleBoardDetailEscape);
+}
+
+function handleBoardCardKey(event, card, tasks) {
+  if (event.key !== "Enter" && event.key !== " ") return;
+
+  event.preventDefault();
+  openBoardTaskDetail(card.dataset.taskId, tasks);
+}
+
+function openBoardTaskDetail(taskId, tasks) {
+  const task = tasks.find((currentTask) => currentTask.id === taskId);
+  if (!task) return;
+
+  fillBoardTaskDetail(task);
+  getBoardDetailOverlay().hidden = false;
+}
+
+function closeBoardTaskDetail() {
+  getBoardDetailOverlay().hidden = true;
+}
+
+function handleBoardDetailBackdrop(event) {
+  if (event.target === getBoardDetailOverlay()) closeBoardTaskDetail();
+}
+
+function handleBoardDetailEscape(event) {
+  if (event.key === "Escape") closeBoardTaskDetail();
+}
+
+function fillBoardTaskDetail(task) {
+  setBoardDetailText("boardTaskDetailCategory", formatBoardCategory(task.category));
+  setBoardDetailText("boardTaskDetailTitle", task.title);
+  setBoardDetailText("boardTaskDetailDescription", task.description || "No description");
+  setBoardDetailText("boardTaskDetailDueDate", task.dueDate || "-");
+  setBoardDetailText("boardTaskDetailPriority", task.priority || "-");
+  setBoardDetailText("boardTaskDetailAssignee", task.assignedTo || "Not assigned");
+  setBoardDetailText("boardTaskDetailSubtasks", formatBoardSubtasks(task.subtasks));
+}
+
+function setBoardDetailText(elementId, text) {
+  document.getElementById(elementId).textContent = text;
+}
+
+function formatBoardSubtasks(subtasks) {
+  if (!subtasks || !subtasks.length) return "No subtasks";
+  return subtasks.join(", ");
+}
+
+function getBoardDetailOverlay() {
+  return document.getElementById("boardTaskDetail");
+}
+
+function getBoardDetailCloseButton() {
+  return document.getElementById("boardTaskDetailClose");
 }
 
 function formatBoardCategory(category) {

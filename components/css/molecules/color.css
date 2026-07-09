@@ -2,6 +2,7 @@
   --color-black: #000000;
   --color-white: #ffffff;
   --color-transparent: transparent;
+  --color-overlay-backdrop: rgba(0, 0, 0, 0.3);
 
   --color-background: #f7f8fa;
   --color-background-soft: #f6f7f8;
