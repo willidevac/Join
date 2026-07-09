@@ -1,3 +1,6 @@
+let activeBoardTasks = [];
+let activeBoardTaskId = "";
+
 /**
  * Renders locally saved tasks into the board columns and wires the detail view.
  */
@@ -5,9 +8,15 @@ function initBoardTasks() {
   const taskLists = document.querySelectorAll("[data-board-status]");
   if (!taskLists.length) return;
 
-  const tasks = getStoredTasks();
-  taskLists.forEach((taskList) => renderBoardColumn(taskList, tasks));
-  initBoardTaskDetails(tasks);
+  activeBoardTasks = getStoredTasks();
+  renderBoardColumns(activeBoardTasks);
+  initBoardTaskDetails(activeBoardTasks);
+}
+
+function renderBoardColumns(tasks) {
+  document.querySelectorAll("[data-board-status]").forEach((taskList) => {
+    renderBoardColumn(taskList, tasks);
+  });
 }
 
 function renderBoardColumn(taskList, tasks) {
@@ -38,16 +47,27 @@ function getBoardEmptyTemplate(status) {
 }
 
 /**
- * Adds click and keyboard handling for opening and closing task details.
+ * Adds click and keyboard handling for opening, closing and editing task details.
  */
 function initBoardTaskDetails(tasks) {
   document.querySelectorAll(".board-card").forEach((card) => {
     card.addEventListener("click", () => openBoardTaskDetail(card.dataset.taskId, tasks));
     card.addEventListener("keydown", (event) => handleBoardCardKey(event, card, tasks));
   });
+  initBoardDetailControls();
+}
+
+function initBoardDetailControls() {
+  const overlay = getBoardDetailOverlay();
+  if (overlay.dataset.eventsReady === "true") return;
+
   getBoardDetailCloseButton().addEventListener("click", closeBoardTaskDetail);
-  getBoardDetailOverlay().addEventListener("click", handleBoardDetailBackdrop);
+  overlay.addEventListener("click", handleBoardDetailBackdrop);
   document.addEventListener("keydown", handleBoardDetailEscape);
+  getBoardEditButton().addEventListener("click", showBoardEditMode);
+  getBoardEditCancelButton().addEventListener("click", showBoardDetailViewMode);
+  getBoardEditForm().addEventListener("submit", handleBoardEditSubmit);
+  overlay.dataset.eventsReady = "true";
 }
 
 function handleBoardCardKey(event, card, tasks) {
@@ -61,12 +81,16 @@ function openBoardTaskDetail(taskId, tasks) {
   const task = tasks.find((currentTask) => currentTask.id === taskId);
   if (!task) return;
 
+  activeBoardTaskId = task.id;
   fillBoardTaskDetail(task);
+  showBoardDetailViewMode();
   getBoardDetailOverlay().hidden = false;
 }
 
 function closeBoardTaskDetail() {
   getBoardDetailOverlay().hidden = true;
+  activeBoardTaskId = "";
+  showBoardDetailViewMode();
 }
 
 function handleBoardDetailBackdrop(event) {
@@ -87,6 +111,60 @@ function fillBoardTaskDetail(task) {
   setBoardDetailText("boardTaskDetailSubtasks", formatBoardSubtasks(task.subtasks));
 }
 
+function showBoardEditMode() {
+  const task = getActiveBoardTask();
+  if (!task) return;
+
+  fillBoardTaskEditForm(task);
+  getBoardDetailView().hidden = true;
+  getBoardEditForm().hidden = false;
+}
+
+function showBoardDetailViewMode() {
+  getBoardDetailView().hidden = false;
+  getBoardEditForm().hidden = true;
+}
+
+function fillBoardTaskEditForm(task) {
+  getBoardEditField("Title").value = task.title || "";
+  getBoardEditField("Description").value = task.description || "";
+  getBoardEditField("DueDate").value = task.dueDate || "";
+  getBoardEditField("Category").value = task.category || "user-story";
+  getBoardEditField("Priority").value = task.priority || "medium";
+}
+
+function handleBoardEditSubmit(event) {
+  event.preventDefault();
+  const task = getActiveBoardTask();
+  if (!task) return;
+
+  const updatedTask = getBoardEditedTask(task);
+  updateStoredTask(updatedTask);
+  refreshBoardAfterEdit(updatedTask.id);
+}
+
+function getBoardEditedTask(task) {
+  return {
+    ...task,
+    title: getBoardEditField("Title").value.trim(),
+    description: getBoardEditField("Description").value.trim(),
+    dueDate: getBoardEditField("DueDate").value,
+    category: getBoardEditField("Category").value,
+    priority: getBoardEditField("Priority").value,
+  };
+}
+
+function refreshBoardAfterEdit(taskId) {
+  activeBoardTasks = getStoredTasks();
+  renderBoardColumns(activeBoardTasks);
+  initBoardTaskDetails(activeBoardTasks);
+  openBoardTaskDetail(taskId, activeBoardTasks);
+}
+
+function getActiveBoardTask() {
+  return activeBoardTasks.find((task) => task.id === activeBoardTaskId);
+}
+
 function setBoardDetailText(elementId, text) {
   document.getElementById(elementId).textContent = text;
 }
@@ -102,6 +180,26 @@ function getBoardDetailOverlay() {
 
 function getBoardDetailCloseButton() {
   return document.getElementById("boardTaskDetailClose");
+}
+
+function getBoardDetailView() {
+  return document.getElementById("boardTaskDetailView");
+}
+
+function getBoardEditButton() {
+  return document.getElementById("boardTaskEditButton");
+}
+
+function getBoardEditCancelButton() {
+  return document.getElementById("boardTaskEditCancel");
+}
+
+function getBoardEditForm() {
+  return document.getElementById("boardTaskEditForm");
+}
+
+function getBoardEditField(fieldName) {
+  return document.getElementById(`boardTaskEdit${fieldName}`);
 }
 
 function formatBoardCategory(category) {

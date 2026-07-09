@@ -23,3 +23,12 @@ function saveCreatedTask(task) {
   tasks.push(task);
   saveStoredTasks(tasks);
 }
+
+/**
+ * Replaces one existing task after it was edited on the board.
+ */
+function updateStoredTask(updatedTask) {
+  const tasks = getStoredTasks();
+  const updatedTasks = tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task));
+  saveStoredTasks(updatedTasks);
+}
