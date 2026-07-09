@@ -1,5 +1,3 @@
-const ADD_TASK_STORAGE_KEY = "joinTasks";
-
 /**
  * Wires the Add Task dummy form so Create Task unlocks only when required fields are filled.
  */
@@ -68,22 +66,6 @@ function getAddTaskData() {
   };
 }
 
-/**
- * Adds one task to the locally stored task list.
- */
-function saveCreatedTask(task) {
-  const tasks = getStoredTasks();
-  tasks.push(task);
-  localStorage.setItem(ADD_TASK_STORAGE_KEY, JSON.stringify(tasks));
-}
-
-/**
- * Reads the local task list and falls back to an empty list when no data exists yet.
- */
-function getStoredTasks() {
-  const storedTasks = localStorage.getItem(ADD_TASK_STORAGE_KEY);
-  return storedTasks ? JSON.parse(storedTasks) : [];
-}
 
 function createTaskId() {
   return `task-${Date.now()}`;

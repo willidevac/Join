@@ -1,4 +1,7 @@
+@import url("./components/css/molecules/color.css");
 @import url("./components/css/molecules/buttons.css");
+@import url("./components/css/molecules/app-shell.css");
+@import url("./components/css/molecules/assets.css");
 @import url("./components/css/molecules/language-switch.css");
 @import url("./components/css/molecules/page-transition.css");
 @import url("./components/css/pages/login.css");
@@ -10,14 +13,6 @@
 @import url("./components/css/pages/contacts.css");
 
 :root {
-  --color-background: #f7f8fa;
-  --color-surface: #ffffff;
-  --color-text: #1f2937;
-  --color-muted: #667085;
-  --color-accent: #2a7de1;
-  --color-border: #dde3ea;
-  --color-primary: #2a3647;
-  --color-primary-hover: #29abe2;
   --font-body: Arial, Helvetica, sans-serif;
 }
 

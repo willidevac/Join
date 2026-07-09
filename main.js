@@ -28,6 +28,12 @@ const routes = {
 
     protected: true,
   },
+  board: {
+    title: "Join | Board",
+    template: "./components/html/pages/board.html",
+    // Protected route: saved tasks should only be visible after login.
+    protected: true,
+  },
   contacts: {
     title: "Join | Contacts",
     template: "./components/html/pages/contacts.html",
@@ -185,7 +191,12 @@ function initPage(page) {
   if (page === "login") initLoginValidation();
   if (page === "signup") initSignupValidation();
   if (page === "contacts") initContacts();
-  if (page === "summary" || page === "add-task" || page === "board" || page === "contacts")
+  if (
+    page === "summary" ||
+    page === "add-task" ||
+    page === "board" ||
+    page === "contacts"
+  )
     initSummaryUser();
   if (page === "add-task") initAddTaskValidation();
   if (page === "board") initBoardTasks();
@@ -251,12 +262,8 @@ function setTransitionOverflow(isLocked) {
   document.body.classList.toggle("is-page-transitioning", isLocked);
 }
 
-async function createSignupTransitionLoader() {
-  const response = await fetch(signupTransition.template);
-  const wrapper = document.createElement("div");
-
-  wrapper.innerHTML = await response.text();
-  return wrapper.firstElementChild;
+function createSignupTransitionLoader() {
+  return createTemplateElement(signupTransition.template);
 }
 
 function wait(duration) {
