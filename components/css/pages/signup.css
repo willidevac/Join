@@ -113,66 +113,22 @@
   transform: translateY(-50%);
 }
 
-.auth-page--signup .form-field__icon::before,
-.auth-page--signup .form-field__icon::after {
-  content: "";
-  position: absolute;
-  border-color: #6f6f6f;
+.auth-page--signup .form-field__icon {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
-.form-field__icon--user::before {
-  top: 3px;
-  left: 8px;
-  width: 8px;
-  height: 8px;
-  border: 2px solid #6f6f6f;
-  border-radius: 50%;
+.auth-page--signup .form-field__icon--user {
+  background-image: url("../../assets/icons/person.svg");
 }
 
-.form-field__icon--user::after {
-  right: 4px;
-  bottom: 3px;
-  left: 4px;
-  height: 8px;
-  border: 2px solid #6f6f6f;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom: 0;
+.auth-page--signup .form-field__icon--mail {
+  background-image: url("../../assets/icons/mail.svg");
 }
 
-.form-field__icon--mail::before {
-  inset: 4px 2px;
-  border: 2px solid #6f6f6f;
-  border-radius: 2px;
-}
-
-.form-field__icon--mail::after {
-  top: 7px;
-  left: 5px;
-  width: 14px;
-  height: 10px;
-  border-right: 2px solid #6f6f6f;
-  border-bottom: 2px solid #6f6f6f;
-  transform: rotate(45deg) skew(-8deg, -8deg);
-}
-
-.form-field__icon--lock::before {
-  right: 4px;
-  bottom: 3px;
-  left: 4px;
-  height: 14px;
-  border: 2px solid #6f6f6f;
-  border-radius: 3px;
-}
-
-.form-field__icon--lock::after {
-  top: 2px;
-  left: 7px;
-  width: 10px;
-  height: 10px;
-  border: 2px solid #6f6f6f;
-  border-bottom: 0;
-  border-radius: 10px 10px 0 0;
+.auth-page--signup .form-field__icon--lock {
+  background-image: url("../../assets/icons/lock.svg");
 }
 
 .privacy-consent {
