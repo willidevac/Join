@@ -1,0 +1,193 @@
+const CONTACT_COLORS = ["#FF7A00", "#9327FF", "#6E52FF", "#FC71FF", "#FFBB2B", "#1FD7C1", "#FF4646", "#00BEE8", "#FF745E", "#0038FF"];
+
+
+/**
+ * Wires the edit dialog controls.
+ */
+function initContactEditEvents() {
+  document.getElementById("contactEditButton").addEventListener("click", openContactEditDialog);
+  document.getElementById("contactEditClose").addEventListener("click", closeContactEditDialog);
+  document.getElementById("contactEditOverlay").addEventListener("click", handleContactOverlayClick);
+  document.getElementById("contactEditForm").addEventListener("submit", handleContactEditSubmit);
+  document.getElementById("contactEditDelete").addEventListener("click", handleContactEditDelete);
+}
+
+
+/**
+ * Wires the add dialog controls.
+ */
+function initContactAddEvents() {
+  document.getElementById("contactAddButton").addEventListener("click", openContactAddDialog);
+  document.getElementById("contactAddClose").addEventListener("click", closeContactAddDialog);
+  document.getElementById("contactAddCancel").addEventListener("click", closeContactAddDialog);
+  document.getElementById("contactAddOverlay").addEventListener("click", handleContactAddOverlayClick);
+  document.getElementById("contactAddForm").addEventListener("submit", handleContactAddSubmit);
+}
+
+
+/**
+ * Opens the edit dialog prefilled with the active contact.
+ */
+function openContactEditDialog() {
+  const contact = getContacts().find((currentContact) => currentContact.id === activeContactId);
+  if (!contact) return;
+  fillContactEditForm(contact);
+  document.getElementById("contactEditOverlay").hidden = false;
+}
+
+
+/**
+ * Hides the edit contact dialog.
+ */
+function closeContactEditDialog() {
+  document.getElementById("contactEditOverlay").hidden = true;
+}
+
+
+/**
+ * Closes the dialog only when the dark backdrop itself is clicked.
+ */
+function handleContactOverlayClick(event) {
+  if (event.target === document.getElementById("contactEditOverlay")) closeContactEditDialog();
+}
+
+
+/**
+ * Writes the contact data into the edit form fields.
+ */
+function fillContactEditForm(contact) {
+  const avatar = document.getElementById("contactEditAvatar");
+  avatar.textContent = getContactInitials(contact.name);
+  avatar.style.backgroundColor = contact.color;
+  document.getElementById("contactEditName").value = contact.name;
+  document.getElementById("contactEditEmail").value = contact.email;
+  document.getElementById("contactEditPhone").value = contact.phone;
+}
+
+
+/**
+ * Validates the edit form and saves the contact on success.
+ */
+function handleContactEditSubmit(event) {
+  event.preventDefault();
+  const values = getContactFormValues("contactEdit");
+  const errorMessage = getContactErrorMessage(values);
+  document.getElementById("contactEditError").textContent = errorMessage;
+  if (errorMessage) return;
+  saveEditedContact();
+}
+
+
+/**
+ * Combines the stored contact with the edited form values.
+ */
+function getEditedContact(contact) {
+  return { ...contact, ...getContactFormValues("contactEdit") };
+}
+
+
+/**
+ * Updates the active contact, refreshes the page and closes the dialog.
+ */
+function saveEditedContact() {
+  const updatedContacts = getContacts().map((contact) =>
+    contact.id === activeContactId ? getEditedContact(contact) : contact
+  );
+  saveContacts(updatedContacts);
+  initContacts();
+  openContactDetail(activeContactId, getContacts());
+  closeContactEditDialog();
+  showContactToast("Contact successfully edited");
+}
+
+
+/**
+ * Deletes the active contact from the edit dialog.
+ */
+function handleContactEditDelete() {
+  closeContactEditDialog();
+  deleteActiveContact();
+}
+
+
+/**
+ * Opens the add dialog with cleared form fields.
+ */
+function openContactAddDialog() {
+  document.getElementById("contactAddForm").reset();
+  document.getElementById("contactAddError").textContent = "";
+  document.getElementById("contactAddOverlay").hidden = false;
+}
+
+
+/**
+ * Hides the add contact dialog.
+ */
+function closeContactAddDialog() {
+  document.getElementById("contactAddOverlay").hidden = true;
+}
+
+
+/**
+ * Closes the add dialog only when the dark backdrop itself is clicked.
+ */
+function handleContactAddOverlayClick(event) {
+  if (event.target === document.getElementById("contactAddOverlay")) closeContactAddDialog();
+}
+
+
+/**
+ * Validates the add form and creates the contact on success.
+ */
+function handleContactAddSubmit(event) {
+  event.preventDefault();
+  const values = getContactFormValues("contactAdd");
+  const errorMessage = getContactErrorMessage(values);
+  document.getElementById("contactAddError").textContent = errorMessage;
+  if (errorMessage) return;
+  createContact(values);
+}
+
+
+/**
+ * Creates a new contact, saves it and opens its detail view.
+ */
+function createContact(values) {
+  const newContact = { id: Date.now().toString(), color: getRandomContactColor(), ...values };
+  saveContacts([...getContacts(), newContact]);
+  initContacts();
+  openContactDetail(newContact.id, getContacts());
+  closeContactAddDialog();
+  showContactToast("Contact successfully created");
+}
+
+
+/**
+ * Picks a random avatar color for a new contact.
+ */
+function getRandomContactColor() {
+  return CONTACT_COLORS[Math.floor(Math.random() * CONTACT_COLORS.length)];
+}
+
+
+/**
+ * Reads the trimmed form values for the given dialog id prefix.
+ */
+function getContactFormValues(idPrefix) {
+  return {
+    name: document.getElementById(idPrefix + "Name").value.trim(),
+    email: document.getElementById(idPrefix + "Email").value.trim(),
+    phone: document.getElementById(idPrefix + "Phone").value.trim(),
+  };
+}
+
+
+/**
+ * Returns the first validation error of the given values or an empty string.
+ */
+function getContactErrorMessage(values) {
+  if (!values.name) return "Please enter a name.";
+  if (!values.email.includes("@") || !values.email.includes(".")) return "Please enter a valid email address.";
+  if (!values.phone) return "Please enter a phone number.";
+  return "";
+}
