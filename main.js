@@ -25,7 +25,6 @@ const routes = {
     title: "Join | Add Task",
     template: "./components/html/pages/add-task.html",
     // Protected route: task creation is only available after login.
-
     protected: true,
   },
   board: {
@@ -38,6 +37,11 @@ const routes = {
     title: "Join | Contacts",
     template: "./components/html/pages/contacts.html",
     // Protected route: contacts are only available after login.
+    protected: true,
+  },
+  help: {
+    title: "Join | Help",
+    template: "./components/html/pages/help.html",
     protected: true,
   },
 };
@@ -82,7 +86,6 @@ function renderPageContent(content, shouldAnimate) {
   app.classList.toggle("app-view--entering", animatePage);
   app.classList.remove("app-view--visible");
   app.innerHTML = content;
-  bindPageLinks();
 
   if (animatePage) {
     requestAnimationFrame(() => {
@@ -90,12 +93,6 @@ function renderPageContent(content, shouldAnimate) {
       app.classList.remove("app-view--entering");
     });
   }
-}
-
-function bindPageLinks() {
-  document.querySelectorAll("[data-page]").forEach((link) => {
-    link.addEventListener("click", handlePageLinkClick);
-  });
 }
 
 function getValidPage() {
@@ -195,7 +192,8 @@ async function initPage(page) {
     page === "summary" ||
     page === "add-task" ||
     page === "board" ||
-    page === "contacts"
+    page === "contacts" ||
+    page === "help"
   )
     initSummaryUser();
   if (page === "add-task") initAddTaskValidation();
