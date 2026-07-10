@@ -21,7 +21,9 @@ function getBoardCategoryClass(category) {
 
 function getBoardShortText(text) {
   const cleanedText = escapeBoardText(text);
-  return cleanedText.length > 72 ? `${cleanedText.slice(0, 69)}...` : cleanedText;
+  return cleanedText.length > 72
+    ? `${cleanedText.slice(0, 69)}...`
+    : cleanedText;
 }
 
 function getBoardSubtaskTemplate(subtasks) {
@@ -56,7 +58,11 @@ function getBoardAssigneeTemplate(assignedTo) {
 function getBoardAssignees(assignedTo) {
   if (Array.isArray(assignedTo)) return assignedTo.filter(Boolean).slice(0, 3);
   if (!assignedTo) return [];
-  return String(assignedTo).split(",").map((name) => name.trim()).filter(Boolean).slice(0, 3);
+  return String(assignedTo)
+    .split(",")
+    .map((name) => name.trim())
+    .filter(Boolean)
+    .slice(0, 3);
 }
 
 function getBoardAvatarTemplate(name, index) {
