@@ -11,6 +11,7 @@
   --color-text-dark: #000000;
   --color-text-main: #2a3140;
   --color-text-auth: #2a3647;
+  --color-text-hint: #a8a8a8;
   --color-muted: #667085;
   --color-placeholder: #71747a;
   --color-placeholder-light: #d1d1d1;
@@ -49,4 +50,5 @@
   --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.12);
   --shadow-card-strong: 0 2px 4px rgba(0, 0, 0, 0.14);
   --shadow-topbar: 0 2px 8px rgba(0, 0, 0, 0.12);
+  
 }
