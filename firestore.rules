@@ -25,6 +25,7 @@ service cloud.firestore {
     //   - name: string, required, 1-80 chars
     //   - email: string, required, valid email, max 120 chars
     //   - phone: string, optional, max 40 chars
+    //   - color: string, optional, hex color, 4-9 chars
     //   - createdAt: timestamp, required, immutable
     //   - updatedAt: timestamp, required
     //
@@ -65,6 +66,13 @@ service cloud.firestore {
         value.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
     }
 
+    function isValidHexColor(value) {
+      return value is string &&
+        value.size() >= 4 &&
+        value.size() <= 9 &&
+        value.matches('^#[A-Fa-f0-9]{3,8}$');
+    }
+
     function hasValidTimestamps() {
       return request.resource.data.createdAt is timestamp &&
         request.resource.data.updatedAt is timestamp;
@@ -92,11 +100,12 @@ service cloud.firestore {
     }
 
     function isValidContact(data) {
-      return hasOnlyFields(['name', 'email', 'phone', 'createdAt', 'updatedAt']) &&
+      return hasOnlyFields(['name', 'email', 'phone', 'color', 'createdAt', 'updatedAt']) &&
         hasRequiredFields(['name', 'email', 'createdAt', 'updatedAt']) &&
         isValidString(data.name, 1, 80) &&
         isValidEmail(data.email) &&
         (!('phone' in data) || isValidString(data.phone, 0, 40)) &&
+        (!('color' in data) || isValidHexColor(data.color)) &&
         hasValidTimestamps();
     }
 
