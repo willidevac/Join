@@ -1,6 +1,5 @@
 window.joinFirebaseReady = loadFirebaseConfig();
 
-
 /**
  * Loads the local Firebase config and then starts the Firebase adapter.
  */
@@ -10,12 +9,12 @@ async function loadFirebaseConfig() {
     if (!response.ok) return null;
     await loadScript("./components/js/firebase-config.js");
     await import("./firebase-auth.mjs");
+    await import("./firebase-contacts.mjs");
     return window.joinFirebaseAuth.waitForAuthReady();
   } catch (error) {
     return null;
   }
 }
-
 
 /**
  * Adds a script tag dynamically so the ignored firebase-config.js can load.
