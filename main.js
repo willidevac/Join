@@ -249,7 +249,7 @@ async function initPage(page) {
   if (usesAppShell(page) || isInternalLegalDocPage(page)) initSummaryUser();
   if (page === "summary") initSummaryMetrics();
   if (page === "add-task") await initAddTaskValidation();
-  if (page === "board") initBoardTasks();
+  if (page === "board") await initBoardTasks();
   if (page === "privacy-policy") initPrivacyLanguageSwitch();
   if (page === "legal-notice") initLegalNoticeLanguageSwitch();
 }

@@ -3,13 +3,13 @@ let activeBoardTaskId = "";
 let draggedBoardTaskId = "";
 
 /**
- * Renders locally saved tasks into the board columns and wires the detail view.
+ * Loads tasks from the task store and wires the board interactions.
  */
-function initBoardTasks() {
+async function initBoardTasks() {
   const taskLists = document.querySelectorAll("[data-board-status]");
   if (!taskLists.length) return;
 
-  activeBoardTasks = getStoredTasks();
+  activeBoardTasks = await loadTasksFromStore();
   renderBoardColumns(activeBoardTasks);
   initBoardTaskDetails(activeBoardTasks);
   initBoardDropZones(taskLists);
@@ -85,15 +85,23 @@ function handleBoardDragLeave(event, taskList) {
   clearBoardDropFeedback(taskList);
 }
 
-function handleBoardDrop(event, taskList) {
+async function handleBoardDrop(event, taskList) {
   event.preventDefault();
   const task = getDraggedBoardTask();
   if (!task) return;
 
-  updateStoredTask({ ...task, status: taskList.dataset.boardStatus });
-  draggedBoardTaskId = "";
-  clearAllBoardDropFeedback();
-  refreshBoardAfterDrop();
+  try {
+    await updateTaskInStore({
+      ...task,
+      status: taskList.dataset.boardStatus,
+    });
+    await refreshBoardAfterDrop();
+  } catch (error) {
+    console.error("Task status could not be updated.", error);
+  } finally {
+    draggedBoardTaskId = "";
+    clearAllBoardDropFeedback();
+  }
 }
 
 function getDraggedBoardTask() {
@@ -110,8 +118,8 @@ function clearAllBoardDropFeedback() {
   });
 }
 
-function refreshBoardAfterDrop() {
-  activeBoardTasks = getStoredTasks();
+async function refreshBoardAfterDrop() {
+  activeBoardTasks = await loadTasksFromStore();
   renderBoardColumns(activeBoardTasks);
   initBoardTaskDetails(activeBoardTasks);
 }
@@ -222,28 +230,38 @@ function fillBoardTaskEditForm(task) {
   getBoardEditField("Category").value = task.category || "user-story";
   getBoardEditField("Priority").value = task.priority || "medium";
   getBoardEditField("Status").value = task.status || "todo";
-  getBoardEditField("Assignee").value = task.assignedTo || "";
+  getBoardEditField("Assignee").value = formatBoardAssigneesForEdit(
+    task.assignedTo,
+  );
   getBoardEditField("Subtasks").value = formatBoardSubtasksForEdit(
     task.subtasks,
   );
 }
 
-function handleBoardDeleteClick() {
+async function handleBoardDeleteClick() {
   if (!activeBoardTaskId) return;
 
-  deleteStoredTask(activeBoardTaskId);
-  closeBoardTaskDetail();
-  initBoardTasks();
+  try {
+    await deleteTaskFromStore(activeBoardTaskId);
+    closeBoardTaskDetail();
+    await initBoardTasks();
+  } catch (error) {
+    console.error("Task could not be deleted.", error);
+  }
 }
 
-function handleBoardEditSubmit(event) {
+async function handleBoardEditSubmit(event) {
   event.preventDefault();
   const task = getActiveBoardTask();
   if (!task) return;
 
   const updatedTask = getBoardEditedTask(task);
-  updateStoredTask(updatedTask);
-  refreshBoardAfterEdit(updatedTask.id);
+  try {
+    await updateTaskInStore(updatedTask);
+    await refreshBoardAfterEdit(updatedTask.id);
+  } catch (error) {
+    console.error("Task could not be updated.", error);
+  }
 }
 
 function getBoardEditedTask(task) {
@@ -255,7 +273,7 @@ function getBoardEditedTask(task) {
     category: getBoardEditField("Category").value,
     priority: getBoardEditField("Priority").value,
     status: getBoardEditField("Status").value,
-    assignedTo: getBoardEditField("Assignee").value.trim(),
+    assignedTo: getBoardEditedAssignees(),
     subtasks: getBoardEditedSubtasks(),
   };
 }
@@ -267,12 +285,19 @@ function getBoardEditedSubtasks() {
     .filter(Boolean);
 }
 
+function getBoardEditedAssignees() {
+  return getBoardEditField("Assignee")
+    .value.split(",")
+    .map(getTrimmedText)
+    .filter(Boolean);
+}
+
 function getTrimmedText(text) {
   return text.trim();
 }
 
-function refreshBoardAfterEdit(taskId) {
-  activeBoardTasks = getStoredTasks();
+async function refreshBoardAfterEdit(taskId) {
+  activeBoardTasks = await loadTasksFromStore();
   renderBoardColumns(activeBoardTasks);
   initBoardTaskDetails(activeBoardTasks);
   openBoardTaskDetail(taskId, activeBoardTasks);
@@ -285,6 +310,11 @@ function getActiveBoardTask() {
 function formatBoardSubtasksForEdit(subtasks) {
   if (!subtasks || !subtasks.length) return "";
   return subtasks.join("\n");
+}
+
+function formatBoardAssigneesForEdit(assignedTo) {
+  if (Array.isArray(assignedTo)) return assignedTo.join(", ");
+  return assignedTo || "";
 }
 
 function setBoardDetailText(elementId, text) {
