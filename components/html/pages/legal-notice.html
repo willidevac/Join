@@ -1,27 +1,214 @@
-<main class="legal-page">
+<main
+  class="legal-page legal-page--legal legal-view legal-view--external"
+  id="legalExternalView"
+>
   <a class="legal-page__back" href="?page=login" data-page="login">
-    Back to login
+    Back to log in
   </a>
 
   <header class="legal-page__header">
     <h1>Legal Notice</h1>
+
+    <label class="language-switch" for="legalLanguageToggle">
+      <span>DE</span>
+      <input
+        id="legalLanguageToggle"
+        class="language-switch__input"
+        type="checkbox"
+        aria-label="Switch legal notice language"
+      />
+      <span class="language-switch__slider" aria-hidden="true"></span>
+      <span>EN</span>
+    </label>
   </header>
 
-  <section class="privacy-copy">
+  <section class="privacy-copy privacy-copy--de" lang="de">
+    <h2>Impressum</h2>
+
     <article>
-      <h2>Imprint</h2>
+      <h3>1. Anbieter und verantwortliche Stelle</h3>
       <p>
-        This Join application is built as an educational project. The project
-        team is responsible for the content shown in this learning version.
+        Anbieter dieser Anwendung ist das Join-Projektteam, eine studentische
+        Lerngruppe. Verantwortliche Person im Sinne der geltenden Vorschriften:
+        [Vorname Nachname], [Strasse und Hausnummer], [Postleitzahl und Ort],
+        Deutschland.
       </p>
     </article>
 
     <article>
-      <h2>Contact</h2>
+      <h3>2. Projektinformationen</h3>
       <p>
-        Contact details can be added by the project owner before publishing the
-        application outside the training environment.
+        Projektname: Join. Projektart: studentisches Lernprojekt und Kanban
+        Project Management Tool. Join wird ausschliesslich zu Lern- und
+        Uebungszwecken entwickelt und stellt keine produktive
+        Geschaeftsanwendung dar.
       </p>
     </article>
+
+    <article>
+      <h3>3. Kontakt</h3>
+      <p>
+        E-Mail: join-project@example.com. Anfragen zu diesem Lernprojekt werden
+        ueber diese Platzhalter-Adresse durch das Projektteam bearbeitet.
+      </p>
+    </article>
+
+    <article>
+      <h3>4. Verantwortlich fuer den Inhalt</h3>
+      <p>
+        Verantwortlich fuer die Inhalte dieser Anwendung ist das
+        Join-Projektteam, vertreten durch die oben genannte verantwortliche
+        Person.
+      </p>
+    </article>
+
+    <article>
+      <h3>5. Haftung fuer Inhalte</h3>
+      <p>
+        Die Inhalte dieser Lernanwendung werden mit Sorgfalt erstellt. Fuer die
+        Richtigkeit, Vollstaendigkeit und Aktualitaet der Inhalte kann jedoch
+        keine Gewaehr uebernommen werden, da es sich um ein Uebungsprojekt
+        handelt.
+      </p>
+    </article>
+
+    <article>
+      <h3>6. Haftung fuer Links</h3>
+      <p>
+        Diese Anwendung kann Verweise auf externe Webseiten enthalten, auf deren
+        Inhalte das Projektteam keinen Einfluss hat. Fuer die Inhalte verlinkter
+        Seiten ist stets der jeweilige Anbieter verantwortlich.
+      </p>
+    </article>
+
+    <article>
+      <h3>7. Urheberrecht und Designrechte</h3>
+      <p>
+        Das Design und die Marke Join wurden im Rahmen eines Bootcamps bei der
+        Developer Akademie GmbH erstellt. Die Designrechte liegen bei der
+        Developer Akademie GmbH. Eine Weiterverwendung ausserhalb dieses
+        Lernkontexts ist nur mit Zustimmung der Rechteinhaber zulaessig.
+      </p>
+    </article>
+
+    <article>
+      <h3>8. Hinweis zum Lernprojekt</h3>
+      <p>
+        Join ist ein studentisches Lernprojekt und dient ausschliesslich
+        Ausbildungszwecken. Die Anwendung bietet keine Rechtsberatung und stellt
+        keine produktive Business-Plattform dar.
+      </p>
+    </article>
+  </section>
+
+  <section class="privacy-copy privacy-copy--en" lang="en">
+    <h2>Legal Notice</h2>
+
+    <article>
+      <h3>1. Provider and responsible party</h3>
+      <p>
+        The provider of this application is the Join project team, a group of
+        students in a learning context. Person responsible under the applicable
+        rules: [First name Last name], [Street and number], [Postcode and city],
+        Germany.
+      </p>
+    </article>
+
+    <article>
+      <h3>2. Project information</h3>
+      <p>
+        Project name: Join. Project type: student learning project and Kanban
+        Project Management Tool. Join is developed solely for learning and
+        practice purposes and is not a productive business application.
+      </p>
+    </article>
+
+    <article>
+      <h3>3. Contact</h3>
+      <p>
+        Email: join-project@example.com. Requests regarding this learning
+        project are handled by the project team via this placeholder address.
+      </p>
+    </article>
+
+    <article>
+      <h3>4. Responsible for the content</h3>
+      <p>
+        Responsible for the content of this application is the Join project team,
+        represented by the responsible person named above.
+      </p>
+    </article>
+
+    <article>
+      <h3>5. Liability for content</h3>
+      <p>
+        The content of this learning application is created with care. However,
+        no guarantee can be given for the accuracy, completeness and timeliness
+        of the content, as this is a practice project.
+      </p>
+    </article>
+
+    <article>
+      <h3>6. Liability for links</h3>
+      <p>
+        This application may contain references to external websites whose
+        content the project team has no influence over. The respective provider
+        is always responsible for the content of linked pages.
+      </p>
+    </article>
+
+    <article>
+      <h3>7. Copyright and design rights</h3>
+      <p>
+        The design and the Join brand were created during a bootcamp at the
+        Developer Akademie GmbH. The design rights belong to the Developer
+        Akademie GmbH. Any reuse outside of this learning context is only
+        permitted with the consent of the rights holders.
+      </p>
+    </article>
+
+    <article>
+      <h3>8. Note on the learning project</h3>
+      <p>
+        Join is a student learning project and serves educational purposes only.
+        The application does not provide legal advice and is not a productive
+        business platform.
+      </p>
+    </article>
+  </section>
+</main>
+
+<main
+  class="summary-shell legal-view legal-view--internal"
+  id="legalInternalView"
+  hidden
+>
+  <div data-include="./components/html/organisms/app-sidebar.html"></div>
+
+  <section class="summary-main">
+    <div data-include="./components/html/organisms/app-topbar.html"></div>
+
+    <section
+      class="privacy-internal-content legal-page--legal"
+      aria-labelledby="legalInternalTitle"
+    >
+      <header class="privacy-internal-header">
+        <h1 id="legalInternalTitle">Legal Notice</h1>
+
+        <label class="language-switch" for="legalInternalLanguageToggle">
+          <span>DE</span>
+          <input
+            id="legalInternalLanguageToggle"
+            class="language-switch__input"
+            type="checkbox"
+            aria-label="Switch legal notice language"
+          />
+          <span class="language-switch__slider" aria-hidden="true"></span>
+          <span>EN</span>
+        </label>
+      </header>
+
+      <div class="privacy-internal-copy" id="legalInternalCopy"></div>
+    </section>
   </section>
 </main>

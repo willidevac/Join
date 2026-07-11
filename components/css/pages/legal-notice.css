@@ -1,0 +1,5 @@
+/* Legal Notice reuses the shared legal-page styling; only the view toggle is
+   page specific because the internal app-shell sets its own display. */
+.legal-view[hidden] {
+  display: none;
+}

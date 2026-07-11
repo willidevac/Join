@@ -246,19 +246,23 @@ async function initPage(page) {
   if (page === "login") initLoginValidation();
   if (page === "signup") initSignupValidation();
   if (page === "contacts") await initContacts();
-  if (usesAppShell(page) || isInternalPrivacyPage(page)) initSummaryUser();
+  if (usesAppShell(page) || isInternalLegalDocPage(page)) initSummaryUser();
   if (page === "summary") initSummaryMetrics();
   if (page === "add-task") await initAddTaskValidation();
   if (page === "board") initBoardTasks();
   if (page === "privacy-policy") initPrivacyLanguageSwitch();
+  if (page === "legal-notice") initLegalNoticeLanguageSwitch();
 }
 
 function usesAppShell(page) {
   return ["summary", "add-task", "board", "contacts", "help"].includes(page);
 }
 
-function isInternalPrivacyPage(page) {
-  return page === "privacy-policy" && isUserAuthenticated();
+function isInternalLegalDocPage(page) {
+  return (
+    (page === "privacy-policy" || page === "legal-notice") &&
+    isUserAuthenticated()
+  );
 }
 
 
