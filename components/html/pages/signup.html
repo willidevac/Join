@@ -1,122 +1,13 @@
 <main class="auth-page auth-page--signup">
-  <a class="auth-logo" href="?page=login" data-page="login" aria-label="Go to login page">
-    <img src="./components/assets/icons/Logo for Favicon construction.svg" alt="" />
-  </a>
+  <div data-include="./components/html/atoms/auth-logo.html"></div>
 
   <section class="auth-card auth-card--signup" aria-labelledby="signupTitle">
-    <a class="auth-card__back" href="?page=login" data-page="login" aria-label="Back to login">
-      &larr;
-    </a>
+    <div data-include="./components/html/atoms/auth-back-link.html"></div>
 
     <h1 class="auth-card__title" id="signupTitle">Sign up</h1>
 
-    <form
-      class="auth-form"
-      id="signupForm"
-      onsubmit="handleSignup(event)"
-      novalidate
-    >
-      <label class="form-field" for="signupName">
-        <span class="form-field__label">Name</span>
-        <input
-          class="form-field__input"
-          id="signupName"
-          name="name"
-          type="text"
-          placeholder="Name"
-          autocomplete="name"
-        />
-        <span
-          class="form-field__icon form-field__icon--user"
-          aria-hidden="true"
-        ></span>
-      </label>
-
-      <label class="form-field" for="signupEmail">
-        <span class="form-field__label">Email</span>
-        <input
-          class="form-field__input"
-          id="signupEmail"
-          name="email"
-          type="email"
-          placeholder="Email"
-          autocomplete="email"
-        />
-        <span
-          class="form-field__icon form-field__icon--mail"
-          aria-hidden="true"
-        ></span>
-      </label>
-
-      <label class="form-field" for="signupPassword">
-        <span class="form-field__label">Password</span>
-        <input
-          class="form-field__input"
-          id="signupPassword"
-          name="password"
-          type="password"
-          placeholder="Password"
-          autocomplete="new-password"
-        />
-        <span
-          class="form-field__icon form-field__icon--lock"
-          aria-hidden="true"
-        ></span>
-      </label>
-
-      <label class="form-field" for="signupConfirmPassword">
-        <span class="form-field__label">Confirm Password</span>
-        <input
-          class="form-field__input"
-          id="signupConfirmPassword"
-          name="confirmPassword"
-          type="password"
-          placeholder="Confirm Password"
-          autocomplete="new-password"
-        />
-        <span
-          class="form-field__icon form-field__icon--lock"
-          aria-hidden="true"
-        ></span>
-      </label>
-
-      <div class="privacy-consent">
-        <input
-          class="privacy-consent__checkbox"
-          id="privacyAccepted"
-          name="privacyAccepted"
-          type="checkbox"
-          disabled
-          aria-describedby="signupMessage"
-        />
-        <label class="privacy-consent__label" for="privacyAccepted">
-          I accept the
-          <a
-            class="privacy-consent__link"
-            id="privacyPolicyLink"
-            href="?page=privacy-policy"
-            data-page="privacy-policy"
-          >
-            Privacy policy
-          </a>
-        </label>
-      </div>
-
-      <p class="auth-form__message" id="signupMessage"></p>
-
-      <button
-        class="auth-form__submit"
-        id="signupButton"
-        type="submit"
-        disabled
-      >
-        Sign up
-      </button>
-    </form>
+    <div data-include="./components/html/organisms/signup-form.html"></div>
   </section>
 
-  <footer class="auth-footer">
-    <a href="?page=privacy-policy" data-page="privacy-policy">Privacy Policy</a>
-    <a href="?page=legal-notice" data-page="legal-notice">Legal notice</a>
-  </footer>
+  <div data-include="./components/html/molecules/auth-footer.html"></div>
 </main>

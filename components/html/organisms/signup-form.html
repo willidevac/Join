@@ -1,4 +1,10 @@
-<form class="auth-form" data-component="signup-form" id="signupForm" novalidate>
+<form
+  class="auth-form"
+  data-component="signup-form"
+  id="signupForm"
+  onsubmit="handleSignup(event)"
+  novalidate
+>
   <label class="form-field" data-component="auth-form-field" for="signupName">
     <span class="form-field__label">Name</span>
     <input
@@ -9,7 +15,7 @@
       placeholder="Name"
       autocomplete="name"
     />
-    <span class="form-field__icon" data-icon="user" aria-hidden="true"></span>
+    <span class="form-field__icon form-field__icon--user" aria-hidden="true"></span>
   </label>
 
   <label class="form-field" data-component="auth-form-field" for="signupEmail">
@@ -22,7 +28,7 @@
       placeholder="Email"
       autocomplete="email"
     />
-    <span class="form-field__icon" data-icon="mail" aria-hidden="true"></span>
+    <span class="form-field__icon form-field__icon--mail" aria-hidden="true"></span>
   </label>
 
   <label class="form-field" data-component="auth-form-field" for="signupPassword">
@@ -35,7 +41,7 @@
       placeholder="Password"
       autocomplete="new-password"
     />
-    <span class="form-field__icon" data-icon="lock" aria-hidden="true"></span>
+    <span class="form-field__icon form-field__icon--lock" aria-hidden="true"></span>
   </label>
 
   <label
@@ -52,36 +58,12 @@
       placeholder="Confirm Password"
       autocomplete="new-password"
     />
-    <span class="form-field__icon" data-icon="lock" aria-hidden="true"></span>
+    <span class="form-field__icon form-field__icon--lock" aria-hidden="true"></span>
   </label>
 
-  <div class="privacy-consent" data-component="privacy-consent">
-    <input
-      class="privacy-consent__checkbox"
-      id="privacyAccepted"
-      name="privacyAccepted"
-      type="checkbox"
-      disabled
-      aria-describedby="privacyConsentHint"
-    />
-    <label class="privacy-consent__label" for="privacyAccepted">
-      I accept the
-      <a
-        class="privacy-consent__link"
-        id="privacyPolicyLink"
-        href="?page=privacy-policy"
-        data-page="privacy-policy"
-      >
-        Privacy policy
-      </a>
-    </label>
-  </div>
+  <div data-include="./components/html/molecules/privacy-consent.html"></div>
 
-  <p class="auth-form__message" id="privacyConsentHint">
-    Open the Privacy policy before accepting it.
-  </p>
+  <p class="auth-form__message" id="signupMessage"></p>
 
-  <button class="auth-form__submit" data-component="auth-submit-button" type="submit" disabled>
-    Sign up
-  </button>
+  <div data-include="./components/html/atoms/auth-submit-button.html"></div>
 </form>

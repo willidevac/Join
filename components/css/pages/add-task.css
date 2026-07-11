@@ -64,7 +64,7 @@
 .add-task-field select,
 .add-task-field textarea {
   width: 100%;
-  border: 1px solid 1px solid var(--color-border-dark);
+  border: 1px solid var(--color-border-dark);
   border-radius: 8px;
   background: var(--color-white);
   color: var(--color-text-main);
@@ -128,7 +128,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid 1px solid var(--color-border-medium);
+  border: 1px solid var(--color-border-medium);
   border-radius: 8px;
   background: var(--color-white);
   box-shadow: var(--shadow-card);

@@ -18,25 +18,21 @@ const routes = {
   summary: {
     title: "Join | Summary",
     template: "./components/html/pages/summary.html",
-    // Protected route: requires a Firebase or fallback user before rendering.
     protected: true,
   },
   "add-task": {
     title: "Join | Add Task",
     template: "./components/html/pages/add-task.html",
-    // Protected route: task creation is only available after login.
     protected: true,
   },
   board: {
     title: "Join | Board",
     template: "./components/html/pages/board.html",
-    // Protected route: saved tasks should only be visible after login.
     protected: true,
   },
   contacts: {
     title: "Join | Contacts",
     template: "./components/html/pages/contacts.html",
-    // Protected route: contacts are only available after login.
     protected: true,
   },
   help: {
@@ -75,24 +71,53 @@ async function renderCurrentPage(options = {}) {
   const response = await fetch(route.template);
 
   document.title = route.title;
-  renderPageContent(await response.text(), options.animate);
+  await renderPageContent(await response.text(), options.animate, page);
   await initPage(page);
 }
 
-function renderPageContent(content, shouldAnimate) {
+async function renderPageContent(content, shouldAnimate, page) {
   const app = document.getElementById("app");
   const animatePage = Boolean(shouldAnimate);
 
+  preparePageAnimation(app, animatePage);
+  app.innerHTML = content;
+  await hydrateHtmlIncludes(app);
+  setActiveNavigation(page);
+  showRenderedPage(app, animatePage);
+}
+
+function preparePageAnimation(app, animatePage) {
   app.classList.toggle("app-view--entering", animatePage);
   app.classList.remove("app-view--visible");
-  app.innerHTML = content;
+}
 
-  if (animatePage) {
-    requestAnimationFrame(() => {
-      app.classList.add("app-view--visible");
-      app.classList.remove("app-view--entering");
-    });
+async function hydrateHtmlIncludes(root) {
+  let includes = [...root.querySelectorAll("[data-include]")];
+
+  while (includes.length) {
+    await Promise.all(includes.map(replaceHtmlInclude));
+    includes = [...root.querySelectorAll("[data-include]")];
   }
+}
+
+async function replaceHtmlInclude(placeholder) {
+  const response = await fetch(placeholder.dataset.include);
+  placeholder.outerHTML = await response.text();
+}
+
+function setActiveNavigation(page) {
+  document.querySelectorAll(".summary-nav__item").forEach((link) => {
+    link.classList.toggle("summary-nav__item--active", link.dataset.page === page);
+  });
+}
+
+function showRenderedPage(app, animatePage) {
+  if (!animatePage) return;
+
+  requestAnimationFrame(() => {
+    app.classList.add("app-view--visible");
+    app.classList.remove("app-view--entering");
+  });
 }
 
 function getValidPage() {
@@ -100,9 +125,6 @@ function getValidPage() {
   return routes[page] ? page : "login";
 }
 
-/**
- * Returns the requested page or redirects protected pages to login.
- */
 function getAuthorizedPage() {
   const page = getValidPage();
   if (isProtectedPage(page) && !isUserAuthenticated())
@@ -110,16 +132,10 @@ function getAuthorizedPage() {
   return page;
 }
 
-/**
- * Checks the user object synchronized from Firebase into localStorage.
- */
 function isUserAuthenticated() {
   return Boolean(getStoredUser());
 }
 
-/**
- * Waits for Firebase Auth before protected routes are rendered.
- */
 async function waitForFirebaseAuth() {
   if (window.joinFirebaseReady) await window.joinFirebaseReady;
 }
@@ -170,13 +186,10 @@ async function navigateToPage(page, params = {}) {
   const query = new URLSearchParams({ page, ...params });
   const shouldAnimateSignup = page === "signup" && getValidPage() !== "signup";
 
-  if (pageTransitionRunning) {
-    return;
-  }
+  if (pageTransitionRunning) return;
 
   if (shouldAnimateSignup) {
-    window.history.pushState({}, "", `?${query.toString()}`);
-    await renderSignupWithTransition();
+    await navigateWithSignupTransition(query);
     return;
   }
 
@@ -184,22 +197,24 @@ async function navigateToPage(page, params = {}) {
   await renderCurrentPage({ animate: shouldAnimateSignup });
 }
 
+async function navigateWithSignupTransition(query) {
+  window.history.pushState({}, "", `?${query.toString()}`);
+  await renderSignupWithTransition();
+}
+
 async function initPage(page) {
   if (page === "login") initLoginValidation();
   if (page === "signup") initSignupValidation();
   if (page === "contacts") await initContacts();
-  if (
-    page === "summary" ||
-    page === "add-task" ||
-    page === "board" ||
-    page === "contacts" ||
-    page === "help"
-  )
-    initSummaryUser();
+  if (usesAppShell(page)) initSummaryUser();
   if (page === "summary") initSummaryMetrics();
   if (page === "add-task") initAddTaskValidation();
   if (page === "board") initBoardTasks();
   if (page === "privacy-policy") initPrivacyLanguageSwitch();
+}
+
+function usesAppShell(page) {
+  return ["summary", "add-task", "board", "contacts", "help"].includes(page);
 }
 
 
@@ -209,19 +224,27 @@ async function renderSignupWithTransition() {
   pageTransitionRunning = true;
   const loader = await createSignupTransitionLoader();
 
-  setTransitionOverflow(true);
-  document.body.append(loader);
-  requestAnimationFrame(() => loader.classList.add("is-active"));
+  showTransitionLoader(loader);
 
   try {
     await wait(signupTransition.renderDelay);
     await renderCurrentPage({ animate: true });
     await wait(signupTransition.exitDelay);
   } finally {
-    removeTransitionLoader(loader);
-    cleanSignupTransitionParam();
-    pageTransitionRunning = false;
+    finishSignupTransition(loader);
   }
+}
+
+function finishSignupTransition(loader) {
+  removeTransitionLoader(loader);
+  cleanSignupTransitionParam();
+  pageTransitionRunning = false;
+}
+
+function showTransitionLoader(loader) {
+  setTransitionOverflow(true);
+  document.body.append(loader);
+  requestAnimationFrame(() => loader.classList.add("is-active"));
 }
 
 function shouldStartWithSignupTransition() {

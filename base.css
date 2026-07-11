@@ -1,9 +1,12 @@
 @import url("./components/css/molecules/color.css");
 @import url("./components/css/molecules/buttons.css");
-@import url("./components/css/molecules/app-shell.css");
+@import url("./components/css/molecules/auth.css");
 @import url("./components/css/molecules/assets.css");
 @import url("./components/css/molecules/language-switch.css");
 @import url("./components/css/molecules/page-transition.css");
+@import url("./components/css/organisms/app-shell.css");
+@import url("./components/css/organisms/board-detail.css");
+@import url("./components/css/organisms/contacts-dialog.css");
 @import url("./components/css/pages/login.css");
 @import url("./components/css/pages/signup.css");
 @import url("./components/css/pages/privacy-policy.css");
@@ -13,7 +16,6 @@
 @import url("./components/css/pages/board-column.css");
 @import url("./components/css/pages/board-search.css");
 @import url("./components/css/pages/contacts.css");
-@import url("./components/css/pages/contacts-dialog.css");
 @import url("./components/css/pages/help.css");
 
 :root {

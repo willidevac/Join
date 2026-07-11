@@ -1,68 +1,8 @@
 <main class="summary-shell contacts-shell">
-  <aside class="summary-sidebar" aria-label="Main navigation">
-    <a
-      class="summary-sidebar__logo"
-      href="?page=summary"
-      data-page="summary"
-      aria-label="Go to summary"
-    >
-      <img src="./components/assets/icons/Join logo vector.svg" alt="" />
-    </a>
-
-    <nav class="summary-nav">
-      <a class="summary-nav__item" href="?page=summary" data-page="summary">
-        <span class="summary-nav__icon" aria-hidden="true">
-          <img src="./components/assets/icons/summary_icons.svg" alt="" />
-        </span>
-        <span>Summary</span>
-      </a>
-      <a class="summary-nav__item" href="?page=add-task" data-page="add-task">
-        <span class="summary-nav__icon" aria-hidden="true">
-          <img src="./components/assets/icons/add_task_icons.svg" alt="" />
-        </span>
-        <span>Add Task</span>
-      </a>
-      <a class="summary-nav__item" href="?page=board" data-page="board">
-        <span class="summary-nav__icon" aria-hidden="true">
-          <img src="./components/assets/icons/board_icons.svg" alt="" />
-        </span>
-        <span>Board</span>
-      </a>
-      <a
-        class="summary-nav__item summary-nav__item--active"
-        href="?page=contacts"
-        data-page="contacts"
-      >
-        <span class="summary-nav__icon" aria-hidden="true">
-          <img src="./components/assets/icons/contacts_icons.svg" alt="" />
-        </span>
-        <span>Contacts</span>
-      </a>
-    </nav>
-
-    <footer class="summary-sidebar__footer">
-      <a href="?page=privacy-policy" data-page="privacy-policy"
-        >Privacy Policy</a
-      >
-      <a href="?page=legal-notice" data-page="legal-notice">Legal notice</a>
-    </footer>
-  </aside>
+  <div data-include="./components/html/organisms/app-sidebar.html"></div>
 
   <section class="summary-main">
-    <header class="summary-topbar">
-      <p>Kanban Project Management Tool</p>
-      <div class="summary-user-actions">
-        <button class="summary-help" type="button" data-page="help" aria-label="Help">?</button>
-        <button
-          class="summary-avatar"
-          type="button"
-          onclick="handleLogout()"
-          aria-label="Log out"
-        >
-          <span id="summaryUserInitials">?</span>
-        </button>
-      </div>
-    </header>
+    <div data-include="./components/html/organisms/app-topbar.html"></div>
     <section class="contacts-content">
       <aside class="contacts-list-panel">
         <button class="contacts-add-button" type="button" id="contactAddButton">

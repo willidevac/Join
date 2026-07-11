@@ -6,34 +6,6 @@
   padding: 96px 24px 64px;
 }
 
-.auth-page--login .auth-logo {
-  align-items: flex-end;
-  gap: 2px;
-  color: 	var(--color-text-auth);
-  font-weight: 700;
-}
-
-.auth-page--login .auth-logo__mark {
-  position: relative;
-  font-size: 64px;
-  line-height: 0.75;
-}
-
-.auth-page--login .auth-logo__mark::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: -16px;
-  width: 12px;
-  height: 12px;
-  background-color: var(--color-accent-light);
-}
-
-.auth-page--login .auth-logo__text {
-  font-size: 14px;
-  letter-spacing: 1px;
-}
-
 .auth-signup-hint {
   position: absolute;
   top: 64px;
@@ -72,7 +44,7 @@
   padding: 12px 52px 12px 21px;
   color: var(--color-text);
   background-color: var(--color-white);
-  border: 1px solid 1px solid var(--color-border-auth);
+  border: 1px solid var(--color-border-auth);
   border-radius: 10px;
   outline: none;
 }
@@ -112,15 +84,15 @@
   padding: 12px 24px;
   color: var(--color-text-auth);
   background-color: var(--color-white);
-  border: 1px solid 	1px solid var(--color-primary-auth);
+  border: 1px solid var(--color-primary-auth);
   font-size: 21px;
   font-weight: 700;
   transition: color 100ms ease, border-color 100ms ease;
 }
 
 .auth-page--login .auth-form__guest:hover {
-  color: 	var(--color-primary-hover);
-  border-color: 	var(--color-primary-hover);
+  color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 @media (max-width: 760px) {
