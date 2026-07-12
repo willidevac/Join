@@ -33,6 +33,7 @@ function openContactEditDialog() {
   if (!contact) return;
   fillContactEditForm(contact);
   document.getElementById("contactEditOverlay").hidden = false;
+  closeContactMenu();
 }
 
 
