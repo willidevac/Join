@@ -46,15 +46,30 @@
   border-radius: 24px;
   background: var(--color-surface);
   box-shadow: var(--shadow-card-strong);
+  color: var(--color-text-dark);
+  cursor: pointer;
   text-align: center;
-  transition: all 0.15s ease;
+  text-decoration: none;
+  transition:
+    background-color 0.1s ease,
+    color 0.1s ease,
+    transform 0.1s ease;
 }
 
-.summary-card:hover{
-  background: 	var(--color-primary-auth);
+.summary-card:hover,
+.summary-card:focus-visible {
+  background: var(--color-primary-auth);
   transform: scale(1.05);
-
   color: var(--color-white);
+}
+
+.summary-card:focus-visible {
+  outline: 3px solid var(--color-accent-line);
+  outline-offset: 3px;
+}
+
+.summary-card:active {
+  transform: scale(1.02);
 }
 
 .summary-card--small {
@@ -91,7 +106,8 @@
   line-height: 1;
 }
 
-.summary-card:hover strong {
+.summary-card:hover strong,
+.summary-card:focus-visible strong {
   color: var(--color-white);
 }
 
@@ -121,11 +137,13 @@
   display: none;
 }
 
-.summary-card:hover .summary-card__icon-image--default {
+.summary-card:hover .summary-card__icon-image--default,
+.summary-card:focus-visible .summary-card__icon-image--default {
   display: none;
 }
 
-.summary-card:hover .summary-card__icon-image--hover {
+.summary-card:hover .summary-card__icon-image--hover,
+.summary-card:focus-visible .summary-card__icon-image--hover {
   display: block;
 }
 
