@@ -231,9 +231,18 @@
 
 .contacts-back-button,
 .contacts-fab {
-    display: none;
+  display: none;
 }
 
+@media (hover: hover) {
+  .contacts-fab:hover {
+    background: var(--color-primary-hover);
+  }
+
+  .contacts-back-button:hover {
+    opacity: 0.6;
+  }
+}
 
 @media (max-width: 900px) {
   .contacts-list-panel {
@@ -254,27 +263,23 @@
     display: block;
   }
 
-  .contacts-back-button {
-    display: block;
-  }
-
   .contacts-heading {
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
-}
+  }
 
-.contacts-heading h1 {
+  .contacts-heading h1 {
     font-size: 47px;
-}
+  }
 
-.contacts-heading p {
+  .contacts-heading p {
     border-left: 0;
     padding-left: 0;
     font-size: 20px;
-}
+  }
 
-.contacts-heading p::after {
+  .contacts-heading p::after {
     content: "";
     display: block;
     width: 90px;
@@ -282,7 +287,7 @@
     margin-top: 8px;
     border-radius: 2px;
     background: var(--color-accent-light);
-}
+  }
 
   .contacts-fab {
     display: grid;
@@ -296,6 +301,14 @@
     background: var(--color-primary-auth);
     box-shadow: var(--shadow-soft);
     z-index: 5;
+    transition:
+      background-color 100ms ease,
+      transform 100ms ease;
+  }
+
+  .contacts-fab:active {
+    background: var(--color-primary-hover);
+    transform: scale(0.95);
   }
 
   .contacts-fab img {
@@ -309,6 +322,7 @@
     top: 24px;
     right: 16px;
     background: var(--color-transparent);
+    transition: opacity 100ms ease;
   }
 
   .contacts-back-button img {
