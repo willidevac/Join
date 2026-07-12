@@ -289,7 +289,9 @@ function getBoardEditedSubtasks() {
 
 function getActiveBoardSubtasks() {
   const activeTask = getActiveBoardTask();
-  return activeTask && Array.isArray(activeTask.subtasks) ? activeTask.subtasks : [];
+  return activeTask && Array.isArray(activeTask.subtasks)
+    ? activeTask.subtasks
+    : [];
 }
 
 function getBoardEditedAssignees() {

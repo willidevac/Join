@@ -141,14 +141,21 @@ async function warmHtmlPath(path) {
 async function warmIncludedHtml(content) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = content;
-  const includePaths = [...wrapper.querySelectorAll("[data-include]")].map((include) => include.dataset.include);
+  const includePaths = [...wrapper.querySelectorAll("[data-include]")].map(
+    (include) => include.dataset.include,
+  );
   await Promise.all(includePaths.map(warmHtmlPath));
 }
 
 function setActiveNavigation(page) {
-  document.querySelectorAll(".summary-nav__item, .summary-sidebar__footer a").forEach((link) => {
-    link.classList.toggle("summary-nav__item--active", link.dataset.page === page);
-  });
+  document
+    .querySelectorAll(".summary-nav__item, .summary-sidebar__footer a")
+    .forEach((link) => {
+      link.classList.toggle(
+        "summary-nav__item--active",
+        link.dataset.page === page,
+      );
+    });
 }
 
 function showRenderedPage(app, animatePage) {
@@ -264,7 +271,6 @@ function isInternalLegalDocPage(page) {
     isUserAuthenticated()
   );
 }
-
 
 window.navigateToPage = navigateToPage;
 
