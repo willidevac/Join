@@ -12,8 +12,8 @@ async function initContacts() {
   activeContacts = await getContactsSafely();
   const groups = groupContactsByLetter(sortContactsByName(activeContacts));
   contactsList.innerHTML = Object.keys(groups)
-  .map((letter) => getContactGroupTemplate(letter, groups[letter]))
-  .join("");
+    .map((letter) => getContactGroupTemplate(letter, groups[letter]))
+    .join("");
   initContactDetails(activeContacts);
 }
 
@@ -77,7 +77,9 @@ function groupContactsByLetter(contacts) {
  */
 function initContactDetails(contacts) {
   document.querySelectorAll(".contacts-item").forEach((item) => {
-    item.addEventListener("click", () => openContactDetail(item.dataset.contactId, contacts));
+    item.addEventListener("click", () =>
+      openContactDetail(item.dataset.contactId, contacts),
+    );
   });
 }
 
@@ -89,11 +91,11 @@ function fillContactDetail(contact) {
   const avatar = document.getElementById("contactDetailAvatar");
   avatar.textContent = getContactInitials(contact.name);
   avatar.style.backgroundColor = contact.color;
-  document.getElementById("contactDetailName").textContent = contact.name;      
-  document.getElementById("contactDetailPhone").textContent = contact.phone;    
-  const email = document.getElementById("contactDetailEmail");                  
-  email.textContent = contact.email;                                            
-  email.href = "mailto:" + contact.email;                                       
+  document.getElementById("contactDetailName").textContent = contact.name;
+  document.getElementById("contactDetailPhone").textContent = contact.phone;
+  const email = document.getElementById("contactDetailEmail");
+  email.textContent = contact.email;
+  email.href = "mailto:" + contact.email;
 }
 
 
@@ -101,12 +103,15 @@ function fillContactDetail(contact) {
  * Looks up the clicked contact and shows its filled detail view.
  */
 function openContactDetail(contactId, contacts = activeContacts) {
-  const contact = contacts.find((currentContact) => currentContact.id === contactId);
+  const contact = contacts.find(
+    (currentContact) => currentContact.id === contactId,
+  );
   if (!contact) return;
   activeContactId = contact.id;
   markActiveContactItem(contact.id);
   fillContactDetail(contact);
   document.getElementById("contactDetail").hidden = false;
+  setMobileDetailView(true);
 }
 
 
@@ -114,13 +119,16 @@ function openContactDetail(contactId, contacts = activeContacts) {
  * Removes the shown contact, cleans its task assignments and refreshes the list.
  */
 async function deleteActiveContact() {
-  const contact = activeContacts.find((currentContact) => currentContact.id === activeContactId);
+  const contact = activeContacts.find(
+    (currentContact) => currentContact.id === activeContactId,
+  );
   if (!contact) return;
   try {
     await deleteContactFromStore(activeContactId);
     await removeContactFromTasks(contact.name);
     activeContactId = "";
     document.getElementById("contactDetail").hidden = true;
+    setMobileDetailView(false);
     await initContacts();
     showContactToast("Contact successfully deleted");
   } catch (error) {
@@ -135,10 +143,13 @@ async function deleteActiveContact() {
 async function removeContactFromTasks(contactName) {
   const tasks = await loadTasksFromStore();
   const affectedTasks = tasks.filter(
-    (task) => Array.isArray(task.assignedTo) && task.assignedTo.includes(contactName),
+    (task) =>
+      Array.isArray(task.assignedTo) && task.assignedTo.includes(contactName),
   );
   await Promise.all(
-    affectedTasks.map((task) => updateTaskInStore(removeAssigneeFromTask(task, contactName))),
+    affectedTasks.map((task) =>
+      updateTaskInStore(removeAssigneeFromTask(task, contactName)),
+    ),
   );
 }
 
@@ -154,7 +165,6 @@ function removeAssigneeFromTask(task, contactName) {
 }
 
 
-
 /**
  * Wires the static contact controls once per page load.
  */
@@ -164,6 +174,7 @@ function initContactActions() {
   deleteButton.addEventListener("click", deleteActiveContact);
   initContactEditEvents();
   initContactAddEvents();
+  initContactViewEvents();
   deleteButton.dataset.eventsReady = "true";
 }
 
@@ -173,7 +184,10 @@ function initContactActions() {
  */
 function markActiveContactItem(contactId) {
   document.querySelectorAll(".contacts-item").forEach((item) => {
-    item.classList.toggle("contacts-item--active", item.dataset.contactId === contactId);
+    item.classList.toggle(
+      "contacts-item--active",
+      item.dataset.contactId === contactId,
+    );
   });
 }
 
@@ -190,4 +204,45 @@ function showContactToast(message) {
 }
 
 
+/**
+ * Switches the mobile layout between list and detail view and closes the actions menu.
+ */
+function setMobileDetailView(isOpen) {
+  const content = document.querySelector(".contacts-content");
+  content.classList.toggle("contacts-content--detail", isOpen);
+  closeContactMenu();
+}
 
+
+/**
+ * Wires the mobile-only view controls (back arrow and both FABs).
+ */
+function initContactViewEvents() {
+  document
+    .getElementById("contactBackButton")
+    .addEventListener("click", () => setMobileDetailView(false));
+  document
+    .getElementById("contactAddFab")
+    .addEventListener("click", openContactAddDialog);
+  document
+    .getElementById("contactMenuFab")
+    .addEventListener("click", toggleContactMenu);
+}
+
+
+/**
+ * Shows or hides the edit/delete actions behind the mobile menu fab.
+ */
+function toggleContactMenu() {
+  const actions = document.querySelector(".contacts-detail-actions");
+  actions.classList.toggle("contacts-detail-actions--open");
+}
+
+
+/**
+ * Closes the mobile edit/delete menu if it is open.
+ */
+function closeContactMenu() {
+  const actions = document.querySelector(".contacts-detail-actions");
+  actions.classList.remove("contacts-detail-actions--open");
+}
