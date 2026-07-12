@@ -175,6 +175,15 @@
   }
 }
 
+.contacts-dialog-primary:active {
+  background: var(--color-primary-hover);
+}
+
+.contacts-dialog-secondary:active {
+  color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
 @media (max-width: 900px) {
   .contacts-dialog {
     flex-direction: column;
