@@ -35,6 +35,22 @@ async function handleBoardDetailSubtaskChange(event) {
   await refreshBoardAfterEdit(updatedTask.id);
 }
 
+/**
+ * Moves the open task from the mobile detail dialog without drag and drop.
+ */
+async function handleBoardMobileStatusChange(event) {
+  const task = getActiveBoardTask();
+  const status = event.target.value;
+  if (!task || task.status === status) return;
+
+  await updateTaskInStore({ ...task, status });
+  await refreshBoardAfterEdit(task.id);
+}
+
+function syncBoardMobileStatus(status) {
+  getBoardMobileStatusSelect().value = status || "todo";
+}
+
 function getTaskWithToggledSubtask(task, checkbox) {
   const index = Number(checkbox.dataset.detailSubtaskIndex);
   const subtasks = getNormalizedBoardSubtasks(task.subtasks);
@@ -93,4 +109,8 @@ function getBoardDetailSubtasks() {
 
 function getBoardEditAssignees() {
   return document.getElementById("boardTaskEditAssignees");
+}
+
+function getBoardMobileStatusSelect() {
+  return document.getElementById("boardTaskMobileStatus");
 }

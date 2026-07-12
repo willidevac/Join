@@ -135,6 +135,7 @@ function initBoardDetailControls() {
   getBoardEditCancelButton().addEventListener("click", showBoardDetailViewMode);
   getBoardEditForm().addEventListener("submit", handleBoardEditSubmit);
   getBoardDetailSubtasks().addEventListener("change", handleBoardDetailSubtaskChange);
+  getBoardMobileStatusSelect().addEventListener("change", handleBoardMobileStatusChange);
   overlay.dataset.eventsReady = "true";
 }
 
@@ -200,6 +201,7 @@ function fillBoardTaskDetail(task) {
   setBoardDetailText("boardTaskDetailDueDate", task.dueDate || "-");
   setBoardDetailText("boardTaskDetailPriority", task.priority || "-");
   setBoardDetailText("boardTaskDetailStatus", formatBoardStatus(task.status));
+  syncBoardMobileStatus(task.status);
   setBoardDetailText(
     "boardTaskDetailAssignee",
     task.assignedTo || "Not assigned",

@@ -31,6 +31,15 @@
           <dd id="boardTaskDetailSubtasks" class="board-detail-subtasks">-</dd>
         </div>
       </dl>
+      <label class="board-detail-mobile-status" for="boardTaskMobileStatus">
+        <span>Move task</span>
+        <select id="boardTaskMobileStatus">
+          <option value="todo">To do</option>
+          <option value="in-progress">In progress</option>
+          <option value="feedback">Await feedback</option>
+          <option value="done">Done</option>
+        </select>
+      </label>
       <div class="board-detail-actions board-detail-actions--between">
         <button class="board-detail-danger" type="button" id="boardTaskDeleteButton">
           Delete
