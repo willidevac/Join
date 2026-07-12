@@ -80,6 +80,7 @@ async function initSummaryMetrics() {
   setSummaryText("summaryDoneCount", countTasksByStatus(tasks, "done"));
   setSummaryText("summaryBoardCount", tasks.length);
   setSummaryText("summaryUrgentCount", countTasksByPriority(tasks, "urgent"));
+  setSummaryText("summaryDeadlineDate", getUpcomingDeadlineText(tasks));
 }
 
 
@@ -96,6 +97,87 @@ function countTasksByStatus(tasks, status) {
  */
 function countTasksByPriority(tasks, priority) {
   return tasks.filter((task) => task.priority === priority).length;
+}
+
+
+/**
+ * Returns the closest valid due date from unfinished tasks.
+ */
+function getUpcomingDeadlineText(tasks, today = new Date()) {
+  const upcomingDeadline = getUpcomingDeadline(tasks, today);
+  if (!upcomingDeadline) return "No upcoming deadline";
+
+  return upcomingDeadline.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+
+/**
+ * Selects the earliest upcoming date from unfinished tasks.
+ */
+function getUpcomingDeadline(tasks, today) {
+  const startOfToday = getStartOfDay(today);
+  return getOpenTaskDueDates(tasks)
+    .filter((dueDate) => dueDate && dueDate >= startOfToday)
+    .sort((firstDate, secondDate) => firstDate - secondDate)[0];
+}
+
+
+/**
+ * Returns midnight in the local timezone for date comparisons.
+ */
+function getStartOfDay(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+
+/**
+ * Collects parsed due dates from tasks that are not done.
+ */
+function getOpenTaskDueDates(tasks) {
+  return tasks
+    .filter((task) => task.status !== "done")
+    .map((task) => parseTaskDueDate(task.dueDate));
+}
+
+
+/**
+ * Parses the date input format without shifting the day through UTC.
+ */
+function parseTaskDueDate(value) {
+  const dateParts = getTaskDueDateParts(value);
+  if (!dateParts) return null;
+  const date = new Date(dateParts.year, dateParts.month - 1, dateParts.day);
+  return isMatchingTaskDate(date, dateParts) ? date : null;
+}
+
+
+/**
+ * Converts a valid date input string into numeric date parts.
+ */
+function getTaskDueDateParts(value) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || "");
+  if (!match) return null;
+  return {
+    year: Number(match[1]),
+    month: Number(match[2]),
+    day: Number(match[3]),
+  };
+}
+
+
+/**
+ * Rejects dates that JavaScript silently rolled into another month.
+ */
+function isMatchingTaskDate(date, dateParts) {
+  return (
+    date.getFullYear() === dateParts.year &&
+    date.getMonth() === dateParts.month - 1 &&
+    date.getDate() === dateParts.day
+  );
 }
 
 
