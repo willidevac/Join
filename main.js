@@ -218,15 +218,21 @@ function handlePageLinkClick(event) {
 }
 
 function getLinkParams(link) {
+  const params = {};
+
   if (link.dataset.transition === "signup") {
-    return { transition: "signup" };
+    params.transition = "signup";
   }
 
-  if (link.dataset.privacyOpened !== "true") {
-    return {};
+  if (link.dataset.privacyOpened === "true") {
+    params.privacy = "opened";
   }
 
-  return { privacy: "opened" };
+  if (link.dataset.taskStatus) {
+    params.status = link.dataset.taskStatus;
+  }
+
+  return params;
 }
 
 async function navigateToPage(page, params = {}) {

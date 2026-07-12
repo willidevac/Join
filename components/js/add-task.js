@@ -1,4 +1,5 @@
 const ADD_TASK_REDIRECT_DELAY = 900;
+const ADD_TASK_STATUSES = ["todo", "in-progress", "feedback", "done"];
 let addTaskRedirectTimer;
 let addTaskContacts = [];
 let selectedTaskAssignees = [];
@@ -129,9 +130,17 @@ function getAddTaskData() {
     assignedTo: getAddTaskAssignee(),
     category: getAddTaskCategory(),
     subtasks: getAddTaskSubtasks(),
-    status: "todo",
+    status: getAddTaskStatus(),
     createdAt: new Date().toISOString(),
   };
+}
+
+/**
+ * Uses a valid status passed by a board column and defaults to To do.
+ */
+function getAddTaskStatus() {
+  const status = new URLSearchParams(window.location.search).get("status");
+  return ADD_TASK_STATUSES.includes(status) ? status : "todo";
 }
 
 function createTaskId() {
