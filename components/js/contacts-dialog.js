@@ -67,7 +67,7 @@ function fillContactEditForm(contact) {
 
 
 /**
- * Validates the edit form and saves the contact on success.
+ * Validates the edit form and saves the contact while the submit button is disabled.
  */
 async function handleContactEditSubmit(event) {
   event.preventDefault();
@@ -75,10 +75,13 @@ async function handleContactEditSubmit(event) {
   const errorMessage = getContactErrorMessage(values);
   document.getElementById("contactEditError").textContent = errorMessage;
   if (errorMessage) return;
+  setSubmitButtonDisabled(event.target, true);
   try {
     await saveEditedContact();
   } catch (error) {
     document.getElementById("contactEditError").textContent = "Contact could not be saved.";
+  } finally {
+    setSubmitButtonDisabled(event.target, false);
   }
 }
 
@@ -141,7 +144,7 @@ function handleContactAddOverlayClick(event) {
 
 
 /**
- * Validates the add form and creates the contact on success.
+ * Validates the add form and creates the contact while the submit button is disabled.
  */
 async function handleContactAddSubmit(event) {
   event.preventDefault();
@@ -149,10 +152,13 @@ async function handleContactAddSubmit(event) {
   const errorMessage = getContactErrorMessage(values);
   document.getElementById("contactAddError").textContent = errorMessage;
   if (errorMessage) return;
+  setSubmitButtonDisabled(event.target, true);
   try {
     await createContact(values);
   } catch (error) {
     document.getElementById("contactAddError").textContent = "Contact could not be created.";
+  } finally {
+    setSubmitButtonDisabled(event.target, false);
   }
 }
 
@@ -197,4 +203,12 @@ function getContactErrorMessage(values) {
   if (!values.email.includes("@") || !values.email.includes(".")) return "Please enter a valid email address.";
   if (!values.phone) return "Please enter a phone number.";
   return "";
+}
+
+
+/**
+ * Enables or disables the submit button of the given form.
+ */
+function setSubmitButtonDisabled(form, isDisabled) {
+  form.querySelector('button[type="submit"]').disabled = isDisabled;
 }
