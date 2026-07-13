@@ -116,6 +116,16 @@ function openContactDetail(contactId, contacts = activeContacts) {
 
 
 /**
+ * Hides the contact detail view and clears the active selection.
+ */
+function closeContactDetail() {
+  activeContactId = "";
+  document.getElementById("contactDetail").hidden = true;
+  setMobileDetailView(false);
+}
+
+
+/**
  * Removes the shown contact, cleans its task assignments and refreshes the list.
  */
 async function deleteActiveContact() {
@@ -126,9 +136,7 @@ async function deleteActiveContact() {
   try {
     await deleteContactFromStore(activeContactId);
     await removeContactFromTasks(contact.name);
-    activeContactId = "";
-    document.getElementById("contactDetail").hidden = true;
-    setMobileDetailView(false);
+    closeContactDetail();
     await initContacts();
     showContactToast("Contact successfully deleted");
   } catch (error) {
