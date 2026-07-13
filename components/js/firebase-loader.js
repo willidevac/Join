@@ -6,15 +6,24 @@ window.joinFirebaseReady = loadFirebaseConfig();
 async function loadFirebaseConfig() {
   try {
     const response = await fetch("./components/js/firebase-config.js");
-    if (!response.ok) return null;
+    if (!response.ok) return handleFirebaseLoadFailure();
     await loadScript("./components/js/firebase-config.js");
     await import("./firebase-auth.mjs");
     await import("./firebase-contacts.mjs");
     await import("./firebase-tasks.mjs");
     return window.joinFirebaseAuth.waitForAuthReady();
-  } catch (error) {
-    return null;
+  } catch {
+    return handleFirebaseLoadFailure();
   }
+}
+
+
+/**
+ * Removes stale local auth data when Firebase cannot be loaded.
+ */
+function handleFirebaseLoadFailure() {
+  clearStoredUser();
+  return null;
 }
 
 /**

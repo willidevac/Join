@@ -1,13 +1,19 @@
+const AUTH_ERROR_MESSAGES = {
+  "auth/firebase-unavailable":
+    "Authentication could not be loaded. Please try again later.",
+  "auth/invalid-credential": "Please check your email and password.",
+  "auth/email-already-in-use": "This email address is already registered.",
+  "auth/weak-password": "Please use at least 6 characters.",
+  "auth/operation-not-allowed": "This login method is not enabled yet.",
+  "auth/network-request-failed": "Please check your internet connection.",
+};
+
+
 /**
- * Uses Firebase login when available and falls back to the dummy login.
+ * Signs in through Firebase and opens the protected summary page.
  */
 async function handleLogin(email, password) {
-  if (isFirebaseAuthReady()) {
-    await loginWithFirebase(email, password);
-    return;
-  }
-  saveStoredUser({ name: "User", type: "login" });
-  navigateToPage("summary");
+  await loginWithFirebase(email, password);
 }
 
 async function handleSignup(event) {
@@ -32,26 +38,24 @@ async function registerUser() {
 }
 
 /**
- * Saves a new signup through Firebase or the temporary dummy user.
+ * Saves a new signup only through Firebase Authentication.
  */
 async function saveSignedUpUser() {
-  if (isFirebaseAuthReady()) {
-    const user = await window.joinFirebaseAuth.registerFirebaseUser(
-      getSignupName(),
-      getSignupEmail(),
-      getSignupPassword(),
-    );
-    saveStoredUser(user);
-    return;
-  }
-  saveStoredUser({ name: getSignupName(), type: "signup" });
+  const auth = getFirebaseAuthAdapter();
+  const user = await auth.registerFirebaseUser(
+    getSignupName(),
+    getSignupEmail(),
+    getSignupPassword(),
+  );
+  saveStoredUser(user);
 }
 
 /**
  * Stores the Firebase login result and opens the protected summary page.
  */
 async function loginWithFirebase(email, password) {
-  const user = await window.joinFirebaseAuth.loginFirebaseUser(email, password);
+  const auth = getFirebaseAuthAdapter();
+  const user = await auth.loginFirebaseUser(email, password);
   saveStoredUser(user);
   navigateToPage("summary");
 }
@@ -68,16 +72,12 @@ async function handleGuestLogin() {
 }
 
 /**
- * Uses Firebase Anonymous Auth for guests and keeps a dummy fallback.
+ * Uses Firebase Anonymous Authentication for the guest login.
  */
 async function loginGuestUser() {
-  if (isFirebaseAuthReady()) {
-    const user = await window.joinFirebaseAuth.loginGuestFirebaseUser();
-    saveStoredUser(user);
-    navigateToPage("summary");
-    return;
-  }
-  saveStoredUser({ name: "Guest", type: "guest" });
+  const auth = getFirebaseAuthAdapter();
+  const user = await auth.loginGuestFirebaseUser();
+  saveStoredUser(user);
   navigateToPage("summary");
 }
 
@@ -97,21 +97,31 @@ function isFirebaseAuthReady() {
   return Boolean(window.joinFirebaseAuth);
 }
 
+
+/**
+ * Returns the Firebase adapter or stops authentication with a clear error.
+ */
+function getFirebaseAuthAdapter() {
+  if (isFirebaseAuthReady()) return window.joinFirebaseAuth;
+  throw createFirebaseUnavailableError();
+}
+
+
+/**
+ * Creates the shared error for an unavailable Firebase Authentication service.
+ */
+function createFirebaseUnavailableError() {
+  const error = new Error("Firebase Authentication is unavailable.");
+  error.code = "auth/firebase-unavailable";
+  return error;
+}
+
 /**
  * Converts Firebase error codes into short messages for the auth forms.
  */
 function getAuthErrorMessage(error) {
   const code = error && error.code;
-  if (code === "auth/invalid-credential")
-    return "Please check your email and password.";
-  if (code === "auth/email-already-in-use")
-    return "This email address is already registered.";
-  if (code === "auth/weak-password") return "Please use at least 6 characters.";
-  if (code === "auth/operation-not-allowed")
-    return "This login method is not enabled yet.";
-  if (code === "auth/network-request-failed")
-    return "Please check your internet connection.";
-  return "Authentication is currently not available.";
+  return AUTH_ERROR_MESSAGES[code] || "Authentication is currently not available.";
 }
 
 function initSignupValidation() {
