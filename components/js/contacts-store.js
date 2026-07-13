@@ -1,5 +1,6 @@
 const CONTACT_STORAGE_KEY = "joinContacts";
 
+
 /**
  * Reads contacts from Firestore when available, otherwise from localStorage.
  */
@@ -8,6 +9,7 @@ async function loadContactsFromStore() {
     return window.joinFirebaseContacts.loadContacts();
   return getLocalContacts();
 }
+
 
 /**
  * Creates one contact in Firestore or localStorage and returns it with an id.
@@ -19,6 +21,7 @@ async function createContactInStore(contact) {
   saveLocalContacts([...getLocalContacts(), newContact]);
   return newContact;
 }
+
 
 /**
  * Updates one contact in Firestore or localStorage.
@@ -34,6 +37,7 @@ async function updateContactInStore(contactId, contact) {
   saveLocalContacts(contacts);
 }
 
+
 /**
  * Deletes one contact from Firestore or localStorage.
  */
@@ -47,15 +51,27 @@ async function deleteContactFromStore(contactId) {
   );
 }
 
+
+/**
+ * Checks whether the Firestore contact API is loaded and available.
+ */
 function isContactFirestoreReady() {
   return Boolean(window.joinFirebaseContacts);
 }
 
+
+/**
+ * Reads and parses the stored contacts from localStorage.
+ */
 function getLocalContacts() {
   const storedContact = localStorage.getItem(CONTACT_STORAGE_KEY);
   return storedContact ? JSON.parse(storedContact) : [];
 }
 
+
+/**
+ * Writes the given contact list as JSON into localStorage.
+ */
 function saveLocalContacts(contacts) {
   localStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify(contacts));
 }
