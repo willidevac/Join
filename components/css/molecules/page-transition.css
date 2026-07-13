@@ -28,10 +28,17 @@ body.is-page-transitioning {
   position: absolute;
   top: 50vh;
   left: 50vw;
+  display: block;
   width: 160px;
   height: auto;
   transform: translate(-50%, -50%) scale(1);
   will-change: transform;
+}
+
+.page-transition__logo img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .page-transition--signup.is-active .page-transition__logo {
@@ -64,6 +71,10 @@ body.is-page-transitioning {
 }
 
 @media (max-width: 767px) {
+  .page-transition--signup {
+    background-color: var(--color-primary-auth);
+  }
+
   .page-transition__logo {
     width: 124px;
   }
