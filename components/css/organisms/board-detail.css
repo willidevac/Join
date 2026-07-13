@@ -208,7 +208,7 @@
   font-weight: 700;
 }
 
-@media (max-width: 620px) {
+@media (max-width: 767px) {
   .board-detail-card {
     padding: 24px;
   }

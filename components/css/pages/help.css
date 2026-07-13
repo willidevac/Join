@@ -100,7 +100,7 @@
   grid-column: 2;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1279px) {
   .help-content {
     padding: 48px 24px;
   }
@@ -110,7 +110,7 @@
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 479px) {
   .help-content {
     min-height: calc(100vh - 72px);
     padding-top: 40px;

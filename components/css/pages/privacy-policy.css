@@ -113,7 +113,7 @@
   line-height: 1.35;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .legal-page__header {
     align-items: flex-start;
     flex-direction: column;

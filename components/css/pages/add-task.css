@@ -353,7 +353,7 @@
   }
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1279px) {
   .add-task-content {
     padding: 72px 24px 48px;
   }
@@ -367,7 +367,7 @@
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 479px) {
   .add-task-content h1 {
     font-size: 40px;
   }

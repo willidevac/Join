@@ -169,7 +169,7 @@ a.summary-user-menu__help {
   display: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1279px) {
   .summary-shell {
     grid-template-columns: 1fr;
   }
@@ -229,7 +229,7 @@ a.summary-user-menu__help {
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 479px) {
   .summary-topbar {
     min-height: 72px;
   }

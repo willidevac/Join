@@ -63,7 +63,7 @@ body.is-page-transitioning {
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 767px) {
   .page-transition__logo {
     width: 124px;
   }

@@ -23,7 +23,10 @@
 
 :root {
   --font-body: Arial, Helvetica, sans-serif;
+  --content-max-width: 1440px;
 }
+
+/* Responsive tiers: 320 base, 480 mobile, 768 tablet, 1024 desktop, 1280 wide. */
 
 * {
   box-sizing: border-box;

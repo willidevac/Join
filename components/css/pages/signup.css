@@ -37,7 +37,7 @@
   border-color: var(--color-accent-light);
 }
 
-@media (max-width: 760px) {
+@media (max-width: 767px) {
   .auth-page--signup {
     align-content: start;
     padding: 32px 16px 96px;
@@ -88,7 +88,7 @@
   }
 }
 
-@media (max-width: 390px) {
+@media (max-width: 479px) {
   .privacy-consent {
     align-items: flex-start;
   }

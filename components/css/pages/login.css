@@ -95,7 +95,7 @@
   border-color: var(--color-primary-hover);
 }
 
-@media (max-width: 760px) {
+@media (max-width: 767px) {
   .auth-page--login {
     align-content: start;
     padding: clamp(16px, 2svh, 32px) 16px clamp(64px, 10svh, 96px);
@@ -113,7 +113,7 @@
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 479px) {
   .auth-form__actions {
     width: 100%;
     flex-direction: column;

@@ -64,7 +64,7 @@
   animation: boardCardIn 0.5s ease;
 }
 
-@media (max-width: 620px) {
+@media (max-width: 767px) {
   .board-header__right {
     display: flex;
     flex-direction: column;
