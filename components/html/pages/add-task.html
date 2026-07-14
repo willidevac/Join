@@ -1,30 +1,12 @@
-<main class="summary-shell add-task-shell">
-  <div data-include="./components/html/organisms/app-sidebar.html"></div>
+<section class="add-task-content" aria-labelledby="addTaskTitle">
+  <h1 id="addTaskTitle">Add Task</h1>
 
-  <section class="summary-main">
-    <div data-include="./components/html/organisms/app-topbar.html"></div>
-
-    <section class="add-task-content" aria-labelledby="addTaskTitle">
-      <h1 id="addTaskTitle">Add Task</h1>
-
-      <p
-        class="add-task-feedback add-task-feedback--success"
-        id="addTaskSuccessMessage"
-        role="status"
-        aria-live="polite"
-        hidden
-      >
-        Task created successfully. Opening board...
-      </p>
-      <p
-        class="add-task-feedback add-task-feedback--error"
-        id="addTaskErrorMessage"
-        role="alert"
-        hidden
-      >
-        Task could not be saved. Please try again.
-      </p>
-      <div data-include="./components/html/organisms/add-task-form.html"></div>
-    </section>
-  </section>
-</main>
+  <p class="add-task-feedback add-task-feedback--success" id="addTaskSuccessMessage" role="status" aria-live="polite"
+    hidden>
+    Task created successfully. Opening board...
+  </p>
+  <p class="add-task-feedback add-task-feedback--error" id="addTaskErrorMessage" role="alert" hidden>
+    Task could not be saved. Please try again.
+  </p>
+  <div data-include="./components/html/organisms/add-task-form.html"></div>
+</section>

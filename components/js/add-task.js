@@ -28,11 +28,12 @@ async function initAddTaskValidation() {
 async function handleAddTaskSubmit(event) {
   event.preventDefault();
   if (!validateAddTaskForm()) return;
+  const form = event.currentTarget;
   setAddTaskSubmitPending(true);
   hideAddTaskErrorMessage();
   try {
     await createTaskInStore(getAddTaskData());
-    completeAddTaskSubmit(event.currentTarget);
+    completeAddTaskSubmit(form);
   } catch {
     failAddTaskSubmit();
   }

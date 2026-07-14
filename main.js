@@ -25,6 +25,8 @@ const routes = {
     title: "Join | Add Task",
     template: "./components/html/pages/add-task.html",
     protected: true,
+    usesLayout: true,
+    layoutClass: "add-task-shell",
   },
   board: {
     title: "Join | Board",
