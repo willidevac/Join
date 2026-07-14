@@ -8,12 +8,30 @@ const CONTACT_COLORS = [
 
 /**
  * Reads contacts from Firestore when available, otherwise from localStorage.
+ * @param {Function} [onAccountContactError] - Handles account contact errors.
+ * @returns {Promise<Array>} The contacts available for rendering.
  */
-async function loadContactsFromStore() {
+async function loadContactsFromStore(onAccountContactError) {
   const contacts = isContactFirestoreReady()
     ? await window.joinFirebaseContacts.loadContacts()
     : getLocalContacts();
-  return ensureAccountContact(contacts);
+  return ensureAccountContactSafely(contacts, onAccountContactError);
+}
+
+
+/**
+ * Keeps loaded contacts available if the account contact cannot be saved.
+ * @param {Array} contacts - The contacts already loaded from the store.
+ * @param {Function} [onError] - Handles the isolated save error.
+ * @returns {Promise<Array>} The contacts available for rendering.
+ */
+async function ensureAccountContactSafely(contacts, onError) {
+  try {
+    return await ensureAccountContact(contacts);
+  } catch (error) {
+    if (onError) onError(error);
+    return contacts;
+  }
 }
 
 

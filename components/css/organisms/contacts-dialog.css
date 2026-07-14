@@ -141,6 +141,10 @@
   white-space: nowrap;
 }
 
+.contacts-dialog-secondary[hidden] {
+  display: none;
+}
+
 .contacts-dialog-avatar--empty {
   background: var(--color-placeholder-light);
   box-shadow: 0 0 0 1px var(--color-border-medium);

@@ -191,6 +191,10 @@
   transition: color 100ms ease;
 }
 
+.contacts-detail-action[hidden] {
+  display: none;
+}
+
 @media (hover: hover) {
   .contacts-detail-action:hover {
     color: var(--color-primary-hover);

@@ -22,8 +22,16 @@ async function initContacts() {
  * Reads contacts through the store layer and keeps the active list in memory.
  */
 async function getContacts() {
-  activeContacts = await loadContactsFromStore();
+  activeContacts = await loadContactsFromStore(showAccountContactError);
   return activeContacts;
+}
+
+
+/**
+ * Shows feedback if only the signed-in account contact could not be added.
+ */
+function showAccountContactError() {
+  showContactToast("Your account contact could not be loaded.");
 }
 
 

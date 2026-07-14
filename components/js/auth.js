@@ -7,6 +7,7 @@ const AUTH_ERROR_MESSAGES = {
   "auth/operation-not-allowed": "This login method is not enabled yet.",
   "auth/network-request-failed": "Please check your internet connection.",
 };
+const AUTH_EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 let signupDraft = null;
 
 
@@ -235,7 +236,7 @@ function getSignupErrorMessage() {
 }
 
 function isEmailValid() {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(getSignupEmail());
+  return AUTH_EMAIL_PATTERN.test(getSignupEmail());
 }
 
 function passwordsMatch() {
