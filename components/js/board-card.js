@@ -134,19 +134,27 @@ function getBoardAssigneeTemplate(assignedTo) {
 
 
 /**
- * Normalizes the assignee field to a list of at most three names.
+ * Normalizes the assignee field to a clean list of names.
  *
  * @param {string[]|string} assignedTo - Names as array or comma-separated string.
- * @returns {string[]} Up to three cleaned assignee names.
+ * @returns {string[]} All cleaned assignee names.
  */
-function getBoardAssignees(assignedTo) {
-  if (Array.isArray(assignedTo)) return assignedTo.filter(Boolean).slice(0, 3);
+function getBoardAssigneeNames(assignedTo) {
+  if (Array.isArray(assignedTo)) return assignedTo.filter(Boolean);
   if (!assignedTo) return [];
   return String(assignedTo)
     .split(",")
     .map((name) => name.trim())
-    .filter(Boolean)
-    .slice(0, 3);
+    .filter(Boolean);
+}
+
+
+/**
+ * @param {string[]|string} assignedTo - Names as array or comma-separated string.
+ * @returns {string[]} Up to three names for the card avatars.
+ */
+function getBoardAssignees(assignedTo) {
+  return getBoardAssigneeNames(assignedTo).slice(0, 3);
 }
 
 

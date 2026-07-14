@@ -70,15 +70,19 @@ function getNormalizedBoardSubtasks(subtasks) {
 }
 
 /**
- * Loads contacts once and renders them as edit-mode checkboxes.
+ * Loads contacts and renders them as options into the assignee dropdown panel.
  */
 async function renderBoardEditAssignees(assignedTo) {
-  const container = getBoardEditAssignees();
+  const container = getBoardEditAssigneesPanel();
   boardDetailContacts = await loadBoardDetailContacts();
-
   container.innerHTML = boardDetailContacts.length
-    ? boardDetailContacts.map((contact) => getBoardEditAssigneeTemplate(contact, assignedTo)).join("")
+    ? boardDetailContacts
+        .map((contact) => getBoardEditAssigneeTemplate(contact, assignedTo))
+        .join("")
     : '<span class="board-detail-empty">No contacts available.</span>';
+  bindBoardEditAssigneesDropdown();
+  setBoardEditAssigneesOpen(false);
+    updateBoardEditAssigneesSelection();
 }
 
 async function loadBoardDetailContacts() {
@@ -89,27 +93,137 @@ async function loadBoardDetailContacts() {
   }
 }
 
+/**
+ * Returns one selectable contact option for the edit assignee dropdown.
+ *
+ * @param {Object} contact - Contact object from the contacts store.
+ * @param {string[]|string} assignedTo - Names currently assigned to the task.
+ * @returns {string} HTML markup for one dropdown option.
+ */
 function getBoardEditAssigneeTemplate(contact, assignedTo) {
-  const checked = getBoardAssignees(assignedTo).includes(contact.name) ? "checked" : "";
+  const checked = getBoardAssigneeNames(assignedTo).includes(contact.name)
+    ? "checked"
+    : "";
   return `
-    <label class="board-detail-assignee">
+    <label class="contact-dropdown__option">
       <input type="checkbox" value="${escapeBoardText(contact.name)}" ${checked} />
+      <span class="contact-dropdown__avatar" style="background-color: ${escapeBoardText(contact.color || "var(--color-primary-auth)")}">
+        ${getContactInitials(contact.name)}
+      </span>
       <span>${escapeBoardText(contact.name)}</span>
     </label>
   `;
 }
 
 function getBoardEditedAssigneesFromContacts() {
-  return [...getBoardEditAssignees().querySelectorAll("input:checked")].map((input) => input.value);
+  return [
+    ...getBoardEditAssigneesPanel().querySelectorAll("input:checked"),
+  ].map((input) => input.value);
 }
+
+/**
+ * Wires the edit assignee dropdown button and the outside click handling once.
+ */
+function bindBoardEditAssigneesDropdown() {
+  const button = getBoardEditAssigneesButton();
+  if (button.dataset.dropdownReady === "true") return;
+  button.addEventListener("click", toggleBoardEditAssigneesDropdown);
+  document.addEventListener("click", closeBoardEditAssigneesOnOutsideClick);
+  getBoardEditAssigneesPanel().addEventListener("change", updateBoardEditAssigneesSelection);
+  button.dataset.dropdownReady = "true";
+}
+
+/**
+ * Opens or closes the edit assignee dropdown from the trigger button.
+ */
+function toggleBoardEditAssigneesDropdown() {
+  setBoardEditAssigneesOpen(getBoardEditAssigneesPanel().hidden);
+}
+
+/**
+ * Closes the dropdown when the user clicks outside of the component.
+ *
+ * @param {MouseEvent} event - Document click event.
+ */
+function closeBoardEditAssigneesOnOutsideClick(event) {
+  const dropdown = getBoardEditAssigneesDropdown();
+  if (dropdown && !dropdown.contains(event.target))
+    setBoardEditAssigneesOpen(false);
+}
+
+/**
+ * Applies the visual and accessibility state for the edit assignee dropdown.
+ *
+ * @param {boolean} isOpen - True to open, false to close the dropdown.
+ */
+function setBoardEditAssigneesOpen(isOpen) {
+  getBoardEditAssigneesDropdown().classList.toggle("is-open", isOpen);
+  getBoardEditAssigneesPanel().hidden = !isOpen;
+  getBoardEditAssigneesButton().setAttribute("aria-expanded", String(isOpen));
+}
+
+/**
+ * Updates the dropdown button text and chips for the checked contacts.
+ */
+function updateBoardEditAssigneesSelection() {
+  const names = getBoardEditedAssigneesFromContacts();
+  updateBoardEditAssigneesButtonText(names.length);
+  renderBoardEditAssigneeChips(names);
+}
+
+/**
+ * @param {number} count - Number of currently selected contacts.
+ */
+function updateBoardEditAssigneesButtonText(count) {
+  getBoardEditAssigneesButton().textContent = count
+    ? `${count} contact${count === 1 ? "" : "s"} selected`
+    : "Select contacts to assign";
+}
+
+/**
+ * @param {string[]} names - Selected contact names.
+ */
+function renderBoardEditAssigneeChips(names) {
+  const chips = names
+    .map((name) => `<span class="contact-dropdown__chip">${escapeBoardText(name)}</span>`)
+    .join("");
+  getBoardEditAssigneesSelected().innerHTML = chips;
+}
+
 
 function getBoardDetailSubtasks() {
   return document.getElementById("boardTaskDetailSubtasks");
 }
 
-function getBoardEditAssignees() {
-  return document.getElementById("boardTaskEditAssignees");
+/**
+ * @returns {HTMLElement} The dropdown panel that lists the edit assignees.
+ */
+function getBoardEditAssigneesPanel() {
+  return document.getElementById("boardEditAssigneesPanel");
 }
+
+/**
+ * @returns {HTMLElement} The edit assignee dropdown container.
+ */
+function getBoardEditAssigneesDropdown() {
+  return document.getElementById("boardEditAssigneesDropdown");
+}
+
+/**
+ * @returns {HTMLElement} The button that toggles the edit assignee dropdown.
+ */
+function getBoardEditAssigneesButton() {
+  return document.getElementById("boardEditAssigneesButton");
+}
+
+
+/**
+ * @returns {HTMLElement} The container for the selected edit assignee chips.
+ */
+function getBoardEditAssigneesSelected() {
+  return document.getElementById("boardEditAssigneesSelected");
+}
+
 
 function getBoardMobileStatusSelect() {
   return document.getElementById("boardTaskMobileStatus");

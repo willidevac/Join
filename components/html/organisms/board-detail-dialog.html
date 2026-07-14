@@ -1,12 +1,25 @@
-<section class="board-detail-overlay" id="boardTaskDetail" aria-labelledby="boardTaskDetailTitle"
-  aria-modal="true" role="dialog" hidden>
+<section
+  class="board-detail-overlay"
+  id="boardTaskDetail"
+  aria-labelledby="boardTaskDetailTitle"
+  aria-modal="true"
+  role="dialog"
+  hidden
+>
   <article class="board-detail-card">
-    <button class="board-detail-close" type="button" id="boardTaskDetailClose" aria-label="Close task details">
+    <button
+      class="board-detail-close"
+      type="button"
+      id="boardTaskDetailClose"
+      aria-label="Close task details"
+    >
       x
     </button>
 
     <div class="board-detail-view" id="boardTaskDetailView">
-      <span class="board-detail-category" id="boardTaskDetailCategory">Task</span>
+      <span class="board-detail-category" id="boardTaskDetailCategory"
+        >Task</span
+      >
       <h2 id="boardTaskDetailTitle">Task title</h2>
       <p id="boardTaskDetailDescription">Task description</p>
       <dl class="board-detail-list">
@@ -41,10 +54,18 @@
         </select>
       </label>
       <div class="board-detail-actions board-detail-actions--between">
-        <button class="board-detail-danger" type="button" id="boardTaskDeleteButton">
+        <button
+          class="board-detail-danger"
+          type="button"
+          id="boardTaskDeleteButton"
+        >
           Delete
         </button>
-        <button class="board-detail-primary" type="button" id="boardTaskEditButton">
+        <button
+          class="board-detail-primary"
+          type="button"
+          id="boardTaskEditButton"
+        >
           Edit
         </button>
       </div>
@@ -87,16 +108,47 @@
           <option value="done">Done</option>
         </select>
       </label>
-      <label>
+      <div class="board-detail-field">
         <span>Assigned to</span>
-        <div class="board-detail-assignees" id="boardTaskEditAssignees"></div>
-      </label>
+        <div class="contact-dropdown" id="boardEditAssigneesDropdown">
+          <button
+            class="contact-dropdown__button"
+            id="boardEditAssigneesButton"
+            type="button"
+            aria-expanded="false"
+            aria-controls="boardEditAssigneesPanel"
+          >
+            Select contacts to assign
+          </button>
+          <div
+            class="contact-dropdown__panel"
+            id="boardEditAssigneesPanel"
+            role="listbox"
+            aria-label="Assignable contacts"
+            hidden
+          ></div>
+          <div
+            class="contact-dropdown__selected"
+            id="boardEditAssigneesSelected"
+            aria-live="polite"
+          ></div>
+        </div>
+      </div>
+
       <label>
         <span>Subtasks</span>
-        <textarea id="boardTaskEditSubtasks" rows="3" placeholder="One subtask per line"></textarea>
+        <textarea
+          id="boardTaskEditSubtasks"
+          rows="3"
+          placeholder="One subtask per line"
+        ></textarea>
       </label>
       <div class="board-detail-actions">
-        <button class="board-detail-secondary" type="button" id="boardTaskEditCancel">
+        <button
+          class="board-detail-secondary"
+          type="button"
+          id="boardTaskEditCancel"
+        >
           Cancel
         </button>
         <button class="board-detail-primary" type="submit">Save</button>

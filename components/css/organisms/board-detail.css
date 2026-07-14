@@ -82,14 +82,12 @@
   color: var(--color-text-main);
 }
 
-.board-detail-subtasks,
-.board-detail-assignees {
+.board-detail-subtasks {
   display: grid;
   gap: 8px;
 }
 
-.board-detail-subtask,
-.board-detail-assignee {
+.board-detail-subtask  {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -97,8 +95,7 @@
   color: var(--color-text-main);
 }
 
-.board-detail-subtask input,
-.board-detail-assignee input {
+.board-detail-subtask input {
   width: 16px;
   height: 16px;
   accent-color: var(--color-primary);
@@ -146,9 +143,15 @@
   display: none;
 }
 
-.board-detail-edit-form label {
+.board-detail-edit-form > label {
   display: grid;
   gap: 8px;
+  color: var(--color-text-main);
+}
+
+.board-detail-field {
+  display: grid; 
+  gap: 8px; 
   color: var(--color-text-main);
 }
 
