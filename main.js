@@ -19,6 +19,7 @@ const routes = {
     title: "Join | Summary",
     template: "./components/html/pages/summary.html",
     protected: true,
+    usesLayout: true,
   },
   "add-task": {
     title: "Join | Add Task",
@@ -81,7 +82,10 @@ async function renderCurrentPage(options = {}) {
 async function renderPageContent(content, shouldAnimate, page) {
   const app = document.getElementById("app");
   const animatePage = Boolean(shouldAnimate);
-  const nextContent = await createHydratedPageContent(content);
+  const route = routes[page];
+  const nextContent = route.usesLayout
+    ? await createAppLayoutContent(content, route)
+    : await createHydratedPageContent(content);
 
   preparePageAnimation(app, animatePage);
   app.replaceChildren(...nextContent.childNodes);
