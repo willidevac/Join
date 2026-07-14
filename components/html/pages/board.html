@@ -1,63 +1,57 @@
-<main class="summary-shell board-shell">
-  <div data-include="./components/html/organisms/app-sidebar.html"></div>
-
-  <section class="summary-main">
-    <div data-include="./components/html/organisms/app-topbar.html"></div>
-
-    <section class="board-content" aria-labelledby="boardTitle">
-      <div class="board-header">
-        <h1 id="boardTitle">Board</h1>
-        <div class="board-header__right">
-          <div class="board-search">
-            <input type="text" id="boardSearchInput" placeholder="Find Task" />
-            <button type="button" class="board-search__btn" aria-label="Search">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </button>
-          </div>
-          <a class="board-add-task" href="?page=add-task" data-page="add-task">Add task +</a>
-        </div>
+<section class="board-content" aria-labelledby="boardTitle">
+  <div class="board-header">
+    <h1 id="boardTitle">Board</h1>
+    <div class="board-header__right">
+      <div class="board-search">
+        <input type="text" id="boardSearchInput" placeholder="Find Task" />
+        <button type="button" class="board-search__btn" aria-label="Search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
       </div>
+      <a class="board-add-task" href="?page=add-task" data-page="add-task">Add task +</a>
+    </div>
+  </div>
 
-      <div class="board-columns" aria-label="Saved tasks">
-        <section class="board-column" aria-labelledby="boardTodoTitle">
-          <div class="board-column__header">
-            <h2 id="boardTodoTitle">To do</h2>
-            <a class="board-column__add" href="?page=add-task&status=todo" data-page="add-task" data-task-status="todo" aria-label="Add task to To do">+</a>
-          </div>
-          <div class="board-task-list" data-board-status="todo"></div>
-        </section>
-
-        <section class="board-column" aria-labelledby="boardProgressTitle">
-          <div class="board-column__header">
-            <h2 id="boardProgressTitle">In progress</h2>
-            <a class="board-column__add" href="?page=add-task&status=in-progress" data-page="add-task" data-task-status="in-progress" aria-label="Add task to In progress">+</a>
-          </div>
-          <div class="board-task-list" data-board-status="in-progress"></div>
-        </section>
-
-        <section class="board-column" aria-labelledby="boardFeedbackTitle">
-          <div class="board-column__header">
-            <h2 id="boardFeedbackTitle">Await feedback</h2>
-            <a class="board-column__add" href="?page=add-task&status=feedback" data-page="add-task" data-task-status="feedback" aria-label="Add task to Await feedback">+</a>
-          </div>
-          <div class="board-task-list" data-board-status="feedback"></div>
-        </section>
-
-        <section class="board-column" aria-labelledby="boardDoneTitle">
-          <div class="board-column__header">
-            <h2 id="boardDoneTitle">Done</h2>
-          </div>
-          <div class="board-task-list" data-board-status="done"></div>
-        </section>
+  <div class="board-columns" aria-label="Saved tasks">
+    <section class="board-column" aria-labelledby="boardTodoTitle">
+      <div class="board-column__header">
+        <h2 id="boardTodoTitle">To do</h2>
+        <a class="board-column__add" href="?page=add-task&status=todo" data-page="add-task" data-task-status="todo"
+          aria-label="Add task to To do">+</a>
       </div>
-      <p class="board-search-no-results" id="boardSearchNoResults" hidden>
-        No matching tasks found.
-      </p>
-
-      <div data-include="./components/html/organisms/board-detail-dialog.html"></div>
+      <div class="board-task-list" data-board-status="todo"></div>
     </section>
-  </section>
-</main>
+
+    <section class="board-column" aria-labelledby="boardProgressTitle">
+      <div class="board-column__header">
+        <h2 id="boardProgressTitle">In progress</h2>
+        <a class="board-column__add" href="?page=add-task&status=in-progress" data-page="add-task"
+          data-task-status="in-progress" aria-label="Add task to In progress">+</a>
+      </div>
+      <div class="board-task-list" data-board-status="in-progress"></div>
+    </section>
+
+    <section class="board-column" aria-labelledby="boardFeedbackTitle">
+      <div class="board-column__header">
+        <h2 id="boardFeedbackTitle">Await feedback</h2>
+        <a class="board-column__add" href="?page=add-task&status=feedback" data-page="add-task"
+          data-task-status="feedback" aria-label="Add task to Await feedback">+</a>
+      </div>
+      <div class="board-task-list" data-board-status="feedback"></div>
+    </section>
+
+    <section class="board-column" aria-labelledby="boardDoneTitle">
+      <div class="board-column__header">
+        <h2 id="boardDoneTitle">Done</h2>
+      </div>
+      <div class="board-task-list" data-board-status="done"></div>
+    </section>
+  </div>
+  <p class="board-search-no-results" id="boardSearchNoResults" hidden>
+    No matching tasks found.
+  </p>
+  <div data-include="./components/html/organisms/board-detail-dialog.html"></div>
+</section>

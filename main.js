@@ -32,16 +32,22 @@ const routes = {
     title: "Join | Board",
     template: "./components/html/pages/board.html",
     protected: true,
+    usesLayout: true,
+    layoutClass: "board-shell",
   },
   contacts: {
     title: "Join | Contacts",
     template: "./components/html/pages/contacts.html",
     protected: true,
+    usesLayout: true,
+    layoutClass: "contacts-shell",
   },
   help: {
     title: "Join | Help",
     template: "./components/html/pages/help.html",
     protected: true,
+    usesLayout: true,
+    layoutClass: "help-shell",
   },
 };
 
