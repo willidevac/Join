@@ -152,7 +152,7 @@
   color: var(--color-text-main);
 }
 
-.board-detail-edit-form input,
+.board-detail-edit-form input:not([type="checkbox"]),
 .board-detail-edit-form textarea,
 .board-detail-edit-form select {
   width: 100%;
