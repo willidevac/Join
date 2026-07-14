@@ -168,6 +168,15 @@
   font: inherit;
 }
 
+.board-detail-edit-form .contact-dropdown__button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-color: var(--color-border-medium);
+  color: var(--color-text-main);
+  font: inherit;
+}
+
+
 .board-detail-edit-form textarea {
   resize: vertical;
 }
