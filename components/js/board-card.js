@@ -29,7 +29,6 @@ function getBoardTaskTemplate(task) {
   `;
 }
 
-
 /**
  * @param {string} category - Stored category value of the task.
  * @returns {string} Modifier suffix for the category badge class.
@@ -37,7 +36,6 @@ function getBoardTaskTemplate(task) {
 function getBoardCategoryClass(category) {
   return category === "technical-task" ? "technical" : "user-story";
 }
-
 
 /**
  * Escapes a text and truncates it to fit the card preview.
@@ -51,7 +49,6 @@ function getBoardShortText(text) {
     ? `${cleanedText.slice(0, 69)}...`
     : cleanedText;
 }
-
 
 /**
  * Returns the subtask progress bar, or an empty string without subtasks.
@@ -72,7 +69,6 @@ function getBoardSubtaskTemplate(subtasks) {
   `;
 }
 
-
 /**
  * @param {Object[]} subtasks - Non-empty list of subtasks.
  * @returns {number} Completed share as a percentage from 0 to 100.
@@ -82,7 +78,6 @@ function getBoardSubtaskProgress(subtasks) {
   return (doneSubtasks / subtasks.length) * 100;
 }
 
-
 /**
  * @param {Object[]} subtasks - Subtasks of one task.
  * @returns {number} Count of subtasks marked as done.
@@ -90,7 +85,6 @@ function getBoardSubtaskProgress(subtasks) {
 function getBoardDoneSubtaskCount(subtasks) {
   return subtasks.filter((subtask) => subtask.done).length;
 }
-
 
 /**
  * Reads the title from a subtask in object or legacy string form.
@@ -102,7 +96,6 @@ function getBoardSubtaskTitle(subtask) {
   if (typeof subtask === "string") return subtask;
   return subtask && subtask.title ? subtask.title : "";
 }
-
 
 /**
  * Builds a subtask object and keeps the done state from a previous version.
@@ -118,7 +111,6 @@ function toBoardSubtask(title, previousSubtasks) {
   return { title, done: Boolean(match && match.done) };
 }
 
-
 /**
  * Returns the avatar group for a card, or a placeholder without assignees.
  *
@@ -131,7 +123,6 @@ function getBoardAssigneeTemplate(assignedTo) {
   const avatars = assignees.map(getBoardAvatarTemplate).join("");
   return `<div class="board-card__assignees">${avatars}</div>`;
 }
-
 
 /**
  * Normalizes the assignee field to a clean list of names.
@@ -148,7 +139,6 @@ function getBoardAssigneeNames(assignedTo) {
     .filter(Boolean);
 }
 
-
 /**
  * @param {string[]|string} assignedTo - Names as array or comma-separated string.
  * @returns {string[]} Up to three names for the card avatars.
@@ -156,7 +146,6 @@ function getBoardAssigneeNames(assignedTo) {
 function getBoardAssignees(assignedTo) {
   return getBoardAssigneeNames(assignedTo).slice(0, 3);
 }
-
 
 /**
  * @param {string} name - Assignee name.
@@ -166,7 +155,6 @@ function getBoardAssignees(assignedTo) {
 function getBoardAvatarTemplate(name, index) {
   return `<span class="board-card__avatar board-card__avatar--${index + 1}">${getBoardInitials(name)}</span>`;
 }
-
 
 /**
  * @param {string} name - Full contact name.
@@ -182,7 +170,6 @@ function getBoardInitials(name) {
     .toUpperCase();
 }
 
-
 /**
  * @param {string} priority - Stored task priority.
  * @returns {string} Icon path, falling back to the medium icon.
@@ -190,7 +177,7 @@ function getBoardInitials(name) {
 function getBoardPriorityIcon(priority) {
   const priorityIcons = {
     urgent: "./components/assets/icons/red_arrow_up.svg",
-    medium: "./components/assets/icons/medium_even.svg",
+    medium: "./components/assets/icons/medium_even_orange.svg",
     low: "./components/assets/icons/green_arrow_down.svg",
   };
   return priorityIcons[String(priority).toLowerCase()] || priorityIcons.medium;
