@@ -1,5 +1,6 @@
 const CONTACT_STORAGE_KEY = "joinContacts";
 const ACCOUNT_CONTACT_PREFIX = "account-";
+const GUEST_USER_TYPES = ["firebase-guest", "guest"];
 const CONTACT_COLORS = [
   "#FF7A00", "#9327FF", "#6E52FF", "#FC71FF", "#FFBB2B",
   "#1FD7C1", "#FF4646", "#00BEE8", "#FF745E", "#0038FF",
@@ -41,18 +42,33 @@ async function ensureAccountContactSafely(contacts, onError) {
 async function ensureAccountContact(contacts) {
   const user = getStoredUser();
   if (!canCreateAccountContact(user)) return contacts;
+  const state = getAccountContactState(contacts, user);
+  if (state.accountContact && !state.emailDuplicates.length) return contacts;
+  return saveAccountContactState(contacts, user, state);
+}
 
+
+function getAccountContactState(contacts, user) {
   const accountId = getAccountContactId(user.uid);
-  if (contacts.some((contact) => contact.id === accountId)) return contacts;
-
-  const emailContact = findContactByEmail(contacts, user.email);
-  const account = getAccountContactData(user, emailContact);
-  const savedAccount = await upsertAccountContactInStore(
+  return {
     accountId,
-    emailContact?.id,
+    accountContact: findContactById(contacts, accountId),
+    emailDuplicates: findAccountEmailDuplicates(contacts, user.email, accountId),
+  };
+}
+
+async function saveAccountContactState(contacts, user, state) {
+  const account = getAccountContactData(
+    user,
+    state.accountContact || state.emailDuplicates[0],
+  );
+  const duplicateIds = state.emailDuplicates.map((contact) => contact.id);
+  const savedAccount = await upsertAccountContactInStore(
+    state.accountId,
+    duplicateIds,
     account,
   );
-  return replaceAccountContact(contacts, emailContact?.id, savedAccount);
+  return replaceAccountContact(contacts, duplicateIds, savedAccount);
 }
 
 
@@ -60,7 +76,7 @@ function canCreateAccountContact(user) {
   return Boolean(
     user?.uid &&
     user?.email &&
-    user.type !== "firebase-guest",
+    !GUEST_USER_TYPES.includes(user.type),
   );
 }
 
@@ -70,10 +86,17 @@ function getAccountContactId(uid) {
 }
 
 
-function findContactByEmail(contacts, email) {
+function findContactById(contacts, contactId) {
+  return contacts.find((contact) => contact.id === contactId);
+}
+
+
+function findAccountEmailDuplicates(contacts, email, accountId) {
   const normalizedEmail = normalizeContactEmail(email);
-  return contacts.find(
-    (contact) => normalizeContactEmail(contact.email) === normalizedEmail,
+  return contacts.filter(
+    (contact) =>
+      contact.id !== accountId &&
+      normalizeContactEmail(contact.email) === normalizedEmail,
   );
 }
 
@@ -102,31 +125,33 @@ function getAccountContactColor(uid) {
 }
 
 
-async function upsertAccountContactInStore(accountId, sourceId, contact) {
+async function upsertAccountContactInStore(accountId, duplicateIds, contact) {
   if (isContactFirestoreReady()) {
     return window.joinFirebaseContacts.upsertAccountContact(
       accountId,
-      sourceId,
+      duplicateIds,
       contact,
     );
   }
-  return upsertLocalAccountContact(accountId, sourceId, contact);
+  return upsertLocalAccountContact(accountId, duplicateIds, contact);
 }
 
 
-function upsertLocalAccountContact(accountId, sourceId, contact) {
+function upsertLocalAccountContact(accountId, duplicateIds, contact) {
   const accountContact = { id: accountId, ...contact };
+  const replacedIds = new Set([accountId, ...duplicateIds]);
   const contacts = getLocalContacts().filter(
-    (currentContact) => ![accountId, sourceId].includes(currentContact.id),
+    (currentContact) => !replacedIds.has(currentContact.id),
   );
   saveLocalContacts([...contacts, accountContact]);
   return accountContact;
 }
 
 
-function replaceAccountContact(contacts, sourceId, accountContact) {
+function replaceAccountContact(contacts, duplicateIds, accountContact) {
+  const replacedIds = new Set([accountContact.id, ...duplicateIds]);
   const otherContacts = contacts.filter(
-    (contact) => ![accountContact.id, sourceId].includes(contact.id),
+    (contact) => !replacedIds.has(contact.id),
   );
   return [...otherContacts, accountContact];
 }

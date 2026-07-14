@@ -35,25 +35,37 @@ async function createContact(contact) {
 
 
 /**
- * Creates the account contact under a stable id and removes an email duplicate.
+ * Creates the account contact under a stable id and removes email duplicates.
  */
-async function upsertAccountContact(contactId, sourceContactId, contact) {
+async function upsertAccountContact(contactId, duplicateIds, contact) {
   const db = window.joinFirestore;
-  const accountRef = doc(db, "contacts", contactId);
-  return runTransaction(db, async (transaction) => {
-    const snapshot = await transaction.get(accountRef);
-    const account = snapshot.exists()
-      ? { id: snapshot.id, ...snapshot.data() }
-      : { id: contactId, ...contact };
+  return runTransaction(db, (transaction) =>
+    saveAccountContact(transaction, db, contactId, duplicateIds, contact),
+  );
+}
 
-    if (!snapshot.exists()) {
-      transaction.set(accountRef, getNewContactData(contact));
-    }
-    if (sourceContactId && sourceContactId !== contactId) {
-      transaction.delete(doc(db, "contacts", sourceContactId));
-    }
-    return account;
-  });
+
+async function saveAccountContact(
+  transaction,
+  db,
+  contactId,
+  duplicateIds,
+  contact,
+) {
+  const accountRef = doc(db, "contacts", contactId);
+  const snapshot = await transaction.get(accountRef);
+  if (!snapshot.exists()) transaction.set(accountRef, getNewContactData(contact));
+  deleteDuplicateContacts(transaction, db, duplicateIds, contactId);
+  return snapshot.exists()
+    ? { id: snapshot.id, ...snapshot.data() }
+    : { id: contactId, ...contact };
+}
+
+
+function deleteDuplicateContacts(transaction, db, duplicateIds, accountId) {
+  duplicateIds
+    .filter((contactId) => contactId !== accountId)
+    .forEach((contactId) => transaction.delete(doc(db, "contacts", contactId)));
 }
 
 
