@@ -85,17 +85,19 @@ function handleBoardDragLeave(event, taskList) {
   clearBoardDropFeedback(taskList);
 }
 
+
+/**
+ * Handles dropping a dragged task card onto a board column.
+ * @param {DragEvent} event - The drop event.
+ * @param {HTMLElement} taskList - The task list the card was dropped on.
+ */
 async function handleBoardDrop(event, taskList) {
   event.preventDefault();
   const task = getDraggedBoardTask();
   if (!task) return;
 
   try {
-    await updateTaskInStore({
-      ...task,
-      status: taskList.dataset.boardStatus,
-    });
-    await refreshBoardAfterDrop();
+    await moveBoardTaskToStatus(task, taskList.dataset.boardStatus);
   } catch (error) {
     console.error("Task status could not be updated.", error);
   } finally {
@@ -103,6 +105,18 @@ async function handleBoardDrop(event, taskList) {
     clearAllBoardDropFeedback();
   }
 }
+
+
+/**
+ * Saves the task with its new status and refreshes the board columns.
+ * @param {Object} task - The task being moved.
+ * @param {string} status - The status of the target column.
+ */
+async function moveBoardTaskToStatus(task, status) {
+  await updateTaskInStore({ ...task, status });
+  await refreshBoardAfterDrop();
+}
+
 
 function getDraggedBoardTask() {
   return activeBoardTasks.find((task) => task.id === draggedBoardTaskId);
@@ -126,7 +140,6 @@ async function refreshBoardAfterDrop() {
 function initBoardDetailControls() {
   const overlay = getBoardDetailOverlay();
   if (overlay.dataset.eventsReady === "true") return;
-
   getBoardDetailCloseButton().addEventListener("click", closeBoardTaskDetail);
   overlay.addEventListener("click", handleBoardDetailBackdrop);
   document.addEventListener("keydown", handleBoardDetailEscape);
@@ -188,6 +201,11 @@ function handleBoardDetailEscape(event) {
   if (event.key === "Escape") closeBoardTaskDetail();
 }
 
+
+/**
+ * Fills the task detail dialog with the content of the given task.
+ * @param {Object} task - The task shown in the detail view.
+ */
 function fillBoardTaskDetail(task) {
   setBoardDetailText(
     "boardTaskDetailCategory",
@@ -198,6 +216,16 @@ function fillBoardTaskDetail(task) {
     "boardTaskDetailDescription",
     task.description || "No description",
   );
+  fillBoardDetailMetaFields(task);
+  renderBoardDetailSubtasks(task);
+}
+
+
+/**
+ * Fills the meta fields (due date, priority, status, assignee) of the task detail dialog.
+ * @param {Object} task - The task providing the meta information.
+ */
+function fillBoardDetailMetaFields(task) {
   setBoardDetailText(
     "boardTaskDetailDueDate",
     formatTaskDueDate(task.dueDate) || "-",
@@ -209,8 +237,8 @@ function fillBoardTaskDetail(task) {
     "boardTaskDetailAssignee",
     task.assignedTo || "Not assigned",
   );
-  renderBoardDetailSubtasks(task);
 }
+
 
 async function showBoardEditMode() {
   const task = getActiveBoardTask();
