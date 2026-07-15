@@ -21,6 +21,7 @@ async function fillBoardTaskEditForm(task) {
   getBoardEditField("Category").value = task.category || "user-story";
   getBoardEditField("Priority").value = task.priority || "medium";
   getBoardEditField("Status").value = task.status || "todo";
+  syncBoardEditDropdowns();
   await renderBoardEditAssignees(task.assignedTo);
   getBoardEditField("Subtasks").value = formatBoardSubtasksForEdit(
     task.subtasks,

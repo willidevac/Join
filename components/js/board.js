@@ -87,6 +87,7 @@ function initBoardDetailControls() {
   getBoardEditForm().addEventListener("submit", handleBoardEditSubmit);
   getBoardDetailSubtasks().addEventListener("change", handleBoardDetailSubtaskChange);
   getBoardMobileStatusSelect().addEventListener("change", handleBoardMobileStatusChange);
+  initBoardEditDropdowns();
   overlay.dataset.eventsReady = "true";
 }
 

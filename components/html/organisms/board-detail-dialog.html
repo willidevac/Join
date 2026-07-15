@@ -84,30 +84,147 @@
         <span>Due date</span>
         <input id="boardTaskEditDueDate" type="date" required />
       </label>
-      <label>
+            <div class="board-detail-field">
         <span>Category</span>
-        <select id="boardTaskEditCategory" required>
-          <option value="user-story">User Story</option>
-          <option value="technical-task">Technical Task</option>
-        </select>
-      </label>
-      <label>
+        <div class="contact-dropdown" data-board-edit-dropdown>
+          <button
+            class="contact-dropdown__button"
+            id="boardEditCategoryButton"
+            type="button"
+            aria-expanded="false"
+            aria-controls="boardEditCategoryPanel"
+          >
+            Select task category
+          </button>
+          <div
+            class="contact-dropdown__panel"
+            id="boardEditCategoryPanel"
+            role="listbox"
+            aria-label="Task categories"
+            hidden
+          >
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="user-story"
+            >
+              User Story
+            </button>
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="technical-task"
+            >
+              Technical Task
+            </button>
+          </div>
+          <input type="hidden" id="boardTaskEditCategory" />
+        </div>
+      </div>
+      <div class="board-detail-field">
         <span>Priority</span>
-        <select id="boardTaskEditPriority" required>
-          <option value="urgent">Urgent</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-      </label>
-      <label>
+        <div class="contact-dropdown" data-board-edit-dropdown>
+          <button
+            class="contact-dropdown__button"
+            id="boardEditPriorityButton"
+            type="button"
+            aria-expanded="false"
+            aria-controls="boardEditPriorityPanel"
+          >
+            Select priority
+          </button>
+          <div
+            class="contact-dropdown__panel"
+            id="boardEditPriorityPanel"
+            role="listbox"
+            aria-label="Task priorities"
+            hidden
+          >
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="urgent"
+            >
+              Urgent
+            </button>
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="medium"
+            >
+              Medium
+            </button>
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="low"
+            >
+              Low
+            </button>
+          </div>
+          <input type="hidden" id="boardTaskEditPriority" />
+        </div>
+      </div>
+      <div class="board-detail-field">
         <span>Status</span>
-        <select id="boardTaskEditStatus" required>
-          <option value="todo">To do</option>
-          <option value="in-progress">In progress</option>
-          <option value="feedback">Await feedback</option>
-          <option value="done">Done</option>
-        </select>
-      </label>
+        <div class="contact-dropdown" data-board-edit-dropdown>
+          <button
+            class="contact-dropdown__button"
+            id="boardEditStatusButton"
+            type="button"
+            aria-expanded="false"
+            aria-controls="boardEditStatusPanel"
+          >
+            Select status
+          </button>
+          <div
+            class="contact-dropdown__panel"
+            id="boardEditStatusPanel"
+            role="listbox"
+            aria-label="Task statuses"
+            hidden
+          >
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="todo"
+            >
+              To do
+            </button>
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="in-progress"
+            >
+              In progress
+            </button>
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="feedback"
+            >
+              Await feedback
+            </button>
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="done"
+            >
+              Done
+            </button>
+          </div>
+          <input type="hidden" id="boardTaskEditStatus" />
+        </div>
+      </div>
       <div class="board-detail-field">
         <span>Assigned to</span>
         <div class="contact-dropdown" id="boardEditAssigneesDropdown">
