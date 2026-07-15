@@ -37,6 +37,7 @@ async function handleBoardDeleteClick() {
     await deleteTaskFromStore(activeBoardTaskId);
     closeBoardTaskDetail();
     await initBoardTasks();
+    showBoardToast("Task successfully deleted");
   } catch (error) {
     showBoardToast("Task could not be deleted.");
   }
@@ -55,6 +56,7 @@ async function handleBoardEditSubmit(event) {
   try {
     await updateTaskInStore(updatedTask);
     await refreshBoardAfterEdit(updatedTask.id);
+    showBoardToast("Task successfully updated");
   } catch (error) {
     showBoardToast("Task could not be updated.");
   }
