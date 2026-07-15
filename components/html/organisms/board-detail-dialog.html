@@ -44,15 +44,61 @@
           <dd id="boardTaskDetailSubtasks" class="board-detail-subtasks">-</dd>
         </div>
       </dl>
-      <label class="board-detail-mobile-status" for="boardTaskMobileStatus">
+      <div class="board-detail-mobile-status">
         <span>Move task</span>
-        <select id="boardTaskMobileStatus">
-          <option value="todo">To do</option>
-          <option value="in-progress">In progress</option>
-          <option value="feedback">Await feedback</option>
-          <option value="done">Done</option>
-        </select>
-      </label>
+        <div class="contact-dropdown" data-board-edit-dropdown>
+          <button
+            class="contact-dropdown__button"
+            id="boardMobileStatusButton"
+            type="button"
+            aria-expanded="false"
+            aria-controls="boardMobileStatusPanel"
+          >
+            To do
+          </button>
+          <div
+            class="contact-dropdown__panel"
+            id="boardMobileStatusPanel"
+            role="listbox"
+            aria-label="Task statuses"
+            hidden
+          >
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="todo"
+            >
+              To do
+            </button>
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="in-progress"
+            >
+              In progress
+            </button>
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="feedback"
+            >
+              Await feedback
+            </button>
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-value="done"
+            >
+              Done
+            </button>
+          </div>
+          <input type="hidden" id="boardTaskMobileStatus" />
+        </div>
+      </div>
       <div class="board-detail-actions board-detail-actions--between">
         <button
           class="board-detail-danger"
@@ -84,7 +130,7 @@
         <span>Due date</span>
         <input id="boardTaskEditDueDate" type="date" required />
       </label>
-            <div class="board-detail-field">
+      <div class="board-detail-field">
         <span>Category</span>
         <div class="contact-dropdown" data-board-edit-dropdown>
           <button

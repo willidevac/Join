@@ -48,6 +48,7 @@ function selectBoardEditDropdownOption(dropdown, option) {
   getBoardEditDropdownButton(dropdown).textContent = option.textContent.trim();
   markBoardEditDropdownOption(dropdown, option);
   setBoardEditDropdownOpen(dropdown, false);
+  getBoardEditDropdownInput(dropdown).dispatchEvent(new Event("change"));
 }
 
 
