@@ -21,6 +21,7 @@ function createBoardSearchContext(tasks) {
   return { ...elements, context, state };
 }
 
+
 /**
  * Creates the observable elements used by the search result display.
  */
@@ -30,6 +31,7 @@ function createBoardSearchElements() {
     columnsElement: { hidden: false },
   };
 }
+
 
 /**
  * Creates the browser globals required by the board search script.
@@ -43,12 +45,14 @@ function createBoardSearchGlobals(tasks, elements, state) {
   };
 }
 
+
 /**
  * Stores one observable search result for later assertions.
  */
 function storeSearchResult(state, key, result) {
   state[key] = result;
 }
+
 
 /**
  * Provides only the elements used by the no-results display logic.
