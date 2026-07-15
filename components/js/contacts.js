@@ -151,7 +151,7 @@ function closeContactDetail() {
 
 
 /**
- * Removes the shown contact, cleans its task assignments and refreshes the list.
+ * Removes the shown contact unless it is the own account contact.
  */
 async function deleteActiveContact() {
   const contact = getActiveContact();
@@ -161,14 +161,23 @@ async function deleteActiveContact() {
     return;
   }
   try {
-    await deleteContactFromStore(activeContactId);
-    await removeContactFromTasks(contact.name);
-    closeContactDetail();
-    await initContacts();
-    showContactToast("Contact successfully deleted");
+    await performContactDeletion(contact);
   } catch (error) {
     showContactToast("Contact could not be deleted.");
   }
+}
+
+
+/**
+ * Deletes the contact, cleans its task assignments and refreshes the list.
+ * @param {Object} contact - The contact to delete.
+ */
+async function performContactDeletion(contact) {
+  await deleteContactFromStore(contact.id);
+  await removeContactFromTasks(contact.name);
+  closeContactDetail();
+  await initContacts();
+  showContactToast("Contact successfully deleted");
 }
 
 
