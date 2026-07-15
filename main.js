@@ -265,7 +265,7 @@ function handlePageLinkClick(event) {
     event.target.nodeType === Node.ELEMENT_NODE
       ? event.target
       : event.target.parentElement;
-  const link = target.closest("[data-page]");
+  const link = target.closest("a[data-page], button[data-page]");
   if (!link || link.matches("a[href]")) return;
   event.preventDefault();
   navigateToPage(link.dataset.page, getLinkParams(link));
