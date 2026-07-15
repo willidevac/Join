@@ -122,7 +122,7 @@ function toBoardSubtask(title, previousSubtasks) {
 /**
  * Returns the avatar group for a card, or a placeholder without assignees.
  *
- * @param {string[]|string} assignedTo - Assignee names from the task.
+ * @param {Array|string} assignedTo - Current or legacy task assignments.
  * @returns {string} HTML markup for the assignee avatars.
  */
 function getBoardAssigneeTemplate(assignedTo) {
@@ -134,23 +134,18 @@ function getBoardAssigneeTemplate(assignedTo) {
 
 
 /**
- * Normalizes the assignee field to a clean list of names.
+ * Returns display names from current references and legacy assignments.
  *
- * @param {string[]|string} assignedTo - Names as array or comma-separated string.
+ * @param {Array|string} assignedTo - Current or legacy task assignments.
  * @returns {string[]} All cleaned assignee names.
  */
 function getBoardAssigneeNames(assignedTo) {
-  if (Array.isArray(assignedTo)) return assignedTo.filter(Boolean);
-  if (!assignedTo) return [];
-  return String(assignedTo)
-    .split(",")
-    .map((name) => name.trim())
-    .filter(Boolean);
+  return getTaskAssigneeReferences(assignedTo).map((assignee) => assignee.name);
 }
 
 
 /**
- * @param {string[]|string} assignedTo - Names as array or comma-separated string.
+ * @param {Array|string} assignedTo - Current or legacy task assignments.
  * @returns {string[]} Up to three names for the card avatars.
  */
 function getBoardAssignees(assignedTo) {
@@ -228,16 +223,18 @@ function getBoardDetailSubtaskTemplate(subtask, index) {
  * Returns one selectable contact option for the edit assignee dropdown.
  *
  * @param {Object} contact - Contact object from the contacts store.
- * @param {string[]|string} assignedTo - Names currently assigned to the task.
+ * @param {Array|string} assignedTo - Current or legacy task assignments.
  * @returns {string} HTML markup for one dropdown option.
  */
 function getBoardEditAssigneeTemplate(contact, assignedTo) {
-  const checked = getBoardAssigneeNames(assignedTo).includes(contact.name)
+  const checked = getTaskAssigneeReferences(assignedTo).some((assignee) =>
+    isTaskAssigneeContact(assignee, contact),
+  )
     ? "checked"
     : "";
   return `
     <label class="contact-dropdown__option">
-      <input type="checkbox" value="${escapeBoardText(contact.name)}" ${checked} />
+      <input type="checkbox" value="${escapeBoardText(contact.id)}" ${checked} />
       <span class="contact-dropdown__avatar" style="background-color: ${escapeBoardText(contact.color || "var(--color-primary-auth)")}">
         ${getContactInitials(contact.name)}
       </span>

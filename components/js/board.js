@@ -190,7 +190,7 @@ function fillBoardDetailMetaFields(task) {
   syncBoardMobileStatus(task.status);
   setBoardDetailText(
     "boardTaskDetailAssignee",
-    task.assignedTo || "Not assigned",
+    getBoardAssigneeNames(task.assignedTo).join(", ") || "Not assigned",
   );
 }
 

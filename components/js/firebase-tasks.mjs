@@ -8,6 +8,7 @@ import {
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+
 /**
  * Loads all tasks from Firestore with the document id attached.
  */
@@ -70,13 +71,12 @@ function getWritableTaskData(task) {
 
 
 /**
- * Ensures the assignees are stored as a list without empty entries.
- * @param {string[]|string|undefined} assignedTo - The raw assignee value.
- * @returns {string[]} The assignee ids as a clean list.
+ * Converts current and legacy task assignments into Firestore-safe references.
+ * @param {Array|string} assignedTo - Stored task assignment value.
+ * @returns {Object[]} Normalized contact references.
  */
 function normalizeTaskAssignees(assignedTo) {
-  if (Array.isArray(assignedTo)) return assignedTo.filter(Boolean);
-  return assignedTo ? [assignedTo] : [];
+  return window.getTaskAssigneeReferences(assignedTo);
 }
 
 window.joinFirebaseTasks = {

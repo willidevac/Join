@@ -225,10 +225,10 @@ function getAddTaskPriority() {
 
 
 /**
- * @returns {string[]} Names of all currently selected contacts.
+ * @returns {Object[]} Stable references to all selected contacts.
  */
 function getAddTaskAssignee() {
-  return selectedTaskAssignees.map((contact) => contact.name);
+  return selectedTaskAssignees.map(createTaskAssigneeReference);
 }
 
 

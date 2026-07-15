@@ -235,7 +235,7 @@ function getActiveBoardSubtasks() {
 
 /**
  * Returns the assignees selected in the edit form.
- * @returns {string} The selected assignee names.
+ * @returns {Object[]} Stable references to the selected contacts.
  */
 function getBoardEditedAssignees() {
   return getBoardEditedAssigneesFromContacts();

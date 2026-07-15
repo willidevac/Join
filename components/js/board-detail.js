@@ -91,7 +91,7 @@ function getNormalizedBoardSubtasks(subtasks) {
 /**
  * Loads contacts and renders them as options into the assignee dropdown panel.
  *
- * @param {string[]|string} assignedTo - Names currently assigned to the task.
+ * @param {Array|string} assignedTo - Current or legacy task assignments.
  */
 async function renderBoardEditAssignees(assignedTo) {
   const container = getBoardEditAssigneesPanel();
@@ -103,7 +103,7 @@ async function renderBoardEditAssignees(assignedTo) {
     : '<span class="board-detail-empty">No contacts available.</span>';
   bindBoardEditAssigneesDropdown();
   setBoardEditAssigneesOpen(false);
-    updateBoardEditAssigneesSelection();
+  updateBoardEditAssigneesSelection();
 }
 
 
@@ -120,12 +120,25 @@ async function loadBoardDetailContacts() {
 
 
 /**
- * @returns {string[]} Names of all contacts checked in the edit dropdown.
+ * @returns {Object[]} Stable references for all checked contacts.
  */
 function getBoardEditedAssigneesFromContacts() {
   return [
     ...getBoardEditAssigneesPanel().querySelectorAll("input:checked"),
-  ].map((input) => input.value);
+  ]
+    .map((input) => getBoardDetailContactById(input.value))
+    .filter(Boolean)
+    .map(createTaskAssigneeReference);
+}
+
+
+/**
+ * Finds one contact loaded for the board edit dropdown.
+ * @param {string} contactId - Contact id stored by the checkbox.
+ * @returns {Object|undefined} Matching contact if it still exists.
+ */
+function getBoardDetailContactById(contactId) {
+  return boardDetailContacts.find((contact) => contact.id === contactId);
 }
 
 
@@ -178,9 +191,9 @@ function setBoardEditAssigneesOpen(isOpen) {
  * Updates the dropdown button text and chips for the checked contacts.
  */
 function updateBoardEditAssigneesSelection() {
-  const names = getBoardEditedAssigneesFromContacts();
-  updateBoardEditAssigneesButtonText(names.length);
-  renderBoardEditAssigneeChips(names);
+  const assignees = getBoardEditedAssigneesFromContacts();
+  updateBoardEditAssigneesButtonText(assignees.length);
+  renderBoardEditAssigneeChips(assignees);
 }
 
 
@@ -195,11 +208,11 @@ function updateBoardEditAssigneesButtonText(count) {
 
 
 /**
- * @param {string[]} names - Selected contact names.
+ * @param {Object[]} assignees - Selected contact references.
  */
-function renderBoardEditAssigneeChips(names) {
-  const chips = names
-    .map((name) => `<span class="contact-dropdown__chip">${escapeBoardText(name)}</span>`)
+function renderBoardEditAssigneeChips(assignees) {
+  const chips = assignees
+    .map((item) => `<span class="contact-dropdown__chip">${escapeBoardText(item.name)}</span>`)
     .join("");
   getBoardEditAssigneesSelected().innerHTML = chips;
 }
