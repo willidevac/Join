@@ -108,6 +108,10 @@ function fillContactDetail(contact) {
 }
 
 
+/**
+ * Hides the delete action while the own account contact is shown.
+ * @param {Object} contact - The contact shown in the detail view.
+ */
 function updateAccountContactActions(contact) {
   document.getElementById("contactDeleteButton").hidden =
     isOwnAccountContact(contact);

@@ -6,6 +6,7 @@ async function loadTasksFromStore() {
   return getStoredTasks();
 }
 
+
 /**
  * Creates one task in Firestore or localStorage and returns it with an id.
  */
@@ -14,6 +15,7 @@ async function createTaskInStore(task) {
   saveCreatedTask(task);
   return task;
 }
+
 
 /**
  * Updates one task in Firestore or localStorage.
@@ -26,6 +28,7 @@ async function updateTaskInStore(task) {
   updateStoredTask(task);
 }
 
+
 /**
  * Deletes one task from Firestore or localStorage.
  */
@@ -37,6 +40,10 @@ async function deleteTaskFromStore(taskId) {
   deleteStoredTask(taskId);
 }
 
+
+/**
+ * @returns {boolean} True when the Firebase task helpers are available.
+ */
 function isTaskFirestoreReady() {
   return Boolean(window.joinFirebaseTasks);
 }
