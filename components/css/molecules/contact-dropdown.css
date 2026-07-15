@@ -33,6 +33,17 @@
   transform: rotate(225deg) translateY(-2px);
 }
 
+.contact-dropdown__option--single {
+  width: 100%;
+  border: unset;
+  background: none;
+  text-align: left;
+}
+
+.contact-dropdown__option--single.is-selected {
+  background: var(--color-background-soft);
+}
+
 .contact-dropdown__panel {
   position: absolute;
   top: calc(100% + 4px);

@@ -11,6 +11,7 @@ async function initAddTaskValidation() {
   if (!form) return;
 
   await initAddTaskAssignees();
+  initAddTaskCategory();
   initAddTaskSubtasks();
   initAddTaskFieldValidation(form);
   form.addEventListener("input", handleAddTaskFormChange);
@@ -48,6 +49,7 @@ async function handleAddTaskSubmit(event) {
 function completeAddTaskSubmit(form) {
   form.reset();
   resetAddTaskAssignees();
+  resetAddTaskCategory();
   showAddTaskSuccessMessage();
   redirectToBoardAfterSuccess();
 }
@@ -81,6 +83,7 @@ function handleAddTaskFormChange(event) {
 function handleAddTaskReset() {
   setTimeout(() => {
     resetAddTaskAssignees();
+    resetAddTaskCategory();
     resetAddTaskSubtasks();
     resetAddTaskFieldValidation();
   }, 0);

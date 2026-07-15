@@ -77,12 +77,7 @@
           <label
             class="add-task-priority__option add-task-priority__option--medium"
           >
-            <input
-              type="radio"
-              name="taskPriority"
-              value="medium"
-              checked
-            />
+            <input type="radio" name="taskPriority" value="medium" checked />
             <span
               >Medium
               <img
@@ -137,23 +132,54 @@
         </div>
       </div>
 
-      <label class="add-task-field" for="taskCategory">
+      <div class="add-task-field">
         <span>Category<strong>*</strong></span>
-        <select
-          id="taskCategory"
-          name="taskCategory"
-          aria-describedby="taskCategoryError"
+        <div
+          class="contact-dropdown"
+          id="taskCategoryDropdown"
+          data-component="contact-dropdown"
         >
-          <option value="">Select task category</option>
-          <option value="technical-task">Technical Task</option>
-          <option value="user-story">User Story</option>
-        </select>
+          <button
+            class="contact-dropdown__button"
+            id="taskCategoryButton"
+            type="button"
+            aria-expanded="false"
+            aria-controls="taskCategoryPanel"
+          >
+            Select task category
+          </button>
+          <div
+            class="contact-dropdown__panel"
+            id="taskCategoryPanel"
+            role="listbox"
+            aria-label="Task categories"
+            hidden
+          >
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-category-value="technical-task"
+            >
+              Technical Task
+            </button>
+            <button
+              class="contact-dropdown__option contact-dropdown__option--single"
+              type="button"
+              role="option"
+              data-category-value="user-story"
+            >
+              User Story
+            </button>
+          </div>
+          <input type="hidden" id="taskCategory" name="taskCategory" />
+        </div>
         <span
           class="add-task-field__error"
           id="taskCategoryError"
           aria-live="polite"
         ></span>
-      </label>
+      </div>
 
       <div class="add-task-field add-task-subtasks">
         <span id="taskSubtasksLabel">Subtasks</span>
@@ -215,10 +241,7 @@
   <div class="add-task-form__footer">
     <p><strong>*</strong>This field is required</p>
     <div class="add-task-form__actions">
-      <button
-        class="add-task-button add-task-button--secondary"
-        type="reset"
-      >
+      <button class="add-task-button add-task-button--secondary" type="reset">
         Clear x
       </button>
       <button
