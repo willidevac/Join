@@ -135,8 +135,16 @@
 }
 
 .contacts-item-name {
+  min-width: 0;
   margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-size: 20px;
+}
+
+.contacts-item-name__short {
+  display: none;
 }
 
 .contacts-item-email {

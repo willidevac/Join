@@ -6,6 +6,7 @@ const {
 } = require("./helpers/scriptContext");
 
 const CONTACT_TEMPLATES_SCRIPT = "components/js/contacts-templates.js";
+const SHARED_SCRIPT = "components/js/shared.js";
 
 
 /**
@@ -14,6 +15,18 @@ const CONTACT_TEMPLATES_SCRIPT = "components/js/contacts-templates.js";
  */
 function createContactNameContext() {
   return loadBrowserScripts([CONTACT_TEMPLATES_SCRIPT]);
+}
+
+
+/**
+ * Loads the contact template with its required browser helpers.
+ * @returns {Object} Context exposing the contact template function.
+ */
+function createContactTemplateContext() {
+  return loadBrowserScripts(
+    [SHARED_SCRIPT, CONTACT_TEMPLATES_SCRIPT],
+    { getContactInitials: () => "VR" },
+  );
 }
 
 
@@ -53,4 +66,21 @@ test("normalizes surrounding and repeated whitespace", () => {
     context.getAbbreviatedContactName("  Camila   Fernandez Ruiz  "),
     "Camila F. R.",
   );
+});
+
+
+test("renders full and abbreviated contact names", () => {
+  const context = createContactTemplateContext();
+  const markup = context.getContactItemTemplate({
+    id: "contact-1",
+    name: "Valentina Rodriguez Pena",
+    email: "valentina@example.com",
+    color: "#FF7A00",
+  });
+
+  assert.ok(markup.includes(
+    '<span class="contacts-item-name__full">Valentina Rodriguez Pena</span>',
+  ));
+  assert.ok(markup.includes("Valentina R. P."));
+  assert.ok(markup.includes('title="Valentina Rodriguez Pena"'));
 });

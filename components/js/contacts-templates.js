@@ -2,6 +2,9 @@
  * Returns the list item markup for a single contact.
  */
 function getContactItemTemplate(contact) {
+  const fullName = escapeHtmlText(contact.name);
+  const shortName = escapeHtmlText(getAbbreviatedContactName(contact.name));
+
   return `
   <li class="contacts-item" data-contact-id="${contact.id}">
     <span
@@ -11,7 +14,12 @@ function getContactItemTemplate(contact) {
       ${getContactInitials(contact.name)}
     </span>
     <div class="contacts-item-info">
-      <p class="contacts-item-name">${escapeHtmlText(contact.name)}</p>
+      <p class="contacts-item-name" title="${fullName}">
+        <span class="contacts-item-name__full">${fullName}</span>
+        <span class="contacts-item-name__short" aria-hidden="true">
+          ${shortName}
+        </span>
+      </p>
       <a class="contacts-item-email">${escapeHtmlText(contact.email)}</a>
     </div>
   </li>
