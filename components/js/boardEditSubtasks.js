@@ -10,7 +10,7 @@ function initBoardEditSubtasks(subtasks) {
   boardEditSubtaskItems = getNormalizedBoardSubtasks(subtasks);
   boardEditSubtaskEditingIndex = -1;
   getBoardEditSubtaskInput().value = "";
-  updateBoardEditSubtaskInputMode();
+  updateBoardEditSubtaskAddState();
   renderBoardEditSubtasks();
   bindBoardEditSubtaskControls();
 }
@@ -23,7 +23,7 @@ function bindBoardEditSubtaskControls() {
   const input = getBoardEditSubtaskInput();
   if (input.dataset.eventsReady === "true") return;
   input.addEventListener("keydown", handleBoardEditSubtaskInputKey);
-  input.addEventListener("input", updateBoardEditSubtaskInputMode);
+  input.addEventListener("input", updateBoardEditSubtaskAddState);
   getBoardEditSubtaskList().addEventListener(
     "click",
     handleBoardEditSubtaskListClick,
@@ -32,23 +32,16 @@ function bindBoardEditSubtaskControls() {
     "keydown",
     handleBoardEditSubtaskListKey,
   );
-  bindBoardEditSubtaskInputButtons();
+  bindBoardEditSubtaskAddButton();
   input.dataset.eventsReady = "true";
 }
 
 
 /**
- * Wires the plus, clear and confirm buttons of the subtask input.
+ * Wires the plus button that adds the typed subtask.
  */
-function bindBoardEditSubtaskInputButtons() {
-  getBoardEditSubtaskAddButton().addEventListener("click", () =>
-    getBoardEditSubtaskInput().focus(),
-  );
-  getBoardEditSubtaskClearButton().addEventListener(
-    "click",
-    clearBoardEditSubtaskInput,
-  );
-  getBoardEditSubtaskConfirmButton().addEventListener(
+function bindBoardEditSubtaskAddButton() {
+  getBoardEditSubtaskAddButton().addEventListener(
     "click",
     addBoardEditSubtask,
   );
@@ -56,22 +49,21 @@ function bindBoardEditSubtaskInputButtons() {
 
 
 /**
- * Empties the subtask input without touching the stored subtasks.
+ * @param {string} title - Trimmed subtask title.
+ * @returns {boolean} True when the title has at least four characters.
  */
-function clearBoardEditSubtaskInput() {
-  const input = getBoardEditSubtaskInput();
-  input.value = "";
-  updateBoardEditSubtaskInputMode();
-  input.focus();
+function isValidBoardEditSubtaskTitle(title) {
+  return title.length >= 4;
 }
 
 
 /**
- * Switches between the plus icon and the clear/confirm icons.
+ * Enables the plus button only while the input holds a valid title.
  */
-function updateBoardEditSubtaskInputMode() {
-  const hasText = Boolean(getBoardEditSubtaskInput().value.trim());
-  getBoardEditSubtaskInputWrapper().classList.toggle("is-editing", hasText);
+function updateBoardEditSubtaskAddState() {
+  getBoardEditSubtaskAddButton().disabled = !isValidBoardEditSubtaskTitle(
+    getBoardEditSubtaskInput().value.trim(),
+  );
 }
 
 
@@ -87,15 +79,15 @@ function handleBoardEditSubtaskInputKey(event) {
 
 
 /**
- * Appends a new open subtask from the input value and clears the input.
+ * Appends a new open subtask when the input holds a valid title.
  */
 function addBoardEditSubtask() {
   const input = getBoardEditSubtaskInput();
   const title = input.value.trim();
-  if (!title) return;
+  if (!isValidBoardEditSubtaskTitle(title)) return;
   boardEditSubtaskItems.push({ title, done: false });
   input.value = "";
-  updateBoardEditSubtaskInputMode();
+  updateBoardEditSubtaskAddState();
   renderBoardEditSubtasks();
   input.focus();
 }
@@ -208,7 +200,7 @@ function getBoardEditSubtaskEditTemplate(subtask, index) {
         </button>
         <span class="add-task-subtask__divider" aria-hidden="true"></span>
         <button type="button" class="add-task-subtask__action" data-subtask-action="save" aria-label="Save subtask">
-          <img src="./components/assets/img/icons/check_icon.svg" alt="" />
+          <img src="./components/assets/img/icons/check_edit_subtask.svg" alt="" />
         </button>
       </span>
     </li>`;
@@ -240,32 +232,8 @@ function getBoardEditSubtaskList() {
 
 
 /**
- * @returns {HTMLElement} The wrapper that switches the input icon mode.
- */
-function getBoardEditSubtaskInputWrapper() {
-  return document.getElementById("boardEditSubtaskInputWrapper");
-}
-
-
-/**
  * @returns {HTMLElement} The plus button of the subtask input.
  */
 function getBoardEditSubtaskAddButton() {
   return document.getElementById("boardEditSubtaskAdd");
-}
-
-
-/**
- * @returns {HTMLElement} The clear (x) button of the subtask input.
- */
-function getBoardEditSubtaskClearButton() {
-  return document.getElementById("boardEditSubtaskClear");
-}
-
-
-/**
- * @returns {HTMLElement} The confirm (check) button of the subtask input.
- */
-function getBoardEditSubtaskConfirmButton() {
-  return document.getElementById("boardEditSubtaskConfirm");
 }

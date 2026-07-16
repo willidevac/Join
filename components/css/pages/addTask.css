@@ -270,6 +270,11 @@
   background: var(--color-background);
 }
 
+.add-task-subtask-add:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 .add-task-subtask-icon img {
   width: 20px;
   height: 20px;
