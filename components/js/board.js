@@ -9,11 +9,15 @@ async function initBoardTasks() {
   const taskLists = document.querySelectorAll("[data-board-status]");
   if (!taskLists.length) return;
 
-  activeBoardTasks = await loadTasksFromStore();
-  renderBoardColumns(activeBoardTasks);
-  initBoardTaskDetails(activeBoardTasks);
-  initBoardDropZones(taskLists);
-  initBoardSearch();
+  try {
+    activeBoardTasks = await loadTasksFromStore();
+    renderBoardColumns(activeBoardTasks);
+    initBoardTaskDetails(activeBoardTasks);
+    initBoardDropZones(taskLists);
+    initBoardSearch();
+  } catch (error) {
+    showBoardToast("Board tasks could not be loaded.");
+  }
 }
 
 

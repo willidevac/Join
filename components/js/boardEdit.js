@@ -137,10 +137,9 @@ function validateBoardEditField(fieldName) {
  */
 function getBoardEditFieldError(fieldName) {
   const value = getBoardEditField(fieldName).value.trim();
-  if (value) return "";
-  return fieldName === "Title"
-    ? "Please enter a title."
-    : "Please enter a due date.";
+  if (fieldName === "Title") return value ? "" : "Please enter a title.";
+  if (!value) return "Please enter a due date.";
+  return normalizeTaskDueDate(value) ? "" : "Please enter a valid due date.";
 }
 
 

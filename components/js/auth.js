@@ -53,9 +53,14 @@ async function loginGuestUser() {
  * Signs out from Firebase, clears the local user and returns to login.
  */
 async function handleLogout() {
-  if (isFirebaseAuthReady()) await window.joinFirebaseAuth.logoutFirebaseUser();
-  clearStoredUser();
-  navigateToPage("login");
+  try {
+    if (isFirebaseAuthReady()) await window.joinFirebaseAuth.logoutFirebaseUser();
+  } catch (error) {
+    console.error("Firebase logout failed; continuing with local logout.", error);
+  } finally {
+    clearStoredUser();
+    navigateToPage("login");
+  }
 }
 
 

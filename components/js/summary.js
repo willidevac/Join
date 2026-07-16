@@ -73,14 +73,30 @@ function setSummaryText(elementId, text) {
  * Loads tasks from the task store and fills the summary metric cards.
  */
 async function initSummaryMetrics() {
-  const tasks = await loadTasksFromStore();
-  setSummaryText("summaryTodoCount", countTasksByStatus(tasks, "todo"));
-  setSummaryText("summaryProgressCount", countTasksByStatus(tasks, "in-progress"));
-  setSummaryText("summaryFeedbackCount", countTasksByStatus(tasks, "feedback"));
-  setSummaryText("summaryDoneCount", countTasksByStatus(tasks, "done"));
-  setSummaryText("summaryBoardCount", tasks.length);
-  setSummaryText("summaryUrgentCount", countTasksByPriority(tasks, "urgent"));
-  setSummaryText("summaryDeadlineDate", getUpcomingDeadlineText(tasks));
+  try {
+    const tasks = await loadTasksFromStore();
+    setSummaryText("summaryTodoCount", countTasksByStatus(tasks, "todo"));
+    setSummaryText("summaryProgressCount", countTasksByStatus(tasks, "in-progress"));
+    setSummaryText("summaryFeedbackCount", countTasksByStatus(tasks, "feedback"));
+    setSummaryText("summaryDoneCount", countTasksByStatus(tasks, "done"));
+    setSummaryText("summaryBoardCount", tasks.length);
+    setSummaryText("summaryUrgentCount", countTasksByPriority(tasks, "urgent"));
+    setSummaryText("summaryDeadlineDate", getUpcomingDeadlineText(tasks));
+  } catch (error) {
+    setSummaryLoadError("Task overview could not be loaded.");
+  }
+}
+
+
+/**
+ * Shows a page-level error when the summary task request fails.
+ * @param {string} message - Error text shown to the user.
+ */
+function setSummaryLoadError(message) {
+  const error = document.getElementById("summaryLoadError");
+  if (!error) return;
+  error.textContent = message;
+  error.hidden = !message;
 }
 
 

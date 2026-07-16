@@ -7,6 +7,7 @@ const {
 } = require("./helpers/scriptContext");
 
 const authScript = "components/js/auth.js";
+const sharedScript = "components/js/shared.js";
 const signupScript = "components/js/signup.js";
 
 /**
@@ -50,7 +51,7 @@ function createAuthContext() {
   const openedPages = [];
   const window = { open: (...args) => openedPages.push(args) };
   const document = createAuthDocument(elements);
-  const context = loadBrowserScripts([authScript, signupScript], {
+  const context = loadBrowserScripts([sharedScript, authScript, signupScript], {
     document, sessionStorage, window,
   });
   return { context, elements, openedPages, sessionStorage };

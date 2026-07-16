@@ -222,7 +222,7 @@ function getContactFormValues(idPrefix) {
  */
 function getContactErrorMessage(values) {
   if (!values.name) return "Please enter a name.";
-  if (!values.email.includes("@") || !values.email.includes(".")) return "Please enter a valid email address.";
+  if (!isEmailAddressValid(values.email)) return "Please enter a valid email address.";
   if (!values.phone) return "Please enter a phone number.";
   return "";
 }

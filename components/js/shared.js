@@ -1,6 +1,19 @@
 ﻿let lockedScrollY = 0;
 
 
+const emailAddressPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+
+/**
+ * Checks an email address with the format shared by account and contact forms.
+ * @param {string} email - The email address to validate.
+ * @returns {boolean} True when the complete address format is valid.
+ */
+function isEmailAddressValid(email) {
+  return emailAddressPattern.test(email);
+}
+
+
 /**
  * @returns {Object|null} The signed-in user from localStorage, or null.
  */

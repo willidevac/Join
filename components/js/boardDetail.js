@@ -25,8 +25,13 @@ async function handleBoardDetailSubtaskChange(event) {
   const task = getActiveBoardTask();
   if (!task) return;
   const updatedTask = getTaskWithToggledSubtask(task, event.target);
-  await updateTaskInStore(updatedTask);
-  await refreshBoardAfterEdit(updatedTask.id);
+  try {
+    await updateTaskInStore(updatedTask);
+    await refreshBoardAfterEdit(updatedTask.id);
+  } catch (error) {
+    event.target.checked = !event.target.checked;
+    showBoardToast("Subtask could not be updated.");
+  }
 }
 
 
@@ -39,8 +44,13 @@ async function handleBoardMobileStatusChange(event) {
   const task = getActiveBoardTask();
   const status = event.target.value;
   if (!task || task.status === status) return;
-  await updateTaskInStore({ ...task, status });
-  await refreshBoardAfterEdit(task.id);
+  try {
+    await updateTaskInStore({ ...task, status });
+    await refreshBoardAfterEdit(task.id);
+  } catch (error) {
+    event.target.value = task.status;
+    showBoardToast("Task status could not be updated.");
+  }
 }
 
 
