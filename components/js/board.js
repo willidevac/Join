@@ -127,7 +127,7 @@ function openBoardTaskDetail(taskId, tasks) {
   showBoardDetailViewMode();
   getBoardDetailOverlay().hidden = false;
   getBoardDetailCard().scrollTop = 0;
-  lockPageScroll();   
+  lockPageScroll();
 }
 
 

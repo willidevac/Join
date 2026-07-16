@@ -99,25 +99,33 @@
           <input type="hidden" id="boardTaskMobileStatus" />
         </div>
       </div>
-      <div class="board-detail-actions board-detail-actions--between">
+      <div class="board-detail-actions">
         <button
-          class="board-detail-danger"
+          class="board-detail-action"
           type="button"
           id="boardTaskDeleteButton"
         >
+          <img src="./components/assets/icons/delete.svg" alt="" />
           Delete
         </button>
+        <span class="board-detail-actions__divider" aria-hidden="true"></span>
         <button
-          class="board-detail-primary"
+          class="board-detail-action"
           type="button"
           id="boardTaskEditButton"
         >
+          <img src="./components/assets/icons/edit.svg" alt="" />
           Edit
         </button>
       </div>
     </div>
 
-    <form class="board-detail-edit-form" id="boardTaskEditForm" novalidate hidden>
+    <form
+      class="board-detail-edit-form"
+      id="boardTaskEditForm"
+      novalidate
+      hidden
+    >
       <label>
         <span>Title</span>
         <input
