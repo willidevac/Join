@@ -12,7 +12,7 @@
     place-items: center;
     padding: 180px 32px 32px;
     background-color: var(--color-primary-auth);
-    background-image: url("../../assets/icons/Join logo vector.svg");
+    background-image: url("../../assets/img/icons/Join logo vector.svg");
     background-repeat: no-repeat;
     background-position: center calc(50% - 54px);
     background-size: 100px auto;

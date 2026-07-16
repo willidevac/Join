@@ -200,9 +200,9 @@ function getBoardInitials(name) {
  */
 function getBoardPriorityIcon(priority) {
   const priorityIcons = {
-    urgent: "./components/assets/icons/red_arrow_up.svg",
-    medium: "./components/assets/icons/medium_even_orange.svg",
-    low: "./components/assets/icons/green_arrow_down.svg",
+    urgent: "./components/assets/img/icons/red_arrow_up.svg",
+    medium: "./components/assets/img/icons/medium_even_orange.svg",
+    low: "./components/assets/img/icons/green_arrow_down.svg",
   };
   return priorityIcons[String(priority).toLowerCase()] || priorityIcons.medium;
 }

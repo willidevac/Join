@@ -50,14 +50,14 @@
 }
 
 .auth-page--login .form-field__icon--mail {
-  background-image: url("../../assets/icons/mail.svg");
+  background-image: url("../../assets/img/icons/mail.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
 }
 
 .auth-page--login .form-field__icon--lock {
-  background-image: url("../../assets/icons/lock.svg");
+  background-image: url("../../assets/img/icons/lock.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;

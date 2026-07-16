@@ -2,6 +2,15 @@
 
 Join is a learning project for a Kanban project management tool.
 
+## Application architecture
+
+Join uses a multi-page architecture. The HTML files in the project root are
+small route entry documents; all visible UI markup remains organized by Atomic
+Design in `components/html`. Each entry document declares its route through
+`data-page`, while `main.js` loads the matching page component and shared app
+layout. Shared page layouts live in `components/html/templates`, while images
+and icons are stored below `components/assets/img`.
+
 ## Firebase setup
 
 The app expects a local Firebase web config file at:
@@ -80,7 +89,7 @@ as a `file://` URL.
 python -m http.server 5500 --bind localhost
 ```
 
-Then open `http://localhost:5500/?page=login`.
+Then open `http://localhost:5500/index.html`.
 
 If `projects:list` does not show `join-teamjob`, ask a Firebase project owner
 to add the Google account as a project member. Do not create a second Firebase

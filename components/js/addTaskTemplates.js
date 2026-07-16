@@ -38,11 +38,11 @@ function getSubtaskItemTemplate(subtask, index) {
       <span class="add-task-subtask__title">${escapeHtmlText(subtask.title)}</span>
       <span class="add-task-subtask__actions">
         <button type="button" class="add-task-subtask__action" data-subtask-action="edit" aria-label="Edit subtask">
-          <img src="./components/assets/icons/edit.svg" alt="" />
+          <img src="./components/assets/img/icons/edit.svg" alt="" />
         </button>
         <span class="add-task-subtask__divider" aria-hidden="true"></span>
         <button type="button" class="add-task-subtask__action" data-subtask-action="delete" aria-label="Delete subtask">
-          <img src="./components/assets/icons/delete.svg" alt="" />
+          <img src="./components/assets/img/icons/delete.svg" alt="" />
         </button>
       </span>
     </li>`;
@@ -58,11 +58,11 @@ function getSubtaskEditTemplate(subtask, index) {
       <input class="add-task-subtask__edit" type="text" value="${escapeHtmlText(subtask.title)}" data-subtask-edit aria-label="Edit subtask" />
       <span class="add-task-subtask__actions">
         <button type="button" class="add-task-subtask__action" data-subtask-action="delete" aria-label="Delete subtask">
-          <img src="./components/assets/icons/delete.svg" alt="" />
+          <img src="./components/assets/img/icons/delete.svg" alt="" />
         </button>
         <span class="add-task-subtask__divider" aria-hidden="true"></span>
         <button type="button" class="add-task-subtask__action" data-subtask-action="save" aria-label="Save subtask">
-          <img src="./components/assets/icons/check_icon.svg" alt="" />
+          <img src="./components/assets/img/icons/check_icon.svg" alt="" />
         </button>
       </span>
     </li>`;

@@ -63,7 +63,7 @@ function createAuthContext() {
  */
 function createPrivacyOpenEvent() {
   return {
-    currentTarget: { href: "http://localhost/index.html?page=privacy-policy" },
+    currentTarget: { href: "http://localhost/privacyPolicy.html" },
     prevented: false,
     preventDefault() { this.prevented = true; },
   };
