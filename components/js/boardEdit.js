@@ -3,7 +3,6 @@ const boardEditFieldNames = {
   boardTaskEditDueDate: "DueDate",
 };
 
-
 /**
  * Switches the detail dialog to edit mode with the active task's data.
  */
@@ -14,7 +13,6 @@ async function showBoardEditMode() {
   getBoardDetailView().hidden = true;
   getBoardEditForm().hidden = false;
 }
-
 
 /**
  * Fills the edit form fields with the values of the given task.
@@ -31,7 +29,6 @@ async function fillBoardTaskEditForm(task) {
   initBoardEditSubtasks(task.subtasks);
 }
 
-
 /**
  * Deletes the active task and re-renders the board.
  */
@@ -47,7 +44,6 @@ async function handleBoardDeleteClick() {
   }
 }
 
-
 /**
  * Saves the edited task and refreshes the board and detail view.
  * @param {Event} event - The form submit event.
@@ -58,7 +54,6 @@ async function handleBoardEditSubmit(event) {
   if (!task || !validateBoardEditForm()) return;
   await saveBoardEdit(getBoardEditedTask(task));
 }
-
 
 /**
  * Persists a valid board edit and restores the submit state afterwards.
@@ -77,7 +72,6 @@ async function saveBoardEdit(updatedTask) {
   }
 }
 
-
 /**
  * Adds field-level validation to the board edit form.
  */
@@ -87,7 +81,6 @@ function initBoardEditValidation() {
   form.addEventListener("input", handleBoardEditValidationEvent);
 }
 
-
 /**
  * Validates required fields after blur and clears visible errors while typing.
  * @param {Event} event - Input or focusout event from the edit form.
@@ -96,10 +89,10 @@ function handleBoardEditValidationEvent(event) {
   const fieldName = boardEditFieldNames[event.target.id];
   if (!fieldName) return;
   const shouldValidate =
-    event.type === "focusout" || event.target.getAttribute("aria-invalid") === "true";
+    event.type === "focusout" ||
+    event.target.getAttribute("aria-invalid") === "true";
   if (shouldValidate) validateBoardEditField(fieldName);
 }
-
 
 /**
  * Validates all required edit fields and focuses the first invalid input.
@@ -113,7 +106,6 @@ function validateBoardEditForm() {
   return isValid;
 }
 
-
 /**
  * Validates one board edit field and renders its inline message.
  * @param {string} fieldName - Board edit field suffix.
@@ -124,7 +116,6 @@ function validateBoardEditField(fieldName) {
   setBoardEditFieldError(fieldName, message);
   return !message;
 }
-
 
 /**
  * Returns the validation message for one required board edit field.
@@ -137,7 +128,6 @@ function getBoardEditFieldError(fieldName) {
   if (!value) return "Please enter a due date.";
   return normalizeTaskDueDate(value) ? "" : "Please enter a valid due date.";
 }
-
 
 /**
  * Updates one field's accessibility state and inline error text.
@@ -152,7 +142,6 @@ function setBoardEditFieldError(fieldName, message) {
   error.hidden = !message;
 }
 
-
 /**
  * Clears both board edit validation messages.
  */
@@ -162,14 +151,12 @@ function resetBoardEditValidation() {
   });
 }
 
-
 /**
  * Focuses the first invalid field after a failed submit.
  */
 function focusFirstInvalidBoardEditField() {
   getBoardEditForm().querySelector('[aria-invalid="true"]')?.focus();
 }
-
 
 /**
  * Locks the board edit submit button while its save request is pending.
@@ -180,7 +167,6 @@ function setBoardEditPending(isPending) {
   button.disabled = isPending;
   button.setAttribute("aria-busy", String(isPending));
 }
-
 
 /**
  * Builds the updated task object from the edit form values.
@@ -199,7 +185,6 @@ function getBoardEditedTask(task) {
   };
 }
 
-
 /**
  * Returns the assignees selected in the edit form.
  * @returns {Object[]} Stable references to the selected contacts.
@@ -207,7 +192,6 @@ function getBoardEditedTask(task) {
 function getBoardEditedAssignees() {
   return getBoardEditedAssigneesFromContacts().map(createTaskAssigneeReference);
 }
-
 
 /**
  * Reloads the board after an edit and reopens the edited task's detail view.
@@ -220,7 +204,6 @@ async function refreshBoardAfterEdit(taskId) {
   openBoardTaskDetail(taskId, activeBoardTasks);
 }
 
-
 /**
  * Returns the edit button of the task detail dialog.
  * @returns {HTMLElement} The edit button.
@@ -229,7 +212,6 @@ function getBoardEditButton() {
   return document.getElementById("boardTaskEditButton");
 }
 
-
 /**
  * Returns the delete button of the task detail dialog.
  * @returns {HTMLElement} The delete button.
@@ -237,7 +219,6 @@ function getBoardEditButton() {
 function getBoardDeleteButton() {
   return document.getElementById("boardTaskDeleteButton");
 }
-
 
 /**
  * Checks the priority radio matching the task, falling back to medium.
@@ -253,7 +234,6 @@ function setBoardEditPriority(priority) {
   (radio || fallback).checked = true;
 }
 
-
 /**
  * @returns {string} The picked priority from the edit form radios.
  */
@@ -264,7 +244,6 @@ function getBoardEditPriority() {
   return checked ? checked.value : "medium";
 }
 
-
 /**
  * Returns the form element of the task edit mode.
  * @returns {HTMLElement} The edit form.
@@ -272,7 +251,6 @@ function getBoardEditPriority() {
 function getBoardEditForm() {
   return document.getElementById("boardTaskEditForm");
 }
-
 
 /**
  * Returns an input element of the edit form by its field name.
