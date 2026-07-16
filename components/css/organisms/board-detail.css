@@ -80,7 +80,7 @@
   gap: 12px;
 }
 
-.board-detail-list div {
+.board-detail-list > div {
   display: grid;
   grid-template-columns: 110px minmax(0, 1fr);
   gap: 16px;
@@ -115,7 +115,7 @@
   display: grid;
   place-items: center;
   color: var(--color-white);
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .board-detail-list dt {
@@ -132,7 +132,7 @@
   gap: 8px;
 }
 
-.board-detail-subtask  {
+.board-detail-subtask {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -149,11 +149,6 @@
 
 .board-detail-subtask span {
   overflow-wrap: anywhere;
-}
-
-.board-detail-subtask input:checked + span {
-  color: var(--color-muted);
-  text-decoration: line-through;
 }
 
 .board-detail-empty {
@@ -195,8 +190,8 @@
 }
 
 .board-detail-field {
-  display: grid; 
-  gap: 8px; 
+  display: grid;
+  gap: 8px;
   color: var(--color-text-main);
 }
 
@@ -234,7 +229,6 @@
   color: var(--color-text-main);
   font: inherit;
 }
-
 
 .board-detail-edit-form textarea {
   resize: vertical;
@@ -298,7 +292,7 @@
     font-size: 32px;
   }
 
-  .board-detail-list div {
+  .board-detail-list > div {
     grid-template-columns: 1fr;
     gap: 4px;
   }
