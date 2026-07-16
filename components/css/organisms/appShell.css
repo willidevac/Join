@@ -1,4 +1,7 @@
 .summary-shell {
+  --app-topbar-height: 96px;
+  --app-bottom-nav-height: 80px;
+
   min-height: 100vh;
   display: grid;
   grid-template-columns: 232px minmax(0, 1fr);
@@ -7,7 +10,9 @@
 }
 
 .summary-sidebar {
-  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   background: var(--color-primary);
@@ -86,7 +91,7 @@
 }
 
 .summary-topbar {
-  min-height: 88px;
+  min-height: var(--app-topbar-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -169,21 +174,32 @@ a.summary-user-menu__help {
   display: none;
 }
 
+body[data-page="help"] .summary-help,
+body[data-page="privacy-policy"] .summary-help,
+body[data-page="legal-notice"] .summary-help {
+  display: none;
+}
+
 @media (max-width: 1279px) {
   .summary-shell {
+    --app-topbar-height: 80px;
+
     grid-template-columns: 1fr;
   }
 
   .summary-sidebar {
     position: fixed;
+    top: auto;
     bottom: 0;
     left: 0;
     width: 100%;
+    height: auto;
     min-height: auto;
     z-index: 15;
   }
 
   .summary-nav__item {
+    min-height: var(--app-bottom-nav-height);
     flex-direction: column;
     gap: 4px;
     justify-content: center;
@@ -217,7 +233,7 @@ a.summary-user-menu__help {
   }
 
   .summary-main {
-    padding-bottom: 76px;
+    padding-bottom: var(--app-bottom-nav-height);
   }
 
   .summary-help {
@@ -226,15 +242,5 @@ a.summary-user-menu__help {
 
   a.summary-user-menu__help {
     display: block;
-  }
-}
-
-@media (max-width: 479px) {
-  .summary-topbar {
-    min-height: 72px;
-  }
-
-  .summary-topbar p {
-    font-size: 16px;
   }
 }

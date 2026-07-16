@@ -314,7 +314,7 @@
     place-items: center;
     position: fixed;
     right: 16px;
-    bottom: 72px;
+    bottom: calc(var(--app-bottom-nav-height) + 8px);
     width: 56px;
     height: 56px;
     border-radius: 50%;
@@ -360,7 +360,7 @@
     gap: 16px;
     position: fixed;
     right: 56px;
-    bottom: 144px;
+    bottom: calc(var(--app-bottom-nav-height) + 80px);
     padding: 16px 24px;
     border-radius: 20px 20px 0 20px;
     background: var(--color-surface);
