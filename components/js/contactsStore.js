@@ -272,16 +272,33 @@ async function updateContactInStore(contactId, contact) {
 
 
 /**
- * Deletes one contact from Firestore or localStorage.
+ * Deletes a contact together with its cleaned task assignments.
+ * @param {string} contactId - The contact document id.
+ * @param {Object[]} updatedTasks - Tasks without the deleted assignee.
  */
-async function deleteContactFromStore(contactId) {
+async function deleteContactFromStore(contactId, updatedTasks) {
   if (isContactFirestoreReady()) {
-    await window.joinFirebaseContacts.deleteContact(contactId);
+    await window.joinFirebaseContacts.deleteContact(contactId, updatedTasks);
     return;
   }
-  saveLocalContacts(
-    getLocalContacts().filter((contact) => contact.id !== contactId),
-  );
+  deleteLocalContactWithTasks(contactId, updatedTasks);
+}
+
+
+/**
+ * Applies local task cleanup before deleting the contact and rolls back on error.
+ */
+function deleteLocalContactWithTasks(contactId, updatedTasks) {
+  const contacts = getLocalContacts();
+  const tasks = getStoredTasks();
+  const updates = new Map(updatedTasks.map((task) => [task.id, task]));
+  try {
+    saveStoredTasks(tasks.map((task) => updates.get(task.id) || task));
+    saveLocalContacts(contacts.filter((contact) => contact.id !== contactId));
+  } catch (error) {
+    saveStoredTasks(tasks);
+    throw error;
+  }
 }
 
 

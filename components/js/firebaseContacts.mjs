@@ -1,12 +1,12 @@
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
   getDocs,
   runTransaction,
   serverTimestamp,
   updateDoc,
+  writeBatch,
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 
@@ -108,11 +108,27 @@ async function updateContact(contactId, contact) {
 
 
 /**
- * Deletes one contact from Firestore.
+ * Deletes one contact and updates affected tasks in a single batch.
+ * @param {string} contactId - The contact document id.
+ * @param {Object[]} updatedTasks - Tasks without the deleted assignee.
  */
-async function deleteContact(contactId) {
+async function deleteContact(contactId, updatedTasks) {
   const db = window.joinFirestore;
-  await deleteDoc(doc(db, "contacts", contactId));
+  const batch = writeBatch(db);
+  batch.delete(doc(db, "contacts", contactId));
+  updatedTasks.forEach((task) => queueTaskAssignmentUpdate(batch, db, task));
+  await batch.commit();
+}
+
+
+/**
+ * Adds one cleaned task assignment update to a Firestore batch.
+ */
+function queueTaskAssignmentUpdate(batch, db, task) {
+  batch.update(doc(db, "tasks", task.id), {
+    assignedTo: window.getTaskAssigneeReferences(task.assignedTo),
+    updatedAt: serverTimestamp(),
+  });
 }
 
 window.joinFirebaseContacts = {

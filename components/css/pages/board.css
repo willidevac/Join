@@ -109,6 +109,7 @@
 .board-card h3,
 .board-card p {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .board-card h3 {
@@ -232,9 +233,12 @@
   bottom: 20%;
   left: 50%;
   transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 32px);
   padding: 24px clamp(16px, 5vw, 32px);
   font-size: clamp(16px, 5vw - 4px, 20px);
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  text-align: center;
   border-radius: 20px;
   background: var(--color-primary-auth);
   color: var(--color-white);

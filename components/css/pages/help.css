@@ -1,5 +1,5 @@
 .help-content {
-  min-height: calc(100vh - 88px);
+  min-height: calc(100vh - var(--app-topbar-height));
   padding: 88px 56px 72px 84px;
 }
 
@@ -102,6 +102,9 @@
 
 @media (max-width: 1279px) {
   .help-content {
+    min-height: calc(
+      100vh - var(--app-topbar-height) - var(--app-bottom-nav-height)
+    );
     padding: 48px 24px;
   }
 
@@ -112,7 +115,6 @@
 
 @media (max-width: 479px) {
   .help-content {
-    min-height: calc(100vh - 72px);
     padding-top: 40px;
     padding-bottom: 40px;
   }

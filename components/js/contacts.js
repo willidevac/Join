@@ -177,8 +177,8 @@ async function deleteActiveContact() {
  * @param {Object} contact - The contact to delete.
  */
 async function performContactDeletion(contact) {
-  await deleteContactFromStore(contact.id);
-  await removeContactFromTasks(contact);
+  const updatedTasks = await getTasksWithoutContact(contact);
+  await deleteContactFromStore(contact.id, updatedTasks);
   closeContactDetail();
   await initContacts();
   showContactToast("Contact successfully deleted");
@@ -186,19 +186,24 @@ async function performContactDeletion(contact) {
 
 
 /**
- * Removes a deleted contact from the assignee list of all tasks.
+ * Builds updated versions of tasks assigned to the deleted contact.
+ * @param {Object} contact - The contact to remove from task assignments.
+ * @returns {Promise<Object[]>} Changed tasks ready for persistence.
  */
-async function removeContactFromTasks(contact) {
+async function getTasksWithoutContact(contact) {
   const tasks = await loadTasksFromStore();
-  const affectedTasks = tasks.filter((task) =>
-    getTaskAssigneeReferences(task.assignedTo).some((assignee) =>
-      isTaskAssigneeContact(assignee, contact),
-    ),
-  );
-  await Promise.all(
-    affectedTasks.map((task) =>
-      updateTaskInStore(removeAssigneeFromTask(task, contact)),
-    ),
+  return tasks
+    .filter((task) => hasContactAssignment(task, contact))
+    .map((task) => removeAssigneeFromTask(task, contact));
+}
+
+
+/**
+ * Checks whether one task is assigned to the given contact.
+ */
+function hasContactAssignment(task, contact) {
+  return getTaskAssigneeReferences(task.assignedTo).some((assignee) =>
+    isTaskAssigneeContact(assignee, contact),
   );
 }
 
