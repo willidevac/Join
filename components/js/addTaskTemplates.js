@@ -62,7 +62,7 @@ function getSubtaskEditTemplate(subtask, index) {
         </button>
         <span class="add-task-subtask__divider" aria-hidden="true"></span>
         <button type="button" class="add-task-subtask__action" data-subtask-action="save" aria-label="Save subtask">
-          <img src="./components/assets/img/icons/check_icon.svg" alt="" />
+          <img src="./components/assets/img/icons/check_edit_subtask.svg" alt="" />
         </button>
       </span>
     </li>`;
