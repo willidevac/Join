@@ -8,6 +8,7 @@ const AUTH_ERROR_MESSAGES = {
   "auth/network-request-failed": "Please check your internet connection.",
 };
 const AUTH_EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+let signupSubmitPending = false;
 
 
 /**
@@ -24,6 +25,7 @@ async function handleLogin(email, password) {
  */
 async function handleSignup(event) {
   event.preventDefault();
+  if (signupSubmitPending) return;
   if (!isSignupFormValid()) {
     showSignupMessage(getSignupErrorMessage());
     return;
@@ -36,12 +38,15 @@ async function handleSignup(event) {
  * Wraps signup saving so Firebase errors can be shown in the form.
  */
 async function registerUser() {
+  setSignupSubmitPending(true);
   try {
     await saveSignedUpUser();
     clearSignupState();
     navigateToPage("summary");
   } catch (error) {
     showSignupMessage(getAuthErrorMessage(error));
+  } finally {
+    setSignupSubmitPending(false);
   }
 }
 
@@ -210,8 +215,19 @@ function updatePrivacyConsentHint(hasOpenedPrivacy) {
  * Enables the signup button only while the whole form is valid.
  */
 function updateSignupButton() {
-  getSignupButton().disabled = !isSignupFormValid();
+  getSignupButton().disabled = signupSubmitPending || !isSignupFormValid();
   if (isSignupFormValid()) showSignupMessage("");
+}
+
+
+/**
+ * Locks or unlocks signup while Firebase processes the registration.
+ * @param {boolean} isPending - True while registration is running.
+ */
+function setSignupSubmitPending(isPending) {
+  signupSubmitPending = isPending;
+  getSignupButton().setAttribute("aria-busy", String(isPending));
+  updateSignupButton();
 }
 
 
