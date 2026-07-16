@@ -196,14 +196,25 @@
   }
 }
 
-@media (max-width: 479px) {
-  .summary-content {
-    padding-top: 48px;
-  }
-
+@media (max-width: 585px) {
   .summary-heading {
     display: grid;
     gap: 16px;
+  }
+
+  .summary-heading h1 {
+    white-space: nowrap;
+  }
+
+  .summary-heading p {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 479px) {
+  .summary-content {
+    padding-top: 48px;
   }
 
   .summary-heading h1,
@@ -212,8 +223,6 @@
   }
 
   .summary-heading p {
-    padding-left: 0;
-    border-left: 0;
     font-size: 20px;
   }
 
