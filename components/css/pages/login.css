@@ -10,16 +10,29 @@
   position: absolute;
   top: 64px;
   right: 72px;
+  width: 279px;
+  height: 49px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 35px;
+}
+
+.auth-signup-hint > span {
+  font-size: 20px;
+  white-space: nowrap;
 }
 
 .auth-signup-hint__button {
-  padding: 10px 18px;
+  width: 91px;
+  height: 49px;
+  flex: 0 0 91px;
+  display: grid;
+  place-items: center;
+  padding: 0;
   color: var(--color-white);
   background-color: var(--color-primary-auth);
   border-radius: 8px;
+  font-size: 16px;
   font-weight: 700;
   text-decoration: none;
   transition: background-color 100ms ease;
@@ -29,42 +42,79 @@
   background-color: var(--color-primary-hover);
 }
 
+.auth-page--login .auth-footer a {
+  padding: 8px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
 .auth-page--login .auth-card {
-  width: min(100%, 500px);
+  width: min(100%, 652px);
+  height: 449px;
   padding: 48px 72px;
   display: grid;
+  align-content: start;
   background-color: var(--color-surface);
   border-radius: 30px;
   box-shadow: var(--shadow-soft);
 }
 
+.auth-page--login .auth-card__title {
+  margin-bottom: 51px;
+}
+
+.auth-page--login .auth-card__title::after {
+  bottom: -19px;
+}
+
+.auth-page--login .auth-form {
+  width: 422px;
+  justify-self: center;
+}
+
+.auth-page--login .form-field + .form-field {
+  margin-top: calc(32px - clamp(12px, 2svh, 18px));
+}
+
 .auth-page--login .form-field__input {
   width: 100%;
-  height: clamp(40px, 6svh, 48px);
+  height: 48px;
   padding: 12px 52px 12px 21px;
   color: var(--color-text);
   background-color: var(--color-white);
   border: 1px solid var(--color-border-auth);
   border-radius: 10px;
+  font-size: 20px;
+  font-weight: 400;
   outline: none;
 }
 
 .auth-page--login .form-field__icon--mail {
+  top: 16px;
+  right: 23px;
+  width: 20px;
+  height: 16px;
   background-image: url("../../assets/img/icons/mail.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  transform: none;
 }
 
 .auth-page--login .form-field__icon--lock {
+  top: 13px;
+  right: 25px;
+  width: 16px;
+  height: 21px;
   background-image: url("../../assets/img/icons/lock.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  transform: none;
 }
 
 .auth-page--login .form-field__input::placeholder {
-  color: var(--color-placeholder-light);
+  color: #686868;
 }
 
 .auth-page--login .form-field__input:focus {
@@ -79,14 +129,29 @@
   margin-top: 8px;
 }
 
+.auth-page--login .auth-form__submit {
+  width: 110px;
+  min-width: 110px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font-size: 21px;
+  white-space: nowrap;
+}
+
 .auth-page--login .auth-form__guest {
-  height: clamp(46px, 7svh, 55px);
-  padding: 12px 24px;
+  width: 177px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  padding: 0;
   color: var(--color-text-auth);
   background-color: var(--color-white);
   border: 1px solid var(--color-primary-auth);
   font-size: 21px;
   font-weight: 700;
+  white-space: nowrap;
   transition: color 100ms ease, border-color 100ms ease;
 }
 
@@ -109,7 +174,12 @@
 
   .auth-page--login .auth-card {
     width: 100%;
+    height: auto;
     padding: clamp(20px, 3svh, 36px) 24px;
+  }
+
+  .auth-page--login .auth-form {
+    width: 100%;
   }
 }
 

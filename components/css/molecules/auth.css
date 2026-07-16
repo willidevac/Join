@@ -3,13 +3,14 @@
   top: 64px;
   left: 72px;
   display: inline-flex;
-  width: 108px;
+  width: 100px;
+  aspect-ratio: 100 / 122;
   text-decoration: none;
 }
 
 .auth-logo img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
 }
 
