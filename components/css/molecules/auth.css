@@ -25,7 +25,7 @@
 
 .auth-card__title {
   position: relative;
-  margin: 0 0 clamp(16px, 3svh, 44px);
+  margin: 0 0 42px;
   color: var(--color-text-dark);
   font-size: clamp(40px, 13vw, 61px);
   font-weight: 700;
@@ -186,10 +186,4 @@
 
 .auth-footer a:hover {
   color: var(--color-primary-hover);
-}
-
-@media (min-width: 768px) and (max-width: 1279px) and (max-height: 600px) {
-  .auth-form {
-    padding-top: 24px;
-  }
 }
