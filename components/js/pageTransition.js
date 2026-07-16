@@ -1,7 +1,7 @@
 const signupTransition = {
   renderDelay: 240,
   exitDelay: 600,
-  template: "./components/html/molecules/signup-transition-loader.html",
+  template: "./components/html/molecules/signupTransitionLoader.html",
 };
 
 let pageTransitionRunning = false;

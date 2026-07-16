@@ -12,12 +12,12 @@ const routes = {
   "privacy-policy": {
     title: "Join | Privacy Policy",
     file: "./privacyPolicy.html",
-    template: "./components/html/pages/privacy-policy.html",
+    template: "./components/html/pages/privacyPolicy.html",
   },
   "legal-notice": {
     title: "Join | Legal Notice",
     file: "./legalNotice.html",
-    template: "./components/html/pages/legal-notice.html",
+    template: "./components/html/pages/legalNotice.html",
   },
   summary: {
     title: "Join | Summary",
@@ -29,7 +29,7 @@ const routes = {
   "add-task": {
     title: "Join | Add Task",
     file: "./addTask.html",
-    template: "./components/html/pages/add-task.html",
+    template: "./components/html/pages/addTask.html",
     protected: true,
     usesLayout: true,
     layoutClass: "add-task-shell",
@@ -148,7 +148,7 @@ async function createHydratedPageContent(content) {
 async function createAppLayoutContent(pageContent, route) {
   const layoutWrapper = document.createElement("div");
   layoutWrapper.innerHTML = await getHtmlContent(
-    "./components/html/templates/app-layout.html",
+    "./components/html/templates/appLayout.html",
   );
   insertPageIntoLayout(layoutWrapper, pageContent, route);
   await hydrateHtmlIncludes(layoutWrapper);
