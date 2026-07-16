@@ -313,3 +313,23 @@
     font-size: 32px;
   }
 }
+
+@media (max-width: 479px) {
+  .board-detail-edit-form .add-task-priority__options {
+    grid-template-columns: repeat(3, auto);
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .board-detail-edit-form .add-task-priority__option {
+    padding: 0 4px;
+  }
+
+  .board-detail-edit-form .add-task-priority__option span {
+    gap: 4px;
+  }
+
+  .board-detail-edit-form .add-task-priority__option img {
+    width: 14px;
+  }
+}
