@@ -7,6 +7,7 @@ const {
 } = require("./helpers/scriptContext");
 
 const AUTH_SCRIPT = "components/js/auth.js";
+const SIGNUP_SCRIPT = "components/js/signup.js";
 
 /**
  * Creates the signup controls used by the auth validation helpers.
@@ -40,7 +41,7 @@ function createAuthDocument(elements) {
 
 
 /**
- * Loads auth.js with isolated storage, window and form controls.
+ * Loads the shared auth and page-specific signup scripts.
  * @returns {Object} Auth test context and observable dependencies.
  */
 function createAuthContext() {
@@ -49,7 +50,7 @@ function createAuthContext() {
   const openedPages = [];
   const window = { open: (...args) => openedPages.push(args) };
   const document = createAuthDocument(elements);
-  const context = loadBrowserScripts([AUTH_SCRIPT], {
+  const context = loadBrowserScripts([AUTH_SCRIPT, SIGNUP_SCRIPT], {
     document, sessionStorage, window,
   });
   return { context, elements, openedPages, sessionStorage };
