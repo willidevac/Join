@@ -8,14 +8,15 @@
 
 .auth-card--signup {
   position: relative;
-  width: min(100%, 652px);
-  min-height: 560px;
-  padding: 48px 92px 32px;
+  width: min(100%, 600px);
+  min-height: 630px;
+  padding: 48px 89px 32px;
   display: grid;
   align-content: start;
   background-color: var(--color-surface);
   border-radius: 30px;
   box-shadow: var(--shadow-soft);
+  transform: translateY(-30px);
 }
 
 .auth-page--signup .form-field__input {
@@ -47,14 +48,15 @@
     position: static;
     justify-self: start;
     width: clamp(56px, 9svh, 82px);
-    margin: 0 0 clamp(16px, 2.5svh, 64px) 22px;
+    margin: 0 0 clamp(32px, 5.6svh, 52px) 22px;
   }
 
   .auth-card--signup {
     width: 100%;
-    min-height: 0;
-    padding: 36px 22px 32px;
+    min-height: 595px;
+    padding: 36px 16px 27px;
     border-radius: 30px;
+    transform: none;
   }
 
   .auth-card__back {
@@ -64,7 +66,7 @@
   }
 
   .auth-card__title {
-    margin-bottom: 48px;
+    margin-bottom: 40px;
     font-size: 47px;
   }
 
@@ -73,11 +75,15 @@
   }
 
   .auth-form {
-    gap: 24px;
+    gap: 20px;
+  }
+
+  .auth-form > .form-field + .form-field {
+    margin-top: 4px;
   }
 
   .privacy-consent {
-    margin-top: 18px;
+    margin-top: 10px;
     gap: 10px;
   }
 
