@@ -14,6 +14,7 @@ async function initBoardTasks() {
     activeBoardTasks = await loadTasksFromStore();
     activeBoardContacts = await loadBoardDetailContacts();
     renderBoardColumns(activeBoardTasks);
+    playBoardIntroAnimation();
     initBoardTaskDetails(activeBoardTasks);
     initBoardSearch();
   } catch (error) {

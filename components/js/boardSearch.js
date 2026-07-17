@@ -63,3 +63,16 @@ function taskMatchesSearch(task, searchTerm) {
   const description = (task.description || "").toLowerCase();
   return title.includes(searchTerm) || description.includes(searchTerm);
 }
+
+
+/**
+ * Plays the card entrance animation once after the initial board render.
+ */
+function playBoardIntroAnimation() {
+  const columnsElement = document.querySelector(".board-columns");
+  if (!columnsElement) return;
+  columnsElement.classList.add("board-columns--animate-in");
+  setTimeout(() => {
+    columnsElement.classList.remove("board-columns--animate-in");
+  }, 600);
+}
