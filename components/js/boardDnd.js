@@ -60,6 +60,7 @@ function startBoardCardDrag(event) {
   createBoardDragGhost(event, boardDragCard);
   boardDragCard.classList.add("board-card--dragging");
   document.body.classList.add("board-dragging");
+  setBoardDropZonesReady(true);
   document.addEventListener("keydown", handleBoardDragEscape);
 }
 
@@ -72,6 +73,17 @@ function updateBoardDropHighlight(event) {
   clearAllBoardDropFeedback();
   const taskList = getBoardDropTarget(event);
   if (taskList) taskList.classList.add("board-task-list--dragover");
+}
+
+
+/**
+ * Toggles the drop-zone marking on every board column list.
+ * @param {boolean} isReady - True while a card drag is running.
+ */
+function setBoardDropZonesReady(isReady) {
+  document.querySelectorAll("[data-board-status]").forEach((taskList) => {
+    taskList.classList.toggle("board-task-list--droppable", isReady);
+  });
 }
 
 
@@ -137,6 +149,7 @@ function endBoardCardDrag() {
   removeBoardDragGhost();
   clearActiveBoardDragCard();
   clearAllBoardDropFeedback();
+  setBoardDropZonesReady(false);
   draggedBoardTaskId = "";
   boardDragCard = null;
   boardDragActive = false;

@@ -40,6 +40,7 @@
 .board-column {
   min-width: 0;
   display: grid;
+  grid-template-rows: auto 1fr;
   align-content: start;
   gap: 16px;
 }
@@ -83,7 +84,6 @@
     transform 120ms ease,
     box-shadow 120ms ease;
 }
-
 
 .board-card--dragging {
   visibility: hidden;
@@ -298,14 +298,17 @@ body.board-dragging * {
   }
 }
 
-.board-task-list--dragover {
-  background: var(--color-background-soft);
+.board-task-list--droppable {
   outline: 2px dashed var(--color-accent-light);
   outline-offset: -2px;
+  min-height: 320px;
+}
+
+.board-task-list--dragover {
+  background: var(--color-background-soft);
 }
 
 .board-task-list--dragover .board-empty-state {
-  border-color: var(--color-accent-light);
   color: var(--color-text-main);
 }
 
