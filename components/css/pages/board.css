@@ -363,7 +363,7 @@ body.board-dragging * {
   background: var(--color-hover-overlay-light);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
   .board-card-move {
     display: block;
   }
