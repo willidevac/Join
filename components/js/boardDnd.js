@@ -1,4 +1,7 @@
 let draggedBoardTaskId = "";
+let boardDragGhost = null;
+let boardDragGhostOffsetX = 0;
+let boardDragGhostOffsetY = 0;
 
 
 /**
@@ -71,6 +74,7 @@ async function handleBoardDrop(event, taskList) {
   } finally {
     draggedBoardTaskId = "";
     clearAllBoardDropFeedback();
+    removeBoardDragGhost();
   }
 }
 
@@ -125,14 +129,67 @@ async function refreshBoardAfterDrop() {
 
 
 /**
- * Marks the card as dragged and stores its task id.
+ * Starts a card drag with a custom rotated ghost following the mouse.
  * @param {DragEvent} event - The dragstart event.
  * @param {HTMLElement} card - The card being dragged.
  */
 function handleBoardDragStart(event, card) {
   draggedBoardTaskId = card.dataset.taskId;
-  card.classList.add("board-card--dragging");
   event.dataTransfer.setData("text/plain", draggedBoardTaskId);
+  hideNativeBoardDragImage(event);
+  createBoardDragGhost(event, card);
+  document.addEventListener("dragover", moveBoardDragGhost);
+  window.setTimeout(() => card.classList.add("board-card--dragging"));
+}
+
+
+/**
+ * Replaces the browser's drag snapshot with a transparent pixel.
+ * @param {DragEvent} event - The dragstart event.
+ */
+function hideNativeBoardDragImage(event) {
+  const emptyImage = new Image();
+  emptyImage.src =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+  event.dataTransfer.setDragImage(emptyImage, 0, 0);
+}
+
+
+/**
+ * Creates the rotated card clone that follows the mouse while dragging.
+ * @param {DragEvent} event - The dragstart event.
+ * @param {HTMLElement} card - The card being dragged.
+ */
+function createBoardDragGhost(event, card) {
+  const rect = card.getBoundingClientRect();
+  boardDragGhostOffsetX = event.clientX - rect.left;
+  boardDragGhostOffsetY = event.clientY - rect.top;
+  boardDragGhost = card.cloneNode(true);
+  boardDragGhost.classList.add("board-card--ghost");
+  boardDragGhost.style.width = `${rect.width}px`;
+  document.body.append(boardDragGhost);
+  moveBoardDragGhost(event);
+}
+
+
+/**
+ * Moves the drag ghost to the current mouse position.
+ * @param {DragEvent} event - A dragover event carrying mouse coordinates.
+ */
+function moveBoardDragGhost(event) {
+  if (!boardDragGhost) return;
+  boardDragGhost.style.left = `${event.clientX - boardDragGhostOffsetX}px`;
+  boardDragGhost.style.top = `${event.clientY - boardDragGhostOffsetY}px`;
+}
+
+
+/**
+ * Removes the drag ghost and its document-level listener.
+ */
+function removeBoardDragGhost() {
+  document.removeEventListener("dragover", moveBoardDragGhost);
+  if (boardDragGhost) boardDragGhost.remove();
+  boardDragGhost = null;
 }
 
 
@@ -140,6 +197,7 @@ function handleBoardDragStart(event, card) {
  * Resets the drag state and removes all drag and drop feedback.
  */
 function handleBoardDragEnd() {
+  removeBoardDragGhost();
   clearActiveBoardDragCard();
   draggedBoardTaskId = "";
   clearAllBoardDropFeedback();
