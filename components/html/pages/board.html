@@ -11,7 +11,7 @@
           </svg>
         </button>
       </div>
-      <a class="board-add-task" href="./addTask.html" data-page="add-task">
+      <a class="board-add-task" href="./addTask.html?from=board" data-page="add-task" data-from="board">
   Add task
   <img src="./components/assets/img/icons/add.svg" alt="" aria-hidden="true" />
 </a>
@@ -22,7 +22,7 @@
     <section class="board-column" aria-labelledby="boardTodoTitle">
       <div class="board-column__header">
         <h2 id="boardTodoTitle">To do</h2>
-        <a class="board-column__add" href="./addTask.html?status=todo" data-page="add-task" data-task-status="todo"
+        <a class="board-column__add" href="./addTask.html?status=todo&from=board" data-page="add-task" data-task-status="todo" data-from="board"
           aria-label="Add task to To do">+</a>
       </div>
       <div class="board-task-list" data-board-status="todo"></div>
@@ -31,8 +31,8 @@
     <section class="board-column" aria-labelledby="boardProgressTitle">
       <div class="board-column__header">
         <h2 id="boardProgressTitle">In progress</h2>
-        <a class="board-column__add" href="./addTask.html?status=in-progress" data-page="add-task"
-          data-task-status="in-progress" aria-label="Add task to In progress">+</a>
+        <a class="board-column__add" href="./addTask.html?status=in-progress&from=board" data-page="add-task"
+          data-task-status="in-progress" data-from="board" aria-label="Add task to In progress">+</a>
       </div>
       <div class="board-task-list" data-board-status="in-progress"></div>
     </section>
@@ -40,8 +40,8 @@
     <section class="board-column" aria-labelledby="boardFeedbackTitle">
       <div class="board-column__header">
         <h2 id="boardFeedbackTitle">Await feedback</h2>
-        <a class="board-column__add" href="./addTask.html?status=feedback" data-page="add-task"
-          data-task-status="feedback" aria-label="Add task to Await feedback">+</a>
+        <a class="board-column__add" href="./addTask.html?status=feedback&from=board" data-page="add-task"
+          data-task-status="feedback" data-from="board" aria-label="Add task to Await feedback">+</a>
       </div>
       <div class="board-task-list" data-board-status="feedback"></div>
     </section>

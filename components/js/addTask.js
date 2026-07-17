@@ -13,6 +13,7 @@ async function initAddTaskValidation() {
   await initAddTaskAssignees();
   initAddTaskCategory();
   initAddTaskSubtasks();
+  initAddTaskCloseButton();
   initAddTaskFieldValidation(form);
   form.addEventListener("input", handleAddTaskFormChange);
   form.addEventListener("change", handleAddTaskFormChange);
@@ -171,6 +172,19 @@ function getAddTaskData() {
     status: getAddTaskStatus(),
     createdAt: new Date().toISOString(),
   };
+}
+
+
+/**
+ * Shows the close button when the page was opened from the board.
+ */
+function initAddTaskCloseButton() {
+  const closeButton = document.getElementById("addTaskClose");
+  if (!closeButton) return;
+  const from = new URLSearchParams(window.location.search).get("from");
+  if (from !== "board") return;
+  closeButton.hidden = false;
+  closeButton.addEventListener("click", () => navigateToPage("board"));
 }
 
 
