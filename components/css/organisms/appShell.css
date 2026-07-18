@@ -20,10 +20,10 @@
 }
 
 .summary-sidebar__logo {
-  min-height: 248px;
+  min-height: 300px;
   display: grid;
-  place-items: center;
-  padding: 32px;
+  place-items: start center;
+  padding: 64px 32px 32px;
 }
 
 .summary-nav {
@@ -96,7 +96,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 0 max(36px, 100% - 1404px) 0 84px;
+  padding: 0 max(40px, 100% - 1400px) 0 96px;
   background: var(--color-white);
   box-shadow: var(--shadow-topbar);
 }
@@ -112,13 +112,13 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
 }
 
 .summary-help,
 .summary-avatar {
-  width: 44px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
   border: 2px solid var(--color-primary);
   border-radius: 50%;
   background: var(--color-white);
@@ -127,8 +127,8 @@
 }
 
 .summary-help {
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   border-width: 1px;
 }
 

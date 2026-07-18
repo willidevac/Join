@@ -1,19 +1,19 @@
 .summary-content {
   width: min(100%, 1080px);
-  padding: 126px 24px 48px 96px;
+  padding: 118px 24px 48px 96px;
 }
 
 .summary-heading {
   display: flex;
   align-items: center;
-  gap: 28px;
-  margin-bottom: 48px;
+  gap: 33px;
+  margin-bottom: 56px;
 }
 
 .summary-heading h1 {
   margin: 0;
   color: 	var(--color-text-dark);
-  font-size: 56px;
+  font-size: 65px;
   line-height: 1;
 }
 
@@ -21,7 +21,7 @@
   margin: 0;
   padding-left: 28px;
   border-left: 3px solid var(--color-accent-line);
-  font-size: 24px;
+  font-size: 27px;
 }
 
 .summary-dashboard {
@@ -35,16 +35,17 @@
   width: min(100%, 560px);
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 24px;
+  column-gap: 24px;
+  row-gap: 26px;
 }
 
 .summary-card {
-  min-height: 148px;
+  min-height: 170px;
   display: grid;
   place-items: center;
   padding: 24px;
   border: 1px solid var(--color-border-medium);
-  border-radius: 24px;
+  border-radius: 30px;
   background: var(--color-surface);
   box-shadow: var(--shadow-card-strong);
   color: var(--color-text-dark);
@@ -75,16 +76,23 @@
 
 .summary-card--small {
   grid-column: span 3;
+  width: calc(100% - 4px);
+}
+
+.summary-card--small:nth-child(2) {
+  justify-self: end;
 }
 
 .summary-card--urgent {
   grid-column: 1 / -1;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 256px 1fr;
+  padding-right: 0;
+  padding-left: 0;
   text-align: left;
 }
 
 .summary-card--count {
-  min-height: 148px;
+  min-height: 170px;
   grid-column: span 2;
 }
 
@@ -103,7 +111,7 @@
 .summary-card strong {
   display: block;
   color: 	var(--color-text-dark);
-  font-size: 56px;
+  font-size: 61px;
   line-height: 1;
 }
 
@@ -113,7 +121,7 @@
 }
 
 .summary-card span {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .summary-card__icon {
@@ -151,9 +159,10 @@
 .summary-deadline {
   min-height: 88px;
   display: grid;
+  justify-self: stretch;
   align-content: center;
   gap: 8px;
-  padding-left: 44px;
+  padding-left: 60px;
   border-left: 	2px solid var(--color-border-medium);
 }
 
@@ -175,16 +184,14 @@
 }
 
 .summary-greeting p {
-  font-size: 24px;
+  font-size: 47px;
 }
 
 .summary-greeting h2 {
   color: 	var(--color-greeting);
-  font-size: 56px;
+  font-size: 64px;
   line-height: 1.1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 #summaryUserType {
@@ -205,8 +212,20 @@
 
 @media (max-width: 767px) {
   .summary-heading {
+    position: relative;
     display: grid;
     gap: 16px;
+  }
+
+  .summary-heading::after {
+    content: "";
+    position: absolute;
+    bottom: -24px;
+    left: 0;
+    width: 90px;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--color-accent-line);
   }
 
   .summary-heading h1 {
@@ -219,10 +238,7 @@
   }
 
   .summary-greeting h2 {
-    overflow: visible;
-    overflow-wrap: anywhere;
-    text-overflow: clip;
-    white-space: normal;
+    font-size: 47px;
   }
 }
 
@@ -241,23 +257,66 @@
   }
 
   .summary-metrics {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
   }
 
-  .summary-card--small,
-  .summary-card--count {
-    grid-column: span 1;
+  .summary-card--small {
+    width: 100%;
+  }
+
+  .summary-card {
+    min-height: 110px;
+    padding: 12px;
+    border-radius: 20px;
   }
 
   .summary-card--urgent {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    min-height: 112px;
+    grid-template-columns: 1fr 1.35fr;
+    padding-right: 0;
+    padding-left: 0;
+    gap: 0;
   }
 
   .summary-deadline {
-    padding-left: 0;
-    padding-top: 24px;
-    border-left: 0;
-    border-top: 	2px solid var(--color-border-medium);
+    min-height: 72px;
+    padding: 0 0 0 12px;
+    border-left: 2px solid var(--color-border-medium);
+    border-top: 0;
+  }
+
+  .summary-card__main {
+    gap: 8px;
+  }
+
+  .summary-card__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .summary-card__icon--urgent {
+    width: 40px;
+    height: 40px;
+  }
+
+  .summary-card strong {
+    font-size: 40px;
+  }
+
+  .summary-card span {
+    font-size: 14px;
+  }
+
+  .summary-deadline strong {
+    font-size: 14px;
+  }
+
+  .summary-deadline span {
+    font-size: 12px;
+  }
+
+  .summary-greeting {
+    display: none;
   }
 }
