@@ -1,6 +1,6 @@
 .help-content {
   min-height: calc(100vh - var(--app-topbar-height));
-  padding: 88px 56px 72px 84px;
+  padding: 134px 56px 72px 84px;
 }
 
 .help-content__inner {
@@ -115,8 +115,7 @@
 
 @media (max-width: 479px) {
   .help-content {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding: 64px 16px 40px;
   }
 
   .help-heading {
