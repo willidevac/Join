@@ -20,6 +20,7 @@
 
 .auth-card__back {
   position: absolute;
+  z-index: 1;
   top: 56px;
   left: 64px;
   color: var(--color-accent-light);
