@@ -29,7 +29,7 @@ body.is-page-transitioning {
   top: 50vh;
   left: 50vw;
   display: block;
-  width: 160px;
+  width: 277px;
   height: auto;
   transform: translate(-50%, -50%) scale(1);
   will-change: transform;
@@ -66,7 +66,7 @@ body.is-page-transitioning {
   }
 
   100% {
-    transform: translate(calc(-50% - 50vw + 126px), calc(-50% - 50vh + 129px)) scale(0.675);
+    transform: translate(calc(-50% - 50vw + 126px), calc(-50% - 50vh + 129px)) scale(0.365);
   }
 }
 
@@ -76,7 +76,7 @@ body.is-page-transitioning {
   }
 
   .page-transition__logo {
-    width: 124px;
+    width: 101px;
   }
 
   @keyframes signup-logo-travel {
@@ -89,7 +89,7 @@ body.is-page-transitioning {
     }
 
     100% {
-      transform: translate(calc(-50% - 50vw + 79px), calc(-50% - 50vh + 82px)) scale(0.66);
+      transform: translate(calc(-50% - 50vw + 79px), calc(-50% - 50vh + 82px)) scale(0.64);
     }
   }
 }

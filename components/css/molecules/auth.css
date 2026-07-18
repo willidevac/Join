@@ -1,11 +1,15 @@
 .auth-logo {
   position: absolute;
-  top: 64px;
-  left: 72px;
+  top: 65px;
+  left: 77px;
   display: inline-flex;
   width: 100px;
   aspect-ratio: 100 / 122;
   text-decoration: none;
+}
+
+.auth-page--login .auth-logo {
+  top: 67px;
 }
 
 .auth-logo img {
@@ -187,4 +191,10 @@
 
 .auth-footer a:hover {
   color: var(--color-primary-hover);
+}
+
+@media (max-width: 767px) {
+  .auth-page--signup .auth-logo {
+    transform: translateY(5px);
+  }
 }
