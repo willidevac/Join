@@ -209,6 +209,25 @@ Firestore tasks and Firestore contacts are unavailable.
 > Never commit passwords, private credentials, service-account files, API
 > secrets or admin keys to this repository.
 
+### Troubleshooting: Unauthorized OAuth domain
+
+If the browser console reports that the current domain is not authorized for
+OAuth operations, check the address used to open Join. Firebase treats
+`localhost` and `127.0.0.1` as different domains.
+
+Use the local address from this guide whenever possible:
+
+```text
+http://localhost:5500/index.html
+```
+
+If Join must be opened through `127.0.0.1`, add `127.0.0.1` in the Firebase
+Console under `Authentication` -> `Settings` -> `Authorized domains`. Enter
+only the hostname, without `http://`, a port or a path.
+
+This warning primarily affects OAuth popup and redirect operations. It does
+not mean that credentials should be added to the repository.
+
 ## Usage
 
 - Create an account or use the guest login.
