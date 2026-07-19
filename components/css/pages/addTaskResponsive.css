@@ -66,8 +66,11 @@ body[data-page="add-task"] .summary-topbar {
     padding: 52px 16px 164px;
   }
 
-  .add-task-content h1 {
+  .add-task-header {
     margin-bottom: 40px;
+  }
+
+  .add-task-content h1 {
     font-size: 48px;
   }
 
