@@ -292,14 +292,37 @@ body.board-dragging * {
 @media (max-width: 767px) {
   .board-header {
     display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
   }
 
   .board-header h1 {
     font-size: 40px;
   }
 
+  .board-add-task {
+    grid-row: 1;
+    grid-column: 2;
+    width: 48px;
+    min-height: 48px;
+    padding: 0;
+  }
+
+  .board-add-task__label {
+    display: none;
+  }
+
   .board-columns {
     grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .board-task-list {
+    grid-template-columns: repeat(auto-fill, 244px);
+  }
+
+  .board-empty-state {
+    grid-column: 1 / -1;
   }
 }
 
