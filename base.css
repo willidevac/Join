@@ -16,8 +16,10 @@
 @import url("./components/css/pages/legalNotice.css");
 @import url("./components/css/pages/summary.css");
 @import url("./components/css/pages/addTask.css");
+@import url("./components/css/pages/addTaskSubtaskItem.css");
 @import url("./components/css/pages/addTaskResponsive.css");
 @import url("./components/css/pages/board.css");
+@import url("./components/css/pages/boardCardMove.css");
 @import url("./components/css/pages/boardColumn.css");
 @import url("./components/css/pages/boardSearch.css");
 @import url("./components/css/pages/contacts.css");
