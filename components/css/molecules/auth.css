@@ -100,6 +100,19 @@
   background-image: url("../../assets/img/icons/lock.svg");
 }
 
+.form-field__error {
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 12px;
+  color: var(--color-error);
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.form-field__error:empty {
+  display: none;
+}
+
 .privacy-consent {
   display: grid;
   justify-items: center;
@@ -125,6 +138,7 @@
 
 .privacy-consent__checkbox:disabled {
   cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .privacy-consent__label {
@@ -140,15 +154,6 @@
 
 .privacy-consent__link:hover {
   text-decoration: underline;
-}
-
-.privacy-consent__hint {
-  max-width: 320px;
-  margin: 0;
-  color: var(--color-text-hint);
-  font-size: 12px;
-  line-height: 1.35;
-  text-align: center;
 }
 
 .auth-form__message {
@@ -173,6 +178,7 @@
 
 .auth-form__submit:disabled {
   cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .auth-form__submit:not(:disabled):hover {

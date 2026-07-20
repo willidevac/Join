@@ -1,11 +1,31 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
 
-const { loadBrowserScripts } = require("./helpers/scriptContext");
+const {
+  createMemoryStorage,
+  loadBrowserScripts,
+} = require("./helpers/scriptContext");
 
 const authScript = "components/js/auth.js";
 const sharedScript = "components/js/shared.js";
 const signupScript = "components/js/signup.js";
+
+
+/**
+ * Creates one observable form control for the isolated signup context.
+ * @param {string} value - Initial input value.
+ * @param {string} id - Optional control id.
+ * @returns {Object} Minimal input or button implementation.
+ */
+function createFormControl(value = "", id = "") {
+  return {
+    id,
+    value,
+    attributes: {},
+    setAttribute(name, nextValue) { this.attributes[name] = nextValue; },
+  };
+}
+
 
 /**
  * Creates the signup controls used by the auth validation helpers.
@@ -13,13 +33,16 @@ const signupScript = "components/js/signup.js";
  */
 function createSignupElements() {
   return {
-    signupName: { value: "QA User" },
-    signupEmail: { value: "qa.user@example.com" },
-    signupPassword: { value: "Testpass123!" },
-    signupConfirmPassword: { value: "Testpass123!" },
+    signupName: createFormControl("QA User", "signupName"),
+    signupNameError: { textContent: "" },
+    signupEmail: createFormControl("qa.user@example.com", "signupEmail"),
+    signupEmailError: { textContent: "" },
+    signupPassword: createFormControl("Testpass123!", "signupPassword"),
+    signupPasswordError: { textContent: "" },
+    signupConfirmPassword: createFormControl("Testpass123!", "signupConfirmPassword"),
+    signupConfirmPasswordError: { textContent: "" },
     privacyAccepted: { checked: false, disabled: false },
-    privacyConsentHint: { textContent: "" },
-    signupButton: { disabled: false },
+    signupButton: createFormControl(),
     signupMessage: { textContent: "" },
   };
 }
@@ -40,15 +63,20 @@ function createAuthDocument(elements) {
 
 /**
  * Loads the shared auth and page-specific signup scripts.
+ * @param {Object} [overrides] - Additional globals and window dependencies.
  * @returns {Object} Auth test context and observable dependencies.
  */
-function createAuthContext() {
+function createAuthContext(overrides = {}) {
   const elements = createSignupElements();
   const openedPages = [];
-  const window = { open: (...args) => openedPages.push(args) };
+  const { window: windowOverrides = {}, ...globals } = overrides;
+  const window = {
+    open: (...args) => openedPages.push(args),
+    ...windowOverrides,
+  };
   const document = createAuthDocument(elements);
   const context = loadBrowserScripts([sharedScript, authScript, signupScript], {
-    document, window,
+    document, window, ...globals,
   });
   return { context, elements, openedPages };
 }
@@ -88,7 +116,15 @@ test("keeps privacy consent locked while a required field is invalid", () => {
   context.syncPrivacyConsent();
   assert.equal(elements.privacyAccepted.disabled, true);
   assert.equal(elements.signupButton.disabled, true);
-  assert.match(elements.privacyConsentHint.textContent, /Complete all required fields/);
+});
+
+
+test("shows a name error after a one-character name loses focus", () => {
+  const { context, elements } = createAuthContext();
+  elements.signupName.value = "A";
+  context.handleSignupFieldBlur({ target: elements.signupName });
+  assert.equal(elements.signupNameError.textContent, "Enter at least 2 characters.");
+  assert.equal(elements.signupName.attributes["aria-invalid"], "true");
 });
 
 
@@ -121,7 +157,26 @@ test("enables privacy consent when every required field is valid", () => {
   context.syncPrivacyConsent();
   assert.equal(elements.privacyAccepted.disabled, false);
   assert.equal(elements.signupButton.disabled, true);
-  assert.match(elements.privacyConsentHint.textContent, /You can now accept/);
+});
+
+
+test("shows a mismatch after password confirmation loses focus", () => {
+  const { context, elements } = createAuthContext();
+  elements.signupConfirmPassword.value = "Different123!";
+  context.handleSignupFieldBlur({ target: elements.signupConfirmPassword });
+  assert.equal(elements.signupConfirmPasswordError.textContent, "Passwords do not match.");
+  assert.equal(elements.privacyAccepted.disabled, true);
+});
+
+
+test("clears touched field feedback while the user corrects it", () => {
+  const { context, elements } = createAuthContext();
+  elements.signupName.value = "A";
+  context.handleSignupFieldBlur({ target: elements.signupName });
+  elements.signupName.value = "Ada";
+  context.handleSignupInput();
+  assert.equal(elements.signupNameError.textContent, "");
+  assert.equal(elements.signupName.attributes["aria-invalid"], "false");
 });
 
 
@@ -151,4 +206,26 @@ test("shows a clear error when privacy consent was not accepted", async () => {
   const event = createPrivacyOpenEvent();
   await context.handleSignup(event);
   assert.equal(elements.signupMessage.textContent, "Please accept the Privacy Policy.");
+});
+
+
+test("logs out after registration and routes the new user to login", async () => {
+  const calls = [];
+  const localStorage = createMemoryStorage({ joinUser: "stored-user" });
+  const joinFirebaseAuth = {
+    registerFirebaseUser: async (...args) => calls.push(["register", ...args]),
+    logoutFirebaseUser: async () => calls.push(["logout"]),
+  };
+  const { context, elements } = createAuthContext({
+    window: { joinFirebaseAuth },
+    localStorage,
+    navigateToPage: (page) => calls.push(["navigate", page]),
+  });
+  elements.privacyAccepted.checked = true;
+  await context.registerUser();
+  assert.deepEqual(calls, [
+    ["register", "QA User", "qa.user@example.com", "Testpass123!"],
+    ["logout"], ["navigate", "login"],
+  ]);
+  assert.equal(localStorage.getItem("joinUser"), null);
 });

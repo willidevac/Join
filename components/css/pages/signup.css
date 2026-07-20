@@ -77,10 +77,6 @@
   color: var(--color-greeting);
 }
 
-.auth-page--signup .privacy-consent__hint {
-  width: min(320px, calc(100vw - 32px));
-}
-
 .auth-page--signup .auth-form__message:empty {
   display: none;
 }
@@ -154,10 +150,6 @@
 
   .auth-page--signup .privacy-consent {
     margin-top: 40px;
-  }
-
-  .auth-page--signup .privacy-consent__hint {
-    font-size: clamp(10px, 2.8vw, 12px);
   }
 
   .auth-form__message:empty {

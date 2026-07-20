@@ -1,4 +1,11 @@
 let signupSubmitPending = false;
+const signupFieldIds = [
+  "signupName",
+  "signupEmail",
+  "signupPassword",
+  "signupConfirmPassword",
+];
+const touchedSignupFields = new Set();
 
 
 /**
@@ -8,6 +15,9 @@ let signupSubmitPending = false;
 async function handleSignup(event) {
   event.preventDefault();
   if (signupSubmitPending) return;
+  touchAllSignupFields();
+  renderTouchedSignupErrors();
+  syncPrivacyConsent();
   if (!isSignupFormValid()) {
     showSignupMessage(getSignupErrorMessage());
     return;
@@ -23,7 +33,7 @@ async function registerUser() {
   setSignupSubmitPending(true);
   try {
     await saveSignedUpUser();
-    navigateToPage("summary");
+    navigateToPage("login");
   } catch (error) {
     showSignupMessage(getAuthErrorMessage(error));
   } finally {
@@ -37,12 +47,13 @@ async function registerUser() {
  */
 async function saveSignedUpUser() {
   const auth = getFirebaseAuthAdapter();
-  const user = await auth.registerFirebaseUser(
+  await auth.registerFirebaseUser(
     getSignupName(),
     getSignupEmail(),
     getSignupPassword(),
   );
-  saveStoredUser(user);
+  await auth.logoutFirebaseUser();
+  clearStoredUser();
 }
 
 
@@ -52,12 +63,34 @@ async function saveSignedUpUser() {
 function initSignupValidation() {
   const form = document.getElementById("signupForm");
   if (!form) return;
+  touchedSignupFields.clear();
   form.addEventListener("submit", handleSignup);
-  form.addEventListener("input", syncPrivacyConsent);
+  form.addEventListener("input", handleSignupInput);
+  form.addEventListener("blur", handleSignupFieldBlur, true);
   getPrivacyLinks().forEach((link) => {
     link.addEventListener("click", handlePrivacyPolicyOpen);
   });
   getPrivacyCheckbox().addEventListener("change", updateSignupButton);
+  syncPrivacyConsent();
+}
+
+
+/** Refreshes visible validation while the user corrects a touched field. */
+function handleSignupInput() {
+  renderTouchedSignupErrors();
+  syncPrivacyConsent();
+}
+
+
+/**
+ * Validates one signup field as soon as it loses focus.
+ * @param {FocusEvent} event - Blur event from the signup form.
+ */
+function handleSignupFieldBlur(event) {
+  const fieldId = event.target && event.target.id;
+  if (!signupFieldIds.includes(fieldId)) return;
+  touchedSignupFields.add(fieldId);
+  renderSignupFieldError(fieldId);
   syncPrivacyConsent();
 }
 
@@ -79,19 +112,7 @@ function syncPrivacyConsent() {
   const fieldsValid = areSignupFieldsValid();
   getPrivacyCheckbox().disabled = !fieldsValid;
   if (!fieldsValid) getPrivacyCheckbox().checked = false;
-  updatePrivacyConsentHint(fieldsValid);
   updateSignupButton();
-}
-
-
-/**
- * Explains whether the required signup fields allow consent.
- * @param {boolean} fieldsValid - True when every other field is valid.
- */
-function updatePrivacyConsentHint(fieldsValid) {
-  getPrivacyConsentHint().textContent = fieldsValid
-    ? "You can now accept the Privacy Policy."
-    : "Complete all required fields to enable this checkbox.";
 }
 
 
@@ -128,9 +149,9 @@ function isSignupFormValid() {
  */
 function areSignupFieldsValid() {
   return Boolean(
-    getSignupName() &&
+    isSignupNameValid() &&
     isEmailValid() &&
-    getSignupPassword() &&
+    isSignupPasswordValid() &&
     passwordsMatch(),
   );
 }
@@ -141,12 +162,71 @@ function areSignupFieldsValid() {
  * @returns {string} The error text, or an empty string when valid.
  */
 function getSignupErrorMessage() {
-  if (!getSignupName()) return "Please enter your name.";
-  if (!isEmailValid()) return "Please enter a valid email address.";
-  if (!getSignupPassword()) return "Please enter a password.";
-  if (!passwordsMatch()) return "Your passwords do not match.";
+  if (!areSignupFieldsValid()) return "Please correct the highlighted fields.";
   if (!getPrivacyCheckbox().checked) return "Please accept the Privacy Policy.";
   return "";
+}
+
+
+/** Marks every signup input as touched before submit validation. */
+function touchAllSignupFields() {
+  signupFieldIds.forEach((fieldId) => touchedSignupFields.add(fieldId));
+}
+
+
+/** Renders validation feedback for every field the user already left. */
+function renderTouchedSignupErrors() {
+  touchedSignupFields.forEach(renderSignupFieldError);
+}
+
+
+/**
+ * Updates the message and accessibility state of one signup input.
+ * @param {string} fieldId - Id of the input to validate.
+ */
+function renderSignupFieldError(fieldId) {
+  const error = getSignupFieldError(fieldId);
+  document.getElementById(`${fieldId}Error`).textContent = error;
+  document.getElementById(fieldId).setAttribute("aria-invalid", String(Boolean(error)));
+}
+
+
+/** @returns {string} Validation feedback for one signup input. */
+function getSignupFieldError(fieldId) {
+  const errors = {
+    signupName: getSignupNameError(),
+    signupEmail: isEmailValid() ? "" : "Enter a valid email address.",
+    signupPassword: getSignupPasswordError(),
+    signupConfirmPassword: getSignupConfirmPasswordError(),
+  };
+  return errors[fieldId] || "";
+}
+
+
+/** @returns {string} Name validation feedback. */
+function getSignupNameError() {
+  if (!getSignupName()) return "Please enter your name.";
+  return isSignupNameValid() ? "" : "Enter at least 2 characters.";
+}
+
+
+/** @returns {string} Password validation feedback. */
+function getSignupPasswordError() {
+  if (!getSignupPassword()) return "Please enter a password.";
+  return isSignupPasswordValid() ? "" : "Use at least 6 characters.";
+}
+
+
+/** @returns {string} Password confirmation feedback. */
+function getSignupConfirmPasswordError() {
+  if (!getSignupConfirmPassword()) return "Please confirm your password.";
+  return passwordsMatch() ? "" : "Passwords do not match.";
+}
+
+
+/** @returns {boolean} True when the trimmed name has at least two characters. */
+function isSignupNameValid() {
+  return getSignupName().length >= 2;
 }
 
 
@@ -155,6 +235,12 @@ function getSignupErrorMessage() {
  */
 function isEmailValid() {
   return isEmailAddressValid(getSignupEmail());
+}
+
+
+/** @returns {boolean} True when Firebase's minimum password length is met. */
+function isSignupPasswordValid() {
+  return getSignupPassword().length >= 6;
 }
 
 
@@ -211,14 +297,6 @@ function getPrivacyCheckbox() {
  */
 function getPrivacyLinks() {
   return document.querySelectorAll('[data-page="privacy-policy"]');
-}
-
-
-/**
- * @returns {HTMLElement} The hint element below the consent checkbox.
- */
-function getPrivacyConsentHint() {
-  return document.getElementById("privacyConsentHint");
 }
 
 
