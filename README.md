@@ -70,6 +70,7 @@ It provides authenticated and guest access to the same board, contacts and task 
 | Search            | Filter board cards by task title or description.                                              |
 | Contacts          | Create, edit and delete contacts and display the signed-in user in the contact list.          |
 | Shared data       | Store tasks and contacts centrally in Cloud Firestore.                                        |
+| Legal pages       | Switch legal content between English and German while preserving the selected language.      |
 | Responsive design | Use the application on desktop, tablet and mobile layouts.                                    |
 
 ## Tech Stack
@@ -288,6 +289,7 @@ The repository contains automated tests for important logic paths, including:
 - assignee normalization
 - contact names and email validation
 - privacy-policy consent
+- legal-page language defaults, persistence and synchronization
 - asynchronous error handling
 
 Run the complete test suite from the project root:

@@ -7,28 +7,7 @@ function initLegalNoticeLanguageSwitch() {
   const toggles = document.querySelectorAll(".language-switch__input");
   updateLegalViewMode();
   if (!legalPages.length || !toggles.length) return;
-  toggles.forEach((toggle) => {
-    toggle.addEventListener("change", () =>
-      updateLegalLanguage(legalPages, toggle),
-    );
-  });
-  updateLegalLanguage(legalPages, toggles[0]);
-}
-
-
-/**
- * Applies one toggle state to all language switches and legal pages.
- *
- * @param {NodeList} pages - Legal page sections to translate.
- * @param {HTMLInputElement} activeToggle - The switch the user changed.
- */
-function updateLegalLanguage(pages, activeToggle) {
-  document.querySelectorAll(".language-switch__input").forEach((toggle) => {
-    toggle.checked = activeToggle.checked;
-  });
-  pages.forEach((page) =>
-    page.classList.toggle("legal-page--english", activeToggle.checked),
-  );
+  initLegalLanguageControls(legalPages, toggles);
 }
 
 

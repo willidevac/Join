@@ -7,28 +7,7 @@ function initPrivacyLanguageSwitch() {
   const toggles = document.querySelectorAll(".language-switch__input");
   updatePrivacyViewMode();
   if (!privacyPages.length || !toggles.length) return;
-  toggles.forEach((toggle) => {
-    toggle.addEventListener("change", () =>
-      updatePrivacyLanguage(privacyPages, toggle),
-    );
-  });
-  updatePrivacyLanguage(privacyPages, toggles[0]);
-}
-
-
-/**
- * Applies one toggle state to all language switches and privacy pages.
- *
- * @param {NodeList} pages - Privacy page sections to translate.
- * @param {HTMLInputElement} activeToggle - The switch the user changed.
- */
-function updatePrivacyLanguage(pages, activeToggle) {
-  document.querySelectorAll(".language-switch__input").forEach((toggle) => {
-    toggle.checked = activeToggle.checked;
-  });
-  pages.forEach((page) =>
-    page.classList.toggle("legal-page--english", activeToggle.checked),
-  );
+  initLegalLanguageControls(privacyPages, toggles);
 }
 
 
