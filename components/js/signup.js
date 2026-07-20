@@ -23,7 +23,6 @@ async function registerUser() {
   setSignupSubmitPending(true);
   try {
     await saveSignedUpUser();
-    clearSignupState();
     navigateToPage("summary");
   } catch (error) {
     showSignupMessage(getAuthErrorMessage(error));
@@ -54,7 +53,7 @@ function initSignupValidation() {
   const form = document.getElementById("signupForm");
   if (!form) return;
   form.addEventListener("submit", handleSignup);
-  form.addEventListener("input", updateSignupButton);
+  form.addEventListener("input", syncPrivacyConsent);
   getPrivacyLinks().forEach((link) => {
     link.addEventListener("click", handlePrivacyPolicyOpen);
   });
@@ -69,47 +68,30 @@ function initSignupValidation() {
  */
 function handlePrivacyPolicyOpen(event) {
   event.preventDefault();
-  rememberPrivacyOpened();
-  syncPrivacyConsent();
   window.open(event.currentTarget.href, "_blank", "noopener,noreferrer");
 }
 
 
 /**
- * Clears the signup draft and the privacy-opened flag after a signup.
- */
-function clearSignupState() {
-  sessionStorage.removeItem("joinPrivacyOpened");
-}
-
-
-/**
- * Marks in sessionStorage that the Privacy Policy has been opened.
- */
-function rememberPrivacyOpened() {
-  sessionStorage.setItem("joinPrivacyOpened", "true");
-}
-
-
-/**
- * Enables the consent checkbox only after the Privacy Policy was opened.
+ * Enables consent only after every other signup field is valid.
  */
 function syncPrivacyConsent() {
-  const hasOpenedPrivacy = hasOpenedPrivacyPolicy();
-  getPrivacyCheckbox().disabled = !hasOpenedPrivacy;
-  updatePrivacyConsentHint(hasOpenedPrivacy);
+  const fieldsValid = areSignupFieldsValid();
+  getPrivacyCheckbox().disabled = !fieldsValid;
+  if (!fieldsValid) getPrivacyCheckbox().checked = false;
+  updatePrivacyConsentHint(fieldsValid);
   updateSignupButton();
 }
 
 
 /**
- * Explains below the checkbox why it is enabled or still locked.
- * @param {boolean} hasOpenedPrivacy - True when the Privacy Policy was opened.
+ * Explains whether the required signup fields allow consent.
+ * @param {boolean} fieldsValid - True when every other field is valid.
  */
-function updatePrivacyConsentHint(hasOpenedPrivacy) {
-  getPrivacyConsentHint().textContent = hasOpenedPrivacy
-    ? "Privacy Policy opened. You can now accept it."
-    : "Open the Privacy Policy first to enable this checkbox.";
+function updatePrivacyConsentHint(fieldsValid) {
+  getPrivacyConsentHint().textContent = fieldsValid
+    ? "All required fields are valid. You can now accept the Privacy Policy."
+    : "Complete all required fields to enable this checkbox.";
 }
 
 
@@ -137,13 +119,19 @@ function setSignupSubmitPending(isPending) {
  * @returns {boolean} True when all signup fields and the consent are valid.
  */
 function isSignupFormValid() {
+  return areSignupFieldsValid() && getPrivacyCheckbox().checked;
+}
+
+
+/**
+ * @returns {boolean} True when every signup field except consent is valid.
+ */
+function areSignupFieldsValid() {
   return Boolean(
     getSignupName() &&
     isEmailValid() &&
     getSignupPassword() &&
-    passwordsMatch() &&
-    hasOpenedPrivacyPolicy() &&
-    getPrivacyCheckbox().checked,
+    passwordsMatch(),
   );
 }
 
@@ -157,7 +145,6 @@ function getSignupErrorMessage() {
   if (!isEmailValid()) return "Please enter a valid email address.";
   if (!getSignupPassword()) return "Please enter a password.";
   if (!passwordsMatch()) return "Your passwords do not match.";
-  if (!hasOpenedPrivacyPolicy()) return "Please open the Privacy Policy first.";
   if (!getPrivacyCheckbox().checked) return "Please accept the Privacy Policy.";
   return "";
 }
@@ -176,14 +163,6 @@ function isEmailValid() {
  */
 function passwordsMatch() {
   return getSignupPassword() === getSignupConfirmPassword();
-}
-
-
-/**
- * @returns {boolean} True when the Privacy Policy was opened in this session.
- */
-function hasOpenedPrivacyPolicy() {
-  return sessionStorage.getItem("joinPrivacyOpened") === "true";
 }
 
 
