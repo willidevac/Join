@@ -30,7 +30,6 @@ async function renderSignupWithTransition() {
  */
 function finishSignupTransition(loader) {
   removeTransitionLoader(loader);
-  cleanSignupTransitionParam();
   pageTransitionRunning = false;
 }
 
@@ -47,31 +46,10 @@ function showTransitionLoader(loader) {
 
 
 /**
- * Tells whether the page was opened through an animated signup link.
- * @returns {boolean} True when the signup transition should run on load.
- */
-function shouldStartWithSignupTransition() {
-  const params = new URLSearchParams(window.location.search);
-  return getValidPage() === "signup" && params.get("transition") === "signup";
-}
-
-
-/**
  * Tells whether the intro transition should run for a fresh login page load.
  */
 function shouldStartWithLoginTransition() {
   return getValidPage() === "login";
-}
-
-
-/**
- * Removes the transition parameter from the URL after the animation ran.
- */
-function cleanSignupTransitionParam() {
-  const target = new URL(window.location.href);
-  if (target.searchParams.get("transition") !== "signup") return;
-  target.searchParams.delete("transition");
-  window.history.replaceState({}, "", target.pathname + target.search);
 }
 
 

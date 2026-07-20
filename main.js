@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", initApp);
  */
 async function initApp() {
   document.addEventListener("click", handlePageLinkClick);
-  if (shouldStartWithSignupTransition() || shouldStartWithLoginTransition()) {
+  if (shouldStartWithLoginTransition()) {
     await renderSignupWithTransition();
     warmHtmlCache();
     return;
@@ -283,9 +283,6 @@ function handlePageLinkClick(event) {
  */
 function getLinkParams(link) {
   const params = {};
-  if (link.dataset.transition === "signup") {
-    params.transition = "signup";
-  }
   if (link.dataset.taskStatus) {
     params.status = link.dataset.taskStatus;
   }
