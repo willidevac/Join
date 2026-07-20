@@ -58,31 +58,31 @@ It provides authenticated and guest access to the same board, contacts and task 
 
 ## Features
 
-| Feature | Description |
-| --- | --- |
-| Authentication | Sign up and sign in with Firebase Authentication. |
-| Guest access | Test the application anonymously while using the shared task and contact data. |
-| Summary | View live task totals, status metrics, urgent tasks and the next upcoming deadline. |
-| Add Task | Create tasks with a title, description, due date, priority, category, assignees and subtasks. |
-| Board | Organize tasks across To do, In progress, Await feedback and Done. |
-| Task editing | Edit, move and delete existing tasks directly from the board. |
-| Subtasks | Add, edit, remove and complete individual subtasks. |
-| Search | Filter board cards by task title or description. |
-| Contacts | Create, edit and delete contacts and display the signed-in user in the contact list. |
-| Shared data | Store tasks and contacts centrally in Cloud Firestore. |
-| Responsive design | Use the application on desktop, tablet and mobile layouts. |
+| Feature           | Description                                                                                   |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| Authentication    | Sign up and sign in with Firebase Authentication.                                             |
+| Guest access      | Test the application anonymously while using the shared task and contact data.                |
+| Summary           | View live task totals, status metrics, urgent tasks and the next upcoming deadline.           |
+| Add Task          | Create tasks with a title, description, due date, priority, category, assignees and subtasks. |
+| Board             | Organize tasks across To do, In progress, Await feedback and Done.                            |
+| Task editing      | Edit, move and delete existing tasks directly from the board.                                 |
+| Subtasks          | Add, edit, remove and complete individual subtasks.                                           |
+| Search            | Filter board cards by task title or description.                                              |
+| Contacts          | Create, edit and delete contacts and display the signed-in user in the contact list.          |
+| Shared data       | Store tasks and contacts centrally in Cloud Firestore.                                        |
+| Responsive design | Use the application on desktop, tablet and mobile layouts.                                    |
 
 ## Tech Stack
 
-| Technology | Purpose |
-| --- | --- |
-| HTML5 | Semantic page and component structure |
-| CSS3 | Responsive layouts, Figma-based styling and interaction states |
-| JavaScript ES6+ | Routing, rendering, validation and application logic |
-| Firebase Authentication | Email/password and anonymous guest authentication |
-| Cloud Firestore | Shared task and contact persistence |
-| Firebase Hosting | Public deployment of the application |
-| Node.js test runner | Automated tests for central application logic |
+| Technology              | Purpose                                                        |
+| ----------------------- | -------------------------------------------------------------- |
+| HTML5                   | Semantic page and component structure                          |
+| CSS3                    | Responsive layouts, Figma-based styling and interaction states |
+| JavaScript ES6+         | Routing, rendering, validation and application logic           |
+| Firebase Authentication | Email/password and anonymous guest authentication              |
+| Cloud Firestore         | Shared task and contact persistence                            |
+| Firebase Hosting        | Public deployment of the application                           |
+| Node.js test runner     | Automated tests for central application logic                  |
 
 ## Application Architecture
 
