@@ -126,16 +126,6 @@
   padding-right: 48px;
 }
 
-.add-task-date-input img {
-  width: 18px;
-  height: 20px;
-  position: absolute;
-  top: 50%;
-  right: 16px;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
 .add-task-priority {
   display: grid;
   gap: 8px;

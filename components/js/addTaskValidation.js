@@ -16,6 +16,25 @@ const addTaskFieldValidators = {
 let addTaskValidationAttempted = false;
 
 
+/** Sets the native date picker to today as its earliest selectable date. */
+function initAddTaskDueDatePicker() {
+  document.getElementById("taskDueDate").min = getTodayTaskDueDate();
+}
+
+
+/** Returns today's local date in the ISO format required by a date input. */
+function getTodayTaskDueDate(date = new Date()) {
+  const offset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() - offset).toISOString().slice(0, 10);
+}
+
+
+/** Returns whether a normalized due date lies before the given local date. */
+function isPastAddTaskDueDate(dueDate, today = getTodayTaskDueDate()) {
+  return dueDate < today;
+}
+
+
 /**
  * Adds field-level validation without relying on native browser messages.
  */
@@ -142,8 +161,15 @@ function getAddTaskTitleError() {
  */
 function getAddTaskDueDateError() {
   const input = document.getElementById("taskDueDate").value.trim();
-  if (!input) return "Please enter a due date.";
-  return getAddTaskDueDate() ? "" : "Enter a valid date in dd/mm/yyyy.";
+  if (!input) return "Please select a due date.";
+  return getValidatedAddTaskDueDateError(getAddTaskDueDate());
+}
+
+
+/** Returns validation feedback for a normalized Add Task due date. */
+function getValidatedAddTaskDueDateError(dueDate) {
+  if (!dueDate) return "Please select a valid due date.";
+  return isPastAddTaskDueDate(dueDate) ? "Please select today or a future date." : "";
 }
 
 

@@ -10,6 +10,7 @@ async function initAddTaskValidation() {
   const form = document.getElementById("addTaskForm");
   if (!form) return;
 
+  initAddTaskDueDatePicker();
   await initAddTaskAssignees();
   initAddTaskCategory();
   initAddTaskSubtasks();
