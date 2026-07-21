@@ -1,8 +1,9 @@
 .board-status-pill {
   width: 136px;
-  min-height: 28px;
+  height: 28px;
   display: inline-flex;
   align-items: center;
+  align-self: start;
   justify-content: center;
   padding: 4px 16px;
   border-radius: 8px;
