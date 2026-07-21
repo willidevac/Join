@@ -5,9 +5,13 @@
 }
 
 .add-task-field__error {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
   display: block;
-  height: 40px;
-  margin-top: -4px;
+  height: 20px;
+  margin: 0;
   color: var(--color-error);
   font-size: 16px;
   line-height: 20px;

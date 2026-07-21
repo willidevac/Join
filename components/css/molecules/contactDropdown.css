@@ -149,6 +149,10 @@
   gap: 8px;
 }
 
+.contact-dropdown__selected:empty {
+  display: none;
+}
+
 .contact-dropdown__chip {
   display: inline-flex;
   align-items: center;

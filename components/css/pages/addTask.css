@@ -116,6 +116,7 @@
 }
 
 .add-task-field {
+  position: relative;
   display: grid;
   gap: 8px;
   color: var(--color-text-main);
