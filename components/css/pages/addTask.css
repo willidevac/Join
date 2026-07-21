@@ -82,6 +82,21 @@
   gap: 136px;
 }
 
+.add-task-form__fieldset {
+  display: contents;
+}
+
+.add-task-form__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.add-task-form__overlay[hidden] {
+  display: none;
+}
+
 .add-task-form__fields {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);

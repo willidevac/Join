@@ -182,14 +182,15 @@ function getAddTaskCategoryError() {
 
 
 /**
- * Disables the create button while the task is being saved.
+ * Locks every form control and shows an overlay while the task is being saved.
  *
  * @param {boolean} isPending - True while the save request is running.
  */
 function setAddTaskSubmitPending(isPending) {
-  const button = document.getElementById("createTaskButton");
-  button.disabled = isPending;
-  button.setAttribute("aria-busy", String(isPending));
+  const fieldset = document.getElementById("addTaskFormFieldset");
+  fieldset.disabled = isPending;
+  fieldset.setAttribute("aria-busy", String(isPending));
+  document.getElementById("addTaskFormOverlay").hidden = !isPending;
 }
 
 
