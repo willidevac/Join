@@ -147,6 +147,13 @@
   padding-right: 48px;
 }
 
+.add-task-date-input input::-webkit-calendar-picker-indicator {
+  width: 20px;
+  height: 20px;
+  background: url("../../assets/img/icons/event_icons.svg") center / contain no-repeat;
+  cursor: pointer;
+}
+
 .add-task-priority {
   display: grid;
   gap: 8px;
