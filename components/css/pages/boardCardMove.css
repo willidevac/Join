@@ -20,10 +20,10 @@
   right: 0;
   z-index: 10;
   display: grid;
-  gap: 4px;
-  min-width: 140px;
+  gap: 2px;
+  min-width: 126px;
   padding: 12px;
-  border-radius: 16px 0 16px 16px;
+  border-radius: 0 20px 20px 20px;
   background: var(--color-primary-auth);
   color: var(--color-white);
   box-shadow: var(--shadow-soft);
@@ -35,6 +35,7 @@
 
 .board-card-move__title {
   font-weight: 700;
+  padding: 0 8px 2px;
 }
 
 .board-card-move__option {
@@ -50,7 +51,7 @@
 }
 
 .board-card-move__option:hover {
-  background: var(--color-hover-overlay-light);
+  background: var(--color-primary-auth-hover);
 }
 
 @media (max-width: 1279px), (any-pointer: coarse) {
