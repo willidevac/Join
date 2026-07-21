@@ -1,7 +1,11 @@
 const authErrorMessages = {
   "auth/firebase-unavailable":
     "Authentication could not be loaded. Please try again later.",
-  "auth/invalid-credential": "Please check your email and password.",
+  "auth/invalid-email": "Invalid password or email.",
+  "auth/user-not-found": "Invalid password or email.",
+  "auth/invalid-credential": "Invalid password or email.",
+  "auth/invalid-password": "Invalid password or email.",
+  "auth/wrong-password": "Invalid password or email.",
   "auth/email-already-in-use": "This email address is already registered.",
   "auth/weak-password": "Please use at least 6 characters.",
   "auth/operation-not-allowed": "This login method is not enabled yet.",
