@@ -30,18 +30,48 @@
         <img src="./components/assets/img/icons/person.svg" alt="" />
       </span>
 
-      <form class="contacts-dialog-form" id="contactAddForm">
+      <form class="contacts-dialog-form" id="contactAddForm" novalidate>
         <div class="contacts-dialog-field">
-          <input id="contactAddName" type="text" placeholder="Name" />
+          <input
+            id="contactAddName"
+            type="text"
+            placeholder="Name"
+            aria-describedby="contactAddNameError"
+          />
           <img src="./components/assets/img/icons/person.svg" alt="" />
+          <span
+            class="contacts-dialog-field-error"
+            id="contactAddNameError"
+            aria-live="polite"
+          ></span>
         </div>
         <div class="contacts-dialog-field">
-          <input id="contactAddEmail" type="text" placeholder="Email" />
+          <input
+            id="contactAddEmail"
+            type="email"
+            placeholder="Email"
+            aria-describedby="contactAddEmailError"
+          />
           <img src="./components/assets/img/icons/mail.svg" alt="" />
+          <span
+            class="contacts-dialog-field-error"
+            id="contactAddEmailError"
+            aria-live="polite"
+          ></span>
         </div>
         <div class="contacts-dialog-field">
-          <input id="contactAddPhone" type="text" placeholder="Phone" />
+          <input
+            id="contactAddPhone"
+            type="tel"
+            placeholder="Phone"
+            aria-describedby="contactAddPhoneError"
+          />
           <img src="./components/assets/img/icons/call.svg" alt="" />
+          <span
+            class="contacts-dialog-field-error"
+            id="contactAddPhoneError"
+            aria-live="polite"
+          ></span>
         </div>
         <p class="contacts-dialog-error" id="contactAddError"></p>
         <div class="contacts-dialog-actions">

@@ -150,7 +150,6 @@ function setBoardEditFieldError(fieldName, message) {
   const error = document.getElementById(`boardTaskEdit${fieldName}Error`);
   field.setAttribute("aria-invalid", String(Boolean(message)));
   error.textContent = message;
-  error.hidden = !message;
 }
 
 

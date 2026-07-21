@@ -79,6 +79,14 @@ function initSignupValidation() {
 function handleSignupInput() {
   renderTouchedSignupErrors();
   syncPrivacyConsent();
+  refreshSignupFormMessage();
+}
+
+
+/** Refreshes an already visible form-level signup message. */
+function refreshSignupFormMessage() {
+  const message = document.getElementById("signupMessage");
+  if (message.textContent) showSignupMessage(getSignupErrorMessage());
 }
 
 

@@ -45,9 +45,17 @@ function initAddTaskFieldValidation(form) {
  * @param {FocusEvent} event - Focusout event coming from the form.
  */
 function handleAddTaskFieldBlur(event) {
-  const fieldId = event.target.id;
+  const fieldId = getAddTaskBlurFieldId(event);
   if (!getAddTaskFieldValidator(fieldId)) return;
   validateAddTaskField(fieldId);
+}
+
+
+/** Maps native and custom form controls to the field they validate. */
+function getAddTaskBlurFieldId(event) {
+  if (event.target.id !== "taskCategoryButton") return event.target.id;
+  const dropdown = document.getElementById("taskCategoryDropdown");
+  return dropdown.contains(event.relatedTarget) ? "" : "taskCategory";
 }
 
 
@@ -117,8 +125,15 @@ function validateAddTaskField(fieldId) {
  * @param {string} message - Error text, or an empty string to clear it.
  */
 function setAddTaskFieldError(fieldId, errorId, message) {
-  document.getElementById(fieldId).setAttribute("aria-invalid", String(Boolean(message)));
+  getAddTaskValidationControl(fieldId).setAttribute("aria-invalid", String(Boolean(message)));
   document.getElementById(errorId).textContent = message;
+}
+
+
+/** Returns the visible control that owns a field's validation state. */
+function getAddTaskValidationControl(fieldId) {
+  const controlId = fieldId === "taskCategory" ? "taskCategoryButton" : fieldId;
+  return document.getElementById(controlId);
 }
 
 

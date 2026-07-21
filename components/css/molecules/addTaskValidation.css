@@ -1,5 +1,6 @@
 .add-task-field input[aria-invalid="true"],
-.add-task-field select[aria-invalid="true"] {
+.add-task-field select[aria-invalid="true"],
+.add-task-field .contact-dropdown__button[aria-invalid="true"] {
   border-color: var(--color-error);
 }
 

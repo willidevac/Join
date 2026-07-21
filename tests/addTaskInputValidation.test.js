@@ -33,3 +33,37 @@ test("treats whitespace-only required Add Task strings as empty", () => {
   assert.equal(context.getAddTaskTitle(), "");
   assert.equal(context.getAddTaskCategory(), "");
 });
+
+
+test("maps the custom category button blur to category validation", () => {
+  const dropdown = { contains: (target) => target === "inside" };
+  const validationContext = loadBrowserScripts([
+    "components/js/addTaskValidation.js",
+  ], { document: { getElementById: () => dropdown } });
+  assert.equal(validationContext.getAddTaskBlurFieldId({
+    target: { id: "taskCategoryButton" }, relatedTarget: "outside",
+  }), "taskCategory");
+  assert.equal(validationContext.getAddTaskBlurFieldId({
+    target: { id: "taskCategoryButton" }, relatedTarget: "inside",
+  }), "");
+});
+
+
+test("marks the visible category button as invalid", () => {
+  const button = {
+    attributes: {},
+    setAttribute(name, value) { this.attributes[name] = value; },
+  };
+  const error = { textContent: "" };
+  const document = {
+    getElementById: (id) => id === "taskCategoryButton" ? button : error,
+  };
+  const validationContext = loadBrowserScripts([
+    "components/js/addTaskValidation.js",
+  ], { document });
+  validationContext.setAddTaskFieldError(
+    "taskCategory", "taskCategoryError", "Please select a category.",
+  );
+  assert.equal(button.attributes["aria-invalid"], "true");
+  assert.equal(error.textContent, "Please select a category.");
+});

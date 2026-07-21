@@ -25,6 +25,7 @@ function createFormControl(value = "", id = "") {
     value,
     attributes: {},
     setAttribute(name, nextValue) { this.attributes[name] = nextValue; },
+    getAttribute(name) { return this.attributes[name]; },
   };
 }
 
@@ -87,8 +88,10 @@ function createAuthContext(overrides = {}) {
 /** Creates the isolated controls required by login value validation. */
 function createLoginContext() {
   const elements = {
-    loginEmail: createFormControl("  qa.user@example.com  "),
-    loginPassword: createFormControl("  Testpass123!  "),
+    loginEmail: createFormControl("  qa.user@example.com  ", "loginEmail"),
+    loginEmailError: { textContent: "" },
+    loginPassword: createFormControl("  Testpass123!  ", "loginPassword"),
+    loginPasswordError: { textContent: "" },
     loginError: { textContent: "" },
   };
   const document = createAuthDocument(elements);
@@ -161,7 +164,18 @@ test("trims login credentials and rejects invalid email before Firebase", () => 
   assert.equal(context.getLoginPassword(), "Testpass123!");
   elements.loginEmail.value = "invalid-email";
   assert.equal(context.isLoginFormValid(context.getLoginEmail(), context.getLoginPassword()), false);
-  assert.equal(elements.loginError.textContent, "Please enter a valid email address.");
+  assert.equal(elements.loginError.textContent, "");
+});
+
+
+test("shows and clears login email feedback after blur", () => {
+  const { context, elements } = createLoginContext();
+  elements.loginEmail.value = "invalid-email";
+  context.handleLoginFieldBlur({ target: elements.loginEmail });
+  assert.equal(elements.loginEmailError.textContent, "Please enter a valid email address.");
+  elements.loginEmail.value = "qa.user@example.com";
+  context.handleLoginInput();
+  assert.equal(elements.loginEmailError.textContent, "");
 });
 
 

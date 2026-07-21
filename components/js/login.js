@@ -1,3 +1,7 @@
+const loginFieldIds = ["loginEmail", "loginPassword"];
+const touchedLoginFields = new Set();
+
+
 /**
  * Wires up the login form and the guest login button.
  * Runs every time the login page fragment is rendered.
@@ -10,7 +14,10 @@ function initLoginValidation() {
     return;
   }
 
+  touchedLoginFields.clear();
   loginForm.addEventListener("submit", handleLoginSubmit);
+  loginForm.addEventListener("input", handleLoginInput);
+  loginForm.addEventListener("blur", handleLoginFieldBlur, true);
   guestLoginButton.addEventListener("click", handleGuestLogin);
   showSignupSuccessMessage();
 }
@@ -66,7 +73,8 @@ function removeSignupSuccessParameter() {
  */
 async function handleLoginSubmit(event) {
   event.preventDefault();
-
+  touchAllLoginFields();
+  renderTouchedLoginErrors();
   const email = getLoginEmail();
   const password = getLoginPassword();
 
@@ -103,17 +111,66 @@ async function submitLogin(email, password) {
  * @returns {boolean} True if the form input is valid.
  */
 function isLoginFormValid(email, password) {
-  if (email === "" || password === "") {
-    showLoginError("Please fill in email and password.");
-    return false;
-  }
+  const isValid = !getLoginEmailError(email) && !getLoginPasswordError(password);
+  showLoginError("");
+  return isValid;
+}
 
-  if (!isEmailAddressValid(email)) {
-    showLoginError("Please enter a valid email address.");
-    return false;
-  }
 
-  return true;
+/** Validates a login field as soon as it loses focus. */
+function handleLoginFieldBlur(event) {
+  if (!loginFieldIds.includes(event.target.id)) return;
+  touchedLoginFields.add(event.target.id);
+  renderLoginFieldError(event.target.id);
+}
+
+
+/** Refreshes touched feedback and clears stale submit or Firebase messages. */
+function handleLoginInput() {
+  renderTouchedLoginErrors();
+  showLoginError("");
+}
+
+
+/** Marks both login inputs as touched before submit validation. */
+function touchAllLoginFields() {
+  loginFieldIds.forEach((fieldId) => touchedLoginFields.add(fieldId));
+}
+
+
+/** Updates feedback for each login field the user already left. */
+function renderTouchedLoginErrors() {
+  touchedLoginFields.forEach(renderLoginFieldError);
+}
+
+
+/** Updates one login field's message and accessibility state. */
+function renderLoginFieldError(fieldId) {
+  const field = document.getElementById(fieldId);
+  const message = getLoginFieldError(fieldId);
+  field.setAttribute("aria-invalid", String(Boolean(message)));
+  document.getElementById(`${fieldId}Error`).textContent = message;
+}
+
+
+/** @returns {string} Validation feedback for one login field. */
+function getLoginFieldError(fieldId) {
+  if (fieldId === "loginEmail") return getLoginEmailError(getLoginEmail());
+  if (fieldId === "loginPassword") return getLoginPasswordError(getLoginPassword());
+  return "";
+}
+
+
+/** @returns {string} Validation feedback for the login email. */
+function getLoginEmailError(email) {
+  if (!email) return "Please enter your email address.";
+  return isEmailAddressValid(email) ? "" : "Please enter a valid email address.";
+}
+
+
+/** @returns {string} Validation feedback for the login password. */
+function getLoginPasswordError(password) {
+  return password ? "" : "Please enter your password.";
 }
 
 

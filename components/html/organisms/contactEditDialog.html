@@ -21,18 +21,48 @@
     </div>
     <div class="contacts-dialog-body">
       <span class="contacts-dialog-avatar" id="contactEditAvatar"></span>
-      <form class="contacts-dialog-form" id="contactEditForm">
+      <form class="contacts-dialog-form" id="contactEditForm" novalidate>
         <div class="contacts-dialog-field">
-          <input id="contactEditName" type="text" placeholder="Name" />
+          <input
+            id="contactEditName"
+            type="text"
+            placeholder="Name"
+            aria-describedby="contactEditNameError"
+          />
           <img src="./components/assets/img/icons/person.svg" alt="" />
+          <span
+            class="contacts-dialog-field-error"
+            id="contactEditNameError"
+            aria-live="polite"
+          ></span>
         </div>
         <div class="contacts-dialog-field">
-          <input id="contactEditEmail" type="text" placeholder="Email" />
+          <input
+            id="contactEditEmail"
+            type="email"
+            placeholder="Email"
+            aria-describedby="contactEditEmailError"
+          />
           <img src="./components/assets/img/icons/mail.svg" alt="" />
+          <span
+            class="contacts-dialog-field-error"
+            id="contactEditEmailError"
+            aria-live="polite"
+          ></span>
         </div>
         <div class="contacts-dialog-field">
-          <input id="contactEditPhone" type="text" placeholder="Phone" />
+          <input
+            id="contactEditPhone"
+            type="tel"
+            placeholder="Phone"
+            aria-describedby="contactEditPhoneError"
+          />
           <img src="./components/assets/img/icons/call.svg" alt="" />
+          <span
+            class="contacts-dialog-field-error"
+            id="contactEditPhoneError"
+            aria-live="polite"
+          ></span>
         </div>
         <p class="contacts-dialog-error" id="contactEditError"></p>
         <div class="contacts-dialog-actions">

@@ -8,10 +8,16 @@
       type="email"
       placeholder="Email"
       autocomplete="email"
+      aria-describedby="loginEmailError"
     />
     <span
       class="form-field__icon form-field__icon--mail"
       aria-hidden="true"
+    ></span>
+    <span
+      class="form-field__error"
+      id="loginEmailError"
+      aria-live="polite"
     ></span>
   </label>
 
@@ -28,10 +34,16 @@
       type="password"
       placeholder="Password"
       autocomplete="current-password"
+      aria-describedby="loginPasswordError"
     />
     <span
       class="form-field__icon form-field__icon--lock"
       aria-hidden="true"
+    ></span>
+    <span
+      class="form-field__error"
+      id="loginPasswordError"
+      aria-live="polite"
     ></span>
   </label>
 

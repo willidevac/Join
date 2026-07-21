@@ -4,7 +4,7 @@ const test = require("node:test");
 const { loadBrowserScripts } = require("./helpers/scriptContext");
 
 
-test("offers every other board column as a move target", () => {
+test("offers the adjacent board columns as move targets", () => {
   const context = loadBrowserScripts(["components/js/boardTemplates.js"]);
 
   assert.deepEqual(
@@ -12,7 +12,7 @@ test("offers every other board column as a move target", () => {
       context.getBoardMoveTargets("in-progress"),
       (target) => target.value,
     ),
-    ["todo", "feedback", "done"],
+    ["todo", "feedback"],
   );
 });
 
@@ -23,7 +23,7 @@ test("uses directional icons relative to the current board column", () => {
 
   assert.deepEqual(
     Array.from(targets, (target) => target.icon),
-    ["arrow_upward", "arrow_upward", "arrow_downward"],
+    ["arrow_upward", "arrow_downward"],
   );
 });
 

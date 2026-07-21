@@ -1,3 +1,6 @@
+const contactFieldNames = ["Name", "Email", "Phone"];
+
+
 /**
  * Wires the edit dialog controls.
  */
@@ -7,6 +10,7 @@ function initContactEditEvents() {
   document.getElementById("contactEditOverlay").addEventListener("click", handleContactOverlayClick);
   document.getElementById("contactEditForm").addEventListener("submit", handleContactEditSubmit);
   document.getElementById("contactEditDelete").addEventListener("click", handleContactEditDelete);
+  initContactFormValidation("contactEdit");
 }
 
 
@@ -19,6 +23,7 @@ function initContactAddEvents() {
   document.getElementById("contactAddCancel").addEventListener("click", closeContactAddDialog);
   document.getElementById("contactAddOverlay").addEventListener("click", handleContactAddOverlayClick);
   document.getElementById("contactAddForm").addEventListener("submit", handleContactAddSubmit);
+  initContactFormValidation("contactAdd");
 }
 
 
@@ -29,6 +34,7 @@ function openContactEditDialog() {
   const contact = getActiveContact();
   if (!contact) return;
   fillContactEditForm(contact);
+  resetContactFormValidation("contactEdit");
   document.getElementById("contactEditDelete").hidden =
     isOwnAccountContact(contact);
   document.getElementById("contactEditOverlay").hidden = false;
@@ -87,9 +93,78 @@ async function handleContactEditSubmit(event) {
  */
 function getValidatedContactValues(prefix) {
   const values = getContactFormValues(prefix);
-  const errorMessage = getContactErrorMessage(values);
-  document.getElementById(`${prefix}Error`).textContent = errorMessage;
-  return errorMessage ? null : values;
+  const isValid = validateContactForm(prefix);
+  setContactFormMessage(prefix, "");
+  return isValid ? values : null;
+}
+
+
+/** Adds blur and correction validation to one contact form. */
+function initContactFormValidation(prefix) {
+  const form = document.getElementById(`${prefix}Form`);
+  form.addEventListener("focusout", (event) => handleContactValidationEvent(event, prefix));
+  form.addEventListener("input", (event) => handleContactValidationEvent(event, prefix));
+}
+
+
+/** Validates a contact field on blur and while correcting an invalid value. */
+function handleContactValidationEvent(event, prefix) {
+  const fieldName = getContactFieldName(event.target.id, prefix);
+  if (!fieldName) return;
+  if (event.type === "input") setContactFormMessage(prefix, "");
+  const shouldValidate = event.type === "focusout" || event.target.getAttribute("aria-invalid") === "true";
+  if (shouldValidate) validateContactField(prefix, fieldName);
+}
+
+
+/** @returns {string|undefined} Matching contact field suffix. */
+function getContactFieldName(fieldId, prefix) {
+  return contactFieldNames.find((fieldName) => fieldId === `${prefix}${fieldName}`);
+}
+
+
+/** Validates every required contact field. */
+function validateContactForm(prefix) {
+  return contactFieldNames.map((fieldName) => validateContactField(prefix, fieldName)).every(Boolean);
+}
+
+
+/** Validates one contact field and renders its feedback. */
+function validateContactField(prefix, fieldName) {
+  const field = document.getElementById(`${prefix}${fieldName}`);
+  const message = getContactFieldError(fieldName, field.value.trim());
+  setContactFieldError(prefix, fieldName, message);
+  return !message;
+}
+
+
+/** Returns validation feedback for a single contact value. */
+function getContactFieldError(fieldName, value) {
+  if (fieldName === "Name") return value ? "" : "Please enter a name.";
+  if (fieldName === "Email") return isEmailAddressValid(value) ? "" : "Please enter a valid email address.";
+  if (fieldName === "Phone") return value ? "" : "Please enter a phone number.";
+  return "";
+}
+
+
+/** Updates one contact field's inline message and accessibility state. */
+function setContactFieldError(prefix, fieldName, message) {
+  const field = document.getElementById(`${prefix}${fieldName}`);
+  field.setAttribute("aria-invalid", String(Boolean(message)));
+  document.getElementById(`${prefix}${fieldName}Error`).textContent = message;
+}
+
+
+/** Clears all client and save feedback in a contact form. */
+function resetContactFormValidation(prefix) {
+  contactFieldNames.forEach((fieldName) => setContactFieldError(prefix, fieldName, ""));
+  setContactFormMessage(prefix, "");
+}
+
+
+/** Updates the form-level contact message. */
+function setContactFormMessage(prefix, message) {
+  document.getElementById(`${prefix}Error`).textContent = message;
 }
 
 
@@ -148,7 +223,7 @@ function handleContactEditDelete() {
  */
 function openContactAddDialog() {
   document.getElementById("contactAddForm").reset();
-  document.getElementById("contactAddError").textContent = "";
+  resetContactFormValidation("contactAdd");
   document.getElementById("contactAddOverlay").hidden = false;
 }
 
@@ -221,10 +296,9 @@ function getContactFormValues(idPrefix) {
  * Returns the first validation error of the given values or an empty string.
  */
 function getContactErrorMessage(values) {
-  if (!values.name) return "Please enter a name.";
-  if (!isEmailAddressValid(values.email)) return "Please enter a valid email address.";
-  if (!values.phone) return "Please enter a phone number.";
-  return "";
+  return getContactFieldError("Name", values.name)
+    || getContactFieldError("Email", values.email)
+    || getContactFieldError("Phone", values.phone);
 }
 
 

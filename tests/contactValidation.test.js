@@ -57,3 +57,32 @@ test("trims every contact form value before validation and storage", () => {
   ], { document });
   assert.deepEqual(JSON.parse(JSON.stringify(formContext.getContactFormValues("contactAdd"))), validContact);
 });
+
+
+test("shows and clears contact email feedback after blur", () => {
+  const elements = createContactValidationElements();
+  const document = { getElementById: (id) => elements[id] };
+  const formContext = loadBrowserScripts([
+    "components/js/shared.js", "components/js/contactsDialog.js",
+  ], { document });
+  formContext.handleContactValidationEvent({ type: "focusout", target: elements.contactAddEmail }, "contactAdd");
+  assert.equal(elements.contactAddEmailError.textContent, "Please enter a valid email address.");
+  elements.contactAddEmail.value = "ada@example.com";
+  formContext.handleContactValidationEvent({ type: "input", target: elements.contactAddEmail }, "contactAdd");
+  assert.equal(elements.contactAddEmailError.textContent, "");
+});
+
+
+/** Creates observable fields and messages for contact blur validation. */
+function createContactValidationElements() {
+  const field = (id, value) => ({
+    id, value, attributes: {},
+    getAttribute(name) { return this.attributes[name]; },
+    setAttribute(name, nextValue) { this.attributes[name] = nextValue; },
+  });
+  return {
+    contactAddEmail: field("contactAddEmail", "invalid-email"),
+    contactAddEmailError: { textContent: "" },
+    contactAddError: { textContent: "Stored error" },
+  };
+}
