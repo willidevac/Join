@@ -16,13 +16,7 @@ const addTaskFieldValidators = {
 let addTaskValidationAttempted = false;
 
 
-/** Sets the native date picker to today as its earliest selectable date. */
-function initAddTaskDueDatePicker() {
-  document.getElementById("taskDueDate").min = getTodayTaskDueDate();
-}
-
-
-/** Returns today's local date in the ISO format required by a date input. */
+/** Returns today's local date in the ISO format used for task storage. */
 function getTodayTaskDueDate(date = new Date()) {
   const offset = date.getTimezoneOffset() * 60000;
   return new Date(date.getTime() - offset).toISOString().slice(0, 10);

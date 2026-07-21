@@ -133,18 +133,28 @@
   }
 
   .auth-page--signup .form-field {
-    margin-bottom: 22px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+    margin-bottom: 0;
   }
 
   .auth-page--signup .form-field__error {
-    top: calc(100% + 2px);
-    right: 8px;
-    left: 8px;
-    max-height: 32px;
+    position: static;
+    min-width: 0;
+    min-height: 16px;
+    margin-inline: 8px;
     font-size: 13px;
     line-height: 16px;
-    overflow: hidden;
     overflow-wrap: anywhere;
+  }
+
+  .auth-page--signup .form-field__error:empty {
+    display: block;
+  }
+
+  .auth-page--signup .form-field__icon {
+    top: calc(clamp(42px, 7svh, 50px) / 2);
   }
 
   .auth-page--signup .form-field__input {

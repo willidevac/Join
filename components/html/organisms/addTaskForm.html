@@ -33,22 +33,17 @@
         ></textarea>
       </label>
 
-      <label class="add-task-field" for="taskDueDate">
-        <span>Due date<strong>*</strong></span>
-        <span class="add-task-date-input">
-          <input
-            id="taskDueDate"
-            name="taskDueDate"
-            type="date"
-            aria-describedby="taskDueDateError"
-          />
-        </span>
+      <div class="add-task-field">
+        <label for="taskDueDate">Due date<strong>*</strong></label>
+        <span
+          data-include="./components/html/molecules/addTaskDatePicker.html"
+        ></span>
         <span
           class="add-task-field__error"
           id="taskDueDateError"
           aria-live="polite"
         ></span>
-      </label>
+      </div>
     </div>
 
     <div class="add-task-form__divider" aria-hidden="true"></div>
