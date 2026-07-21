@@ -319,12 +319,26 @@ body.board-dragging * {
   }
 
   .board-task-list {
-    grid-template-columns: clamp(244px, 60vw, 460px);
-    justify-content: center;
+    display: flex;
+    justify-content: flex-start;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .board-task-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .board-task-list .board-card {
+    flex: 0 0 clamp(240px, 78%, 320px);
+    scroll-snap-align: start;
   }
 
   .board-empty-state {
-    grid-column: 1 / -1;
+    flex: 1 1 100%;
   }
 }
 
