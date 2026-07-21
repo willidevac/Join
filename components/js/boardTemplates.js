@@ -244,11 +244,11 @@ function getBoardEditAssigneeTemplate(contact, assignedTo) {
     : "";
   return `
     <label class="contact-dropdown__option">
-      <input type="checkbox" value="${escapeHtmlText(contact.id)}" ${checked} />
       <span class="contact-dropdown__avatar" style="background-color: ${escapeHtmlText(contact.color || "var(--color-primary-auth)")}">
         ${getContactInitials(contact.name)}
       </span>
       <span>${escapeHtmlText(contact.name)}</span>
+      <input type="checkbox" value="${escapeHtmlText(contact.id)}" ${checked} />
     </label>
   `;
 }

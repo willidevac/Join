@@ -83,9 +83,35 @@
   color: var(--color-white);
 }
 
-.contact-dropdown__option input {
-  width: 16px;
-  height: 16px;
+.contact-dropdown__option:has(input:checked):hover {
+  background: var(--color-primary-auth-hover);
+}
+
+.contact-dropdown__option:has(input:checked) + .contact-dropdown__option:has(input:checked) {
+  margin-top: 6px;
+  border-top: 1px solid var(--color-border-medium);
+}
+
+.contact-dropdown__option input[type="checkbox"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  flex-shrink: 0;
+  border: 2px solid var(--color-border-dark);
+  border-radius: 4px;
+  background-color: var(--color-white);
+  cursor: pointer;
+}
+
+.contact-dropdown__option input[type="checkbox"]:checked {
+  border-color: var(--color-white);
+  background: var(--color-primary-auth) url("../../assets/img/icons/check.svg") center / 14px no-repeat;
+}
+
+.contact-dropdown__option input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
 }
 
 .contact-dropdown__avatar {
@@ -112,13 +138,11 @@
 }
 
 .contact-dropdown__selected {
+  min-height: 32px;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
-}
-
-.contact-dropdown__selected:empty {
-  display: none;
 }
 
 .contact-dropdown__chip {
