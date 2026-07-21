@@ -343,7 +343,25 @@
 .add-task-subtask-list {
   display: grid;
   gap: 4px;
+  max-height: 128px;
   margin: 0;
-  padding: 0;
+  padding: 0 4px 0 0;
   list-style: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-scrollbar-thumb) transparent;
+  scrollbar-gutter: stable;
+}
+
+.add-task-subtask-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.add-task-subtask-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.add-task-subtask-list::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: var(--color-scrollbar-thumb);
 }

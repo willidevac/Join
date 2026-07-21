@@ -73,6 +73,7 @@ function commitSubtaskFromInput() {
   input.value = "";
   updateSubtaskInputMode();
   renderSubtaskList();
+  scrollToNewestSubtask();
   input.focus();
 }
 
@@ -102,6 +103,13 @@ function updateSubtaskInputMode() {
  */
 function renderSubtaskList() {
   getSubtaskList().innerHTML = addTaskSubtasks.map(getSubtaskItemTemplate).join("");
+}
+
+
+/** Keeps a newly added fourth or later subtask visible inside the list. */
+function scrollToNewestSubtask() {
+  const list = getSubtaskList();
+  list.scrollTop = list.scrollHeight;
 }
 
 
