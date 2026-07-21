@@ -139,6 +139,21 @@
     margin-top: clamp(0px, 0.6svh, 4px);
   }
 
+  .auth-page--signup .form-field {
+    margin-bottom: 22px;
+  }
+
+  .auth-page--signup .form-field__error {
+    top: calc(100% + 2px);
+    right: 8px;
+    left: 8px;
+    max-height: 32px;
+    font-size: 13px;
+    line-height: 16px;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+  }
+
   .auth-page--signup .form-field__input {
     height: clamp(42px, 7svh, 50px);
     border-color: var(--color-border-strong);

@@ -5,9 +5,11 @@
 
 .add-task-field__error {
   display: block;
-  min-height: 20px;
+  height: 40px;
   margin-top: -4px;
   color: var(--color-error);
   font-size: 16px;
   line-height: 20px;
+  overflow: hidden;
+  overflow-wrap: anywhere;
 }
