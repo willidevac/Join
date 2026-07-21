@@ -281,14 +281,17 @@ function getBoardCardMoveTemplate(task) {
 
 /**
  * @param {string} currentStatus - Status of the task's current column.
- * @returns {{value: string, label: string, icon: string}[]} Neighbor columns as targets.
+ * @returns {{value: string, label: string, icon: string}[]} Every other board column as a target.
  */
 function getBoardMoveTargets(currentStatus) {
   const order = ["todo", "in-progress", "feedback", "done"];
   const labels = { todo: "To do", "in-progress": "In progress", feedback: "Await feedback", done: "Done" };
   const index = order.indexOf(currentStatus);
-  const targets = [];
-  if (index > 0) targets.push({ value: order[index - 1], label: labels[order[index - 1]], icon: "arrow_upward" });
-  if (index < order.length - 1) targets.push({ value: order[index + 1], label: labels[order[index + 1]], icon: "arrow_downward" });
-  return targets;
+  return order
+    .filter((status) => status !== currentStatus)
+    .map((status) => ({
+      value: status,
+      label: labels[status],
+      icon: order.indexOf(status) < index ? "arrow_upward" : "arrow_downward",
+    }));
 }

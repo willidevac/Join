@@ -53,8 +53,21 @@
   background: var(--color-hover-overlay-light);
 }
 
-@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+@media (max-width: 767px), (any-pointer: coarse) {
   .board-card-move {
     display: block;
+  }
+
+  .board-card-move__toggle {
+    width: 44px;
+    height: 44px;
+  }
+
+  .board-card-move__menu {
+    top: 48px;
+  }
+
+  .board-card-move__option {
+    min-height: 44px;
   }
 }
