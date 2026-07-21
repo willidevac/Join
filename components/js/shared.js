@@ -1,7 +1,7 @@
 ﻿let lockedScrollY = 0;
 
 
-const emailAddressPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const emailAddressPattern = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
 
 
 /**
@@ -10,7 +10,12 @@ const emailAddressPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
  * @returns {boolean} True when the complete address format is valid.
  */
 function isEmailAddressValid(email) {
-  return emailAddressPattern.test(email);
+  const normalizedEmail = String(email || "").trim();
+  const localPart = normalizedEmail.split("@")[0];
+  return emailAddressPattern.test(normalizedEmail) &&
+    !localPart.startsWith(".") &&
+    !localPart.endsWith(".") &&
+    !localPart.includes("..");
 }
 
 
@@ -63,7 +68,7 @@ function escapeHtmlText(value) {
  */
 function createTaskAssigneeReference(contact) {
   return {
-    id: String(contact?.id || ""),
+    id: String(contact?.id || "").trim(),
     name: String(contact?.name || "").trim(),
   };
 }

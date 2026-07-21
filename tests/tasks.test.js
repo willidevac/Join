@@ -78,9 +78,18 @@ test("deletes only the task with the matching id", () => {
 
 test("normalizes ISO and legacy task dates", () => {
   const { context } = createTaskContext();
-  assert.equal(context.normalizeTaskDueDate("2026-07-15"), "2026-07-15");
+  assert.equal(context.normalizeTaskDueDate("  2026-07-15  "), "2026-07-15");
   assert.equal(context.normalizeTaskDueDate("15/07/2026"), "2026-07-15");
   assert.equal(context.formatTaskDueDate("2026-07-15"), "15/07/2026");
+});
+
+
+test("normalizes task selections before they are stored", () => {
+  const { context } = createTaskContext();
+  assert.equal(context.normalizeTaskPriority("  urgent  "), "urgent");
+  assert.equal(context.normalizeTaskPriority("invalid"), "medium");
+  assert.equal(context.normalizeTaskCategory("  user-story  "), "user-story");
+  assert.equal(context.normalizeTaskCategory("invalid"), "");
 });
 
 

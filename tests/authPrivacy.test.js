@@ -8,6 +8,7 @@ const {
 } = require("./helpers/scriptContext");
 
 const authScript = "components/js/auth.js";
+const loginScript = "components/js/login.js";
 const sharedScript = "components/js/shared.js";
 const signupScript = "components/js/signup.js";
 
@@ -83,6 +84,18 @@ function createAuthContext(overrides = {}) {
 }
 
 
+/** Creates the isolated controls required by login value validation. */
+function createLoginContext() {
+  const elements = {
+    loginEmail: createFormControl("  qa.user@example.com  "),
+    loginPassword: createFormControl("  Testpass123!  "),
+    loginError: { textContent: "" },
+  };
+  const document = createAuthDocument(elements);
+  return { context: loadBrowserScripts([sharedScript, loginScript], { document }), elements };
+}
+
+
 /**
  * Creates the click event passed to the Privacy Policy handler.
  * @returns {Object} Event with an observable preventDefault call.
@@ -139,6 +152,16 @@ test("rejects signup email addresses containing umlauts", () => {
     assert.equal(elements.privacyAccepted.disabled, true);
     assert.equal(elements.signupButton.disabled, true);
   });
+});
+
+
+test("trims login credentials and rejects invalid email before Firebase", () => {
+  const { context, elements } = createLoginContext();
+  assert.equal(context.getLoginEmail(), "qa.user@example.com");
+  assert.equal(context.getLoginPassword(), "Testpass123!");
+  elements.loginEmail.value = "invalid-email";
+  assert.equal(context.isLoginFormValid(context.getLoginEmail(), context.getLoginPassword()), false);
+  assert.equal(elements.loginError.textContent, "Please enter a valid email address.");
 });
 
 
@@ -222,6 +245,10 @@ test("logs out after registration and routes the new user to login", async () =>
     localStorage,
     navigateToPage: (page, params) => calls.push(["navigate", page, params]),
   });
+  elements.signupName.value = "  QA User  ";
+  elements.signupEmail.value = "  qa.user@example.com  ";
+  elements.signupPassword.value = "  Testpass123!  ";
+  elements.signupConfirmPassword.value = "  Testpass123!  ";
   elements.privacyAccepted.checked = true;
   await context.registerUser();
   assert.deepEqual(toPlainValue(calls), [

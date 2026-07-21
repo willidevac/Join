@@ -1,4 +1,6 @@
 const taskStorageKey = "joinTasks";
+const taskPriorityValues = ["urgent", "medium", "low"];
+const taskCategoryValues = ["technical-task", "user-story"];
 
 
 /**
@@ -85,10 +87,25 @@ function parseTaskDueDate(value) {
  * Reads ISO and legacy Join date strings into numeric date parts.
  */
 function getTaskDueDateParts(value) {
-  const isoMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || "");
+  const normalizedValue = String(value || "").trim();
+  const isoMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(normalizedValue);
   if (isoMatch) return getDatePartsFromMatch(isoMatch, 1, 2, 3);
-  const joinMatch = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(value || "");
+  const joinMatch = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(normalizedValue);
   return joinMatch ? getDatePartsFromMatch(joinMatch, 3, 2, 1) : null;
+}
+
+
+/** Returns a valid task priority or the default priority. */
+function normalizeTaskPriority(value) {
+  const priority = String(value || "").trim();
+  return taskPriorityValues.includes(priority) ? priority : "medium";
+}
+
+
+/** Returns a valid task category or an empty required-field value. */
+function normalizeTaskCategory(value) {
+  const category = String(value || "").trim();
+  return taskCategoryValues.includes(category) ? category : "";
 }
 
 

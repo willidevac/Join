@@ -195,7 +195,7 @@ function getBoardEditedTask(task) {
     description: getBoardEditField("Description").value.trim(),
     dueDate: normalizeTaskDueDate(getBoardEditField("DueDate").value),
     priority: getBoardEditPriority(),
-    category: getBoardEditField("Category").value,
+    category: getBoardEditCategory(),
     assignedTo: getBoardEditedAssignees(),
     subtasks: getBoardEditSubtaskItems(),
   };
@@ -263,7 +263,13 @@ function getBoardEditPriority() {
   const checked = document.querySelector(
     'input[name="boardEditPriority"]:checked',
   );
-  return checked ? checked.value : "medium";
+  return normalizeTaskPriority(checked?.value);
+}
+
+
+/** @returns {string} A valid selected category or the task category default. */
+function getBoardEditCategory() {
+  return normalizeTaskCategory(getBoardEditField("Category").value) || "technical-task";
 }
 
 

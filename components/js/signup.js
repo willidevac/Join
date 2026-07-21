@@ -269,18 +269,18 @@ function getSignupEmail() {
 
 
 /**
- * @returns {string} The password from the signup form.
+ * @returns {string} The trimmed password from the signup form.
  */
 function getSignupPassword() {
-  return document.getElementById("signupPassword").value;
+  return document.getElementById("signupPassword").value.trim();
 }
 
 
 /**
- * @returns {string} The password confirmation from the signup form.
+ * @returns {string} The trimmed password confirmation from the signup form.
  */
 function getSignupConfirmPassword() {
-  return document.getElementById("signupConfirmPassword").value;
+  return document.getElementById("signupConfirmPassword").value.trim();
 }
 
 

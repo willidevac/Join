@@ -61,8 +61,8 @@ function getNormalizedBoardSubtasks(subtasks) {
   return subtasks
     .map((subtask) =>
       typeof subtask === "string"
-        ? { title: subtask, done: false }
-        : { title: subtask.title || "", done: Boolean(subtask.done) },
+        ? { title: subtask.trim(), done: false }
+        : { title: String(subtask?.title || "").trim(), done: Boolean(subtask?.done) },
     )
     .filter((subtask) => subtask.title);
 }

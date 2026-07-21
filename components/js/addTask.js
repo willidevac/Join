@@ -235,7 +235,8 @@ function getAddTaskDueDate() {
  * @returns {string} The selected priority; "medium" is preselected by default.
  */
 function getAddTaskPriority() {
-  return document.querySelector('input[name="taskPriority"]:checked').value;
+  const selected = document.querySelector('input[name="taskPriority"]:checked');
+  return normalizeTaskPriority(selected?.value);
 }
 
 
@@ -251,7 +252,7 @@ function getAddTaskAssignee() {
  * @returns {string} The selected category value, or an empty string.
  */
 function getAddTaskCategory() {
-  return document.getElementById("taskCategory").value;
+  return normalizeTaskCategory(document.getElementById("taskCategory").value);
 }
 
 

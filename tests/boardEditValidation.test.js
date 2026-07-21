@@ -5,18 +5,31 @@ const { loadBrowserScripts } = require("./helpers/scriptContext");
 
 const fields = {
   boardTaskEditTitle: { value: "" },
+  boardTaskEditDescription: { value: "" },
   boardTaskEditDueDate: { value: "" },
+  boardTaskEditCategory: { value: "technical-task" },
 };
 
 const document = {
   getElementById(id) {
     return fields[id] || null;
   },
+  querySelector() {
+    return { value: "  low  " };
+  },
 };
 
 const context = loadBrowserScripts(
-  ["components/js/tasks.js", "components/js/boardEdit.js"],
-  { document },
+  [
+    "components/js/shared.js",
+    "components/js/tasks.js",
+    "components/js/boardEdit.js",
+  ],
+  {
+    document,
+    getBoardEditedAssigneesFromContacts: () => [],
+    getBoardEditSubtaskItems: () => [],
+  },
 );
 
 
@@ -41,4 +54,18 @@ test("rejects an impossible board edit due date before saving", () => {
     context.getBoardEditFieldError("DueDate"),
     "Please enter a valid due date.",
   );
+});
+
+
+test("trims board edit strings before building the stored task", () => {
+  fields.boardTaskEditTitle.value = "  Updated title  ";
+  fields.boardTaskEditDescription.value = "  Updated description  ";
+  fields.boardTaskEditDueDate.value = "  2026-07-16  ";
+  fields.boardTaskEditCategory.value = "  user-story  ";
+  const task = context.getBoardEditedTask({ id: "task-1" });
+  assert.equal(task.title, "Updated title");
+  assert.equal(task.description, "Updated description");
+  assert.equal(task.dueDate, "2026-07-16");
+  assert.equal(task.priority, "low");
+  assert.equal(task.category, "user-story");
 });

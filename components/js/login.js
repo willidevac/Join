@@ -108,7 +108,7 @@ function isLoginFormValid(email, password) {
     return false;
   }
 
-  if (!isValidEmail(email)) {
+  if (!isEmailAddressValid(email)) {
     showLoginError("Please enter a valid email address.");
     return false;
   }
@@ -127,12 +127,11 @@ function getLoginEmail() {
 
 
 /**
- * Reads the password input value. Not trimmed, because whitespace
- * is a valid password character and signup does not trim either.
- * @returns {string} The password as typed by the user.
+ * Reads the password without accidental surrounding whitespace.
+ * @returns {string} The trimmed password.
  */
 function getLoginPassword() {
-  return document.getElementById("loginPassword").value;
+  return document.getElementById("loginPassword").value.trim();
 }
 
 
@@ -143,16 +142,6 @@ function getLoginPassword() {
 function showLoginError(message) {
   const errorElement = document.getElementById("loginError");
   errorElement.textContent = message;
-}
-
-
-/**
- * Checks whether a string looks like a valid email address.
- * @param {string} email - The email address to check.
- * @returns {boolean} True if the format is valid.
- */
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 
