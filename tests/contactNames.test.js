@@ -14,7 +14,7 @@ const sharedScript = "components/js/core/shared.js";
  * @returns {Object} Context exposing the abbreviation function.
  */
 function createContactNameContext() {
-  return loadBrowserScripts([contactTemplatesScript]);
+  return loadBrowserScripts([sharedScript, contactTemplatesScript]);
 }
 
 
@@ -25,7 +25,6 @@ function createContactNameContext() {
 function createContactTemplateContext() {
   return loadBrowserScripts(
     [sharedScript, contactTemplatesScript],
-    { getContactInitials: () => "VR" },
   );
 }
 

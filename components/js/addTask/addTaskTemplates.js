@@ -4,14 +4,15 @@
  * @param {Object} contact - Contact object from the contacts store.
  * @returns {string} HTML markup for one selectable contact.
  */
-function getAssigneeOptionTemplate(contact) {
+function getAssigneeOptionTemplate(contact, isChecked = false) {
+  const checked = isChecked ? "checked" : "";
   return `
     <label class="contact-dropdown__option">
       <span class="contact-dropdown__avatar" style="background-color: ${escapeHtmlText(contact.color || "var(--color-primary-auth)")}">
-        ${getContactInitials(contact.name)}
+        ${getInitials(contact.name)}
       </span>
       <span>${escapeHtmlText(contact.name)}</span>
-      <input type="checkbox" value="${escapeHtmlText(contact.id)}" />
+      <input type="checkbox" value="${escapeHtmlText(contact.id)}" ${checked} />
     </label>
   `;
 }
@@ -24,7 +25,7 @@ function getAssigneeOptionTemplate(contact) {
  * @returns {string} HTML markup for the selected-contact avatar chip.
  */
 function getAssigneeChipTemplate(contact) {
-  return `<span class="contact-dropdown__avatar" style="background-color: ${escapeHtmlText(contact.color || "var(--color-primary-auth)")}">${getContactInitials(contact.name)}</span>`;
+  return `<span class="contact-dropdown__avatar" style="background-color: ${escapeHtmlText(contact.color || "var(--color-primary-auth)")}">${getInitials(contact.name)}</span>`;
 }
 
 
@@ -43,8 +44,8 @@ function getAssigneeOverflowChipTemplate(overflowCount) {
 /**
  * Returns the markup for one subtask row in view or edit mode.
  */
-function getSubtaskItemTemplate(subtask, index) {
-  if (index === editingSubtaskIndex) return getSubtaskEditTemplate(subtask, index);
+function getSubtaskItemTemplate(subtask, index, isEditing = false) {
+  if (isEditing) return getSubtaskEditTemplate(subtask, index);
   return `
     <li class="add-task-subtask" data-subtask-index="${index}">
       <span class="add-task-subtask__title">${escapeHtmlText(subtask.title)}</span>

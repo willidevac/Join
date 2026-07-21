@@ -7,6 +7,7 @@ const {
 } = require("./helpers/scriptContext");
 
 const boardSearchScript = "components/js/board/boardSearch.js";
+const sharedScript = "components/js/core/shared.js";
 
 /**
  * Loads the board search logic with a minimal board and DOM test setup.
@@ -17,7 +18,7 @@ function createBoardSearchContext(tasks) {
   const elements = createBoardSearchElements();
   const state = { renderedTasks: [], detailTasks: [] };
   const globals = createBoardSearchGlobals(tasks, elements, state);
-  const context = loadBrowserScripts([boardSearchScript], globals);
+  const context = loadBrowserScripts([sharedScript, boardSearchScript], globals);
   return { ...elements, context, state };
 }
 

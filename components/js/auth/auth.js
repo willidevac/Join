@@ -50,7 +50,7 @@ async function handleGuestLogin() {
  * @param {boolean} isPending - True while the guest login is pending.
  */
 function setGuestLoginPending(isPending) {
-  const button = document.getElementById("guestLoginButton");
+  const button = getElement("guestLoginButton");
   if (!button) return;
   button.disabled = isPending;
   button.setAttribute("aria-busy", String(isPending));

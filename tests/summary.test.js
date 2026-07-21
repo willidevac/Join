@@ -9,6 +9,7 @@ const { loadBrowserScripts } = require("./helpers/scriptContext");
  */
 function createSummaryContext() {
   return loadBrowserScripts([
+    "components/js/core/shared.js",
     "components/js/tasks/tasks.js",
     "components/js/summary/summary.js",
   ]);
@@ -96,7 +97,7 @@ test("shows the mobile greeting after user data was rendered", () => {
       if (eventName === "animationend") animationHandler = handler;
     },
   };
-  const context = loadBrowserScripts(["components/js/summary/summary.js"], {
+  const context = loadBrowserScripts(["components/js/core/shared.js", "components/js/summary/summary.js"], {
     document: { querySelector: () => greeting },
   });
 

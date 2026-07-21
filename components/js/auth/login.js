@@ -7,8 +7,8 @@ const touchedLoginFields = new Set();
  * Runs every time the login page fragment is rendered.
  */
 function initLoginValidation() {
-  const loginForm = document.getElementById("loginForm");
-  const guestLoginButton = document.getElementById("guestLoginButton");
+  const loginForm = getElement("loginForm");
+  const guestLoginButton = getElement("guestLoginButton");
 
   if (!loginForm || !guestLoginButton) {
     return;
@@ -25,7 +25,7 @@ function initLoginValidation() {
 
 /** Shows the one-time success feedback after a completed signup. */
 function showSignupSuccessMessage() {
-  const feedback = document.getElementById("signupSuccessMessage");
+  const feedback = getElement("signupSuccessMessage");
   if (!feedback || !hasSignupSuccessParameter()) return;
   removeSignupSuccessParameter();
   showSignupSuccessAfterTransition(feedback);
@@ -48,8 +48,7 @@ function isSignupTransitionRunning() {
 
 /** Displays the signup feedback and schedules its removal. */
 function revealSignupSuccessMessage(feedback) {
-  feedback.hidden = false;
-  setTimeout(() => (feedback.hidden = true), 3000);
+  showTimedFeedback(feedback);
 }
 
 
@@ -73,8 +72,8 @@ function removeSignupSuccessParameter() {
  */
 async function handleLoginSubmit(event) {
   event.preventDefault();
-  touchAllLoginFields();
-  renderTouchedLoginErrors();
+  touchFields(loginFieldIds, touchedLoginFields);
+  renderTouchedFieldErrors(touchedLoginFields, getLoginFieldError);
   const email = getTrimmedInputValue("loginEmail");
   const password = getTrimmedInputValue("loginPassword");
 
@@ -90,7 +89,7 @@ async function handleLoginSubmit(event) {
  * @param {string} password - The password entered by the user.
  */
 async function submitLogin(email, password) {
-  const submitButton = getLoginSubmitButton();
+  const submitButton = getElement("loginSubmitButton");
   submitButton.disabled = true;
   try {
     showLoginError("");
@@ -121,35 +120,14 @@ function isLoginFormValid(email, password) {
 function handleLoginFieldBlur(event) {
   if (!loginFieldIds.includes(event.target.id)) return;
   touchedLoginFields.add(event.target.id);
-  renderLoginFieldError(event.target.id);
+  setFieldValidationError(event.target.id, getLoginFieldError(event.target.id));
 }
 
 
 /** Refreshes touched feedback and clears stale submit or Firebase messages. */
 function handleLoginInput() {
-  renderTouchedLoginErrors();
+  renderTouchedFieldErrors(touchedLoginFields, getLoginFieldError);
   showLoginError("");
-}
-
-
-/** Marks both login inputs as touched before submit validation. */
-function touchAllLoginFields() {
-  loginFieldIds.forEach((fieldId) => touchedLoginFields.add(fieldId));
-}
-
-
-/** Updates feedback for each login field the user already left. */
-function renderTouchedLoginErrors() {
-  touchedLoginFields.forEach(renderLoginFieldError);
-}
-
-
-/** Updates one login field's message and accessibility state. */
-function renderLoginFieldError(fieldId) {
-  const field = document.getElementById(fieldId);
-  const message = getLoginFieldError(fieldId);
-  field.setAttribute("aria-invalid", String(Boolean(message)));
-  document.getElementById(`${fieldId}Error`).textContent = message;
 }
 
 
@@ -183,15 +161,6 @@ function getLoginPasswordError(password) {
  * @param {string} message - The message to display.
  */
 function showLoginError(message) {
-  const errorElement = document.getElementById("loginError");
+  const errorElement = getElement("loginError");
   errorElement.textContent = message;
-}
-
-
-/**
- * Returns the submit button of the login form.
- * @returns {HTMLButtonElement} The login submit button.
- */
-function getLoginSubmitButton() {
-  return document.getElementById("loginSubmitButton");
 }

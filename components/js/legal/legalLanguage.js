@@ -69,3 +69,44 @@ function syncLegalLanguagePages(pages, showEnglish) {
     page.classList.toggle("legal-page--english", showEnglish);
   });
 }
+
+
+/** Initializes one legal document in public and signed-in layouts. */
+function initLegalPage(documentType) {
+  syncInternalLegalCopy(documentType);
+  updateLegalViewMode(documentType);
+  const pages = document.querySelectorAll(`.legal-page--${documentType}`);
+  const toggles = document.querySelectorAll(".language-switch__input");
+  if (pages.length && toggles.length) initLegalLanguageControls(pages, toggles);
+}
+
+
+/** Clones the public legal copy into the app-shell view once. */
+function syncInternalLegalCopy(documentType) {
+  const internalCopy = getElement(`${documentType}InternalCopy`);
+  const copies = document.querySelectorAll(
+    `#${documentType}ExternalView .privacy-copy`,
+  );
+  if (!internalCopy || !copies.length || internalCopy.children.length) return;
+  copies.forEach((copy) => internalCopy.append(copy.cloneNode(true)));
+}
+
+
+/** Selects the public or signed-in legal view. */
+function updateLegalViewMode(documentType) {
+  const externalView = getElement(`${documentType}ExternalView`);
+  const internalView = getElement(`${documentType}InternalView`);
+  if (!externalView || !internalView) return;
+  externalView.hidden = Boolean(getStoredUser());
+  internalView.hidden = !externalView.hidden;
+}
+
+
+function initPrivacyLanguageSwitch() {
+  initLegalPage("privacy");
+}
+
+
+function initLegalNoticeLanguageSwitch() {
+  initLegalPage("legal");
+}

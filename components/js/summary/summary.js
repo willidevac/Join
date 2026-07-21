@@ -5,10 +5,10 @@ function initSummaryUser() {
   const user = getStoredUser();
   if (!user) return;
 
-  setSummaryText("summaryGreeting", getSummaryDisplayName(user));
-  setSummaryText("summaryUserType", getSummaryUserTypeText(user));
-  setSummaryText("summaryUserInitials", getSummaryInitials(user));
-  setSummaryText("summaryGreetingTime", getTimeGreeting());
+  setElementText("summaryGreeting", getSummaryDisplayName(user));
+  setElementText("summaryUserType", getSummaryUserTypeText(user));
+  setElementText("summaryUserInitials", getInitials(getSummaryDisplayName(user)));
+  setElementText("summaryGreetingTime", getTimeGreeting());
   showMobileSummaryGreeting();
 }
 
@@ -42,19 +42,6 @@ function getSummaryDisplayName(user) {
 
 
 /**
- * Builds short initials for the user button in the header.
- */
-function getSummaryInitials(user) {
-  return getSummaryDisplayName(user)
-    .split(" ")
-    .map((namePart) => namePart.charAt(0))
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
-
-
-/**
  * Returns greeting appropriate to the time of day.
  */
 function getTimeGreeting() {
@@ -82,15 +69,6 @@ function getSummaryUserTypeText(user) {
 
 
 /**
- * Updates a summary text element only when it exists on the page.
- */
-function setSummaryText(elementId, text) {
-  const element = document.getElementById(elementId);
-  if (element) element.textContent = text;
-}
-
-
-/**
  * Loads tasks from the task store and fills the summary metric cards.
  * Renders a cached snapshot instantly to avoid a flash of empty values.
  */
@@ -114,13 +92,13 @@ async function initSummaryMetrics() {
  * @param {Object[]} tasks - Tasks to summarize.
  */
 function renderSummaryMetrics(tasks) {
-  setSummaryText("summaryTodoCount", countTasksByStatus(tasks, "todo"));
-  setSummaryText("summaryProgressCount", countTasksByStatus(tasks, "in-progress"));
-  setSummaryText("summaryFeedbackCount", countTasksByStatus(tasks, "feedback"));
-  setSummaryText("summaryDoneCount", countTasksByStatus(tasks, "done"));
-  setSummaryText("summaryBoardCount", tasks.length);
-  setSummaryText("summaryUrgentCount", countTasksByPriority(tasks, "urgent"));
-  setSummaryText("summaryDeadlineDate", getUpcomingDeadlineText(tasks));
+  setElementText("summaryTodoCount", countTasksByStatus(tasks, "todo"));
+  setElementText("summaryProgressCount", countTasksByStatus(tasks, "in-progress"));
+  setElementText("summaryFeedbackCount", countTasksByStatus(tasks, "feedback"));
+  setElementText("summaryDoneCount", countTasksByStatus(tasks, "done"));
+  setElementText("summaryBoardCount", tasks.length);
+  setElementText("summaryUrgentCount", countTasksByPriority(tasks, "urgent"));
+  setElementText("summaryDeadlineDate", getUpcomingDeadlineText(tasks));
 }
 
 
@@ -143,8 +121,8 @@ function blankSummaryMetricValues() {
     "summaryTodoCount", "summaryDoneCount", "summaryUrgentCount",
     "summaryBoardCount", "summaryProgressCount", "summaryFeedbackCount",
   ];
-  metricIds.forEach((id) => setSummaryText(id, "–"));
-  setSummaryText("summaryDeadlineDate", "–");
+  metricIds.forEach((id) => setElementText(id, "–"));
+  setElementText("summaryDeadlineDate", "–");
 }
 
 

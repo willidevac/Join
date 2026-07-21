@@ -107,11 +107,7 @@ async function handleBoardDragPointerUp(event) {
   const task = getDraggedBoardTask();
   endBoardCardDrag();
   if (!taskList || !task) return;
-  try {
-    await moveBoardTaskToStatus(task, taskList.dataset.boardStatus);
-  } catch (error) {
-    showBoardToast("Task status could not be updated.");
-  }
+  await moveBoardTaskSafely(task, taskList.dataset.boardStatus);
 }
 
 

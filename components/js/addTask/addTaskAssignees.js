@@ -7,25 +7,11 @@ let assigneeOutsideClickReady = false;
  * Loads available contacts and prepares the multi-select assignee dropdown.
  */
 async function initAddTaskAssignees() {
-  addTaskContacts = await loadAddTaskContacts();
+  addTaskContacts = await loadSortedContactsSafely();
   selectedTaskAssignees = [];
   renderAssigneeOptions();
   bindAssigneeDropdown();
   updateAssigneeSelection();
-}
-
-
-/**
- * Returns sorted contacts from Firestore or localStorage, with an empty fallback.
- *
- * @returns {Promise<Object[]>} Sorted contacts, or an empty list on errors.
- */
-async function loadAddTaskContacts() {
-  try {
-    return sortContactsByName(await loadContactsFromStore());
-  } catch (error) {
-    return [];
-  }
 }
 
 

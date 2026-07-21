@@ -10,8 +10,8 @@ async function showBoardEditMode() {
   const task = getActiveBoardTask();
   if (!task) return;
   await fillBoardTaskEditForm(task);
-  getBoardDetailView().hidden = true;
-  getBoardEditForm().hidden = false;
+  getElement("boardTaskDetailView").hidden = true;
+  getElement("boardTaskEditForm").hidden = false;
 }
 
 
@@ -41,9 +41,9 @@ async function handleBoardDeleteClick() {
     await deleteTaskFromStore(activeBoardTaskId);
     closeBoardTaskDetail();
     await initBoardTasks();
-    showBoardToast("Task successfully deleted");
+    showTimedFeedback("boardToast", "Task successfully deleted");
   } catch (error) {
-    showBoardToast("Task could not be deleted.");
+    showTimedFeedback("boardToast", "Task could not be deleted.");
   }
 }
 
@@ -69,9 +69,9 @@ async function saveBoardEdit(updatedTask) {
   try {
     await updateTaskInStore(updatedTask);
     await refreshBoardAfterEdit(updatedTask.id);
-    showBoardToast("Task successfully updated");
+    showTimedFeedback("boardToast", "Task successfully updated");
   } catch (error) {
-    showBoardToast("Task could not be updated.");
+    showTimedFeedback("boardToast", "Task could not be updated.");
   } finally {
     setBoardEditPending(false);
   }
@@ -82,7 +82,7 @@ async function saveBoardEdit(updatedTask) {
  * Adds field-level validation to the board edit form.
  */
 function initBoardEditValidation() {
-  const form = getBoardEditForm();
+  const form = getElement("boardTaskEditForm");
   form.addEventListener("focusout", handleBoardEditValidationEvent);
   form.addEventListener("input", handleBoardEditValidationEvent);
 }
@@ -133,7 +133,7 @@ function validateBoardEditField(fieldName) {
  * @returns {string} Error text or an empty string.
  */
 function getBoardEditFieldError(fieldName) {
-  const value = getBoardEditField(fieldName).value.trim();
+  const value = getTrimmedElementValue(getBoardEditField(fieldName));
   if (fieldName === "Title") return value ? "" : "Please enter a title.";
   if (!value) return "Please enter a due date.";
   return normalizeTaskDueDate(value) ? "" : "Please enter a valid due date.";
@@ -167,7 +167,7 @@ function resetBoardEditValidation() {
  * Focuses the first invalid field after a failed submit.
  */
 function focusFirstInvalidBoardEditField() {
-  getBoardEditForm().querySelector('[aria-invalid="true"]')?.focus();
+  getElement("boardTaskEditForm").querySelector('[aria-invalid="true"]')?.focus();
 }
 
 
@@ -176,7 +176,7 @@ function focusFirstInvalidBoardEditField() {
  * @param {boolean} isPending - True while the task is being saved.
  */
 function setBoardEditPending(isPending) {
-  const button = getBoardEditForm().querySelector('[type="submit"]');
+  const button = getElement("boardTaskEditForm").querySelector('[type="submit"]');
   button.disabled = isPending;
   button.setAttribute("aria-busy", String(isPending));
 }
@@ -190,8 +190,8 @@ function setBoardEditPending(isPending) {
 function getBoardEditedTask(task) {
   return {
     ...task,
-    title: getBoardEditField("Title").value.trim(),
-    description: getBoardEditField("Description").value.trim(),
+    title: getTrimmedElementValue(getBoardEditField("Title")),
+    description: getTrimmedElementValue(getBoardEditField("Description")),
     dueDate: normalizeTaskDueDate(getBoardEditField("DueDate").value),
     priority: getBoardEditPriority(),
     category: getBoardEditCategory(),
@@ -219,24 +219,6 @@ async function refreshBoardAfterEdit(taskId) {
   renderBoardColumns(activeBoardTasks);
   initBoardTaskDetails(activeBoardTasks);
   showBoardTaskDetail(taskId, activeBoardTasks);
-}
-
-
-/**
- * Returns the edit button of the task detail dialog.
- * @returns {HTMLElement} The edit button.
- */
-function getBoardEditButton() {
-  return document.getElementById("boardTaskEditButton");
-}
-
-
-/**
- * Returns the delete button of the task detail dialog.
- * @returns {HTMLElement} The delete button.
- */
-function getBoardDeleteButton() {
-  return document.getElementById("boardTaskDeleteButton");
 }
 
 
@@ -273,19 +255,10 @@ function getBoardEditCategory() {
 
 
 /**
- * Returns the form element of the task edit mode.
- * @returns {HTMLElement} The edit form.
- */
-function getBoardEditForm() {
-  return document.getElementById("boardTaskEditForm");
-}
-
-
-/**
  * Returns an input element of the edit form by its field name.
  * @param {string} fieldName - The suffix of the field's element id.
  * @returns {HTMLElement} The form field element.
  */
 function getBoardEditField(fieldName) {
-  return document.getElementById(`boardTaskEdit${fieldName}`);
+  return getElement(`boardTaskEdit${fieldName}`);
 }

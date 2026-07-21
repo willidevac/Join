@@ -5,8 +5,8 @@ let appTopbarDocumentEventsReady = false;
  * Initializes the user menu in the shared application topbar.
  */
 function initAppTopbar() {
-  const menuButton = getAppTopbarMenuButton();
-  const logoutButton = document.getElementById("appTopbarLogoutButton");
+  const menuButton = getElement("appTopbarMenuButton");
+  const logoutButton = getElement("appTopbarLogoutButton");
   if (!menuButton || !logoutButton) return;
   menuButton.addEventListener("click", toggleAppTopbarMenu);
   logoutButton.addEventListener("click", handleAppTopbarLogout);
@@ -29,7 +29,7 @@ function bindAppTopbarDocumentEvents() {
  * Opens or closes the user menu from the avatar button.
  */
 function toggleAppTopbarMenu() {
-  const menu = getAppTopbarMenu();
+  const menu = getElement("appTopbarMenu");
   if (!menu) return;
   setAppTopbarMenuOpen(menu.hidden);
 }
@@ -56,7 +56,7 @@ function closeAppTopbarMenuOnOutsideClick(event) {
 function closeAppTopbarMenuOnEscape(event) {
   if (event.key !== "Escape" || !isAppTopbarMenuOpen()) return;
   setAppTopbarMenuOpen(false);
-  getAppTopbarMenuButton().focus();
+  getElement("appTopbarMenuButton").focus();
 }
 
 
@@ -75,8 +75,8 @@ async function handleAppTopbarLogout() {
  * @param {boolean} isOpen - True to open, false to close the menu.
  */
 function setAppTopbarMenuOpen(isOpen) {
-  const menu = getAppTopbarMenu();
-  const menuButton = getAppTopbarMenuButton();
+  const menu = getElement("appTopbarMenu");
+  const menuButton = getElement("appTopbarMenuButton");
   if (!menu || !menuButton) return;
   menu.hidden = !isOpen;
   menuButton.setAttribute("aria-expanded", String(isOpen));
@@ -92,22 +92,6 @@ function setAppTopbarMenuOpen(isOpen) {
  * @returns {boolean} True while the user menu is visible.
  */
 function isAppTopbarMenuOpen() {
-  const menu = getAppTopbarMenu();
+  const menu = getElement("appTopbarMenu");
   return Boolean(menu && !menu.hidden);
-}
-
-
-/**
- * @returns {HTMLElement|null} The user menu, if the topbar is on the page.
- */
-function getAppTopbarMenu() {
-  return document.getElementById("appTopbarMenu");
-}
-
-
-/**
- * @returns {HTMLElement|null} The avatar button that toggles the user menu.
- */
-function getAppTopbarMenuButton() {
-  return document.getElementById("appTopbarMenuButton");
 }

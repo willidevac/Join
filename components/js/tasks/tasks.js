@@ -7,8 +7,7 @@ const taskCategoryValues = ["technical-task", "user-story"];
  * Reads the locally saved task list for the temporary localStorage step.
  */
 function getStoredTasks() {
-  const storedTasks = localStorage.getItem(taskStorageKey);
-  return storedTasks ? JSON.parse(storedTasks) : [];
+  return getStoredJson(taskStorageKey, []);
 }
 
 
@@ -16,7 +15,7 @@ function getStoredTasks() {
  * Saves the complete task list in localStorage.
  */
 function saveStoredTasks(tasks) {
-  localStorage.setItem(taskStorageKey, JSON.stringify(tasks));
+  saveStoredJson(taskStorageKey, tasks);
 }
 
 
@@ -87,7 +86,7 @@ function parseTaskDueDate(value) {
  * Reads ISO and legacy Join date strings into numeric date parts.
  */
 function getTaskDueDateParts(value) {
-  const normalizedValue = String(value || "").trim();
+  const normalizedValue = normalizeText(value);
   const isoMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(normalizedValue);
   if (isoMatch) return getDatePartsFromMatch(isoMatch, 1, 2, 3);
   const joinMatch = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(normalizedValue);
@@ -97,14 +96,14 @@ function getTaskDueDateParts(value) {
 
 /** Returns a valid task priority or the default priority. */
 function normalizeTaskPriority(value) {
-  const priority = String(value || "").trim();
+  const priority = normalizeText(value);
   return taskPriorityValues.includes(priority) ? priority : "medium";
 }
 
 
 /** Returns a valid task category or an empty required-field value. */
 function normalizeTaskCategory(value) {
-  const category = String(value || "").trim();
+  const category = normalizeText(value);
   return taskCategoryValues.includes(category) ? category : "";
 }
 

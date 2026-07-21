@@ -15,7 +15,7 @@ function initBoardSearch() {
  * @param {Event} event - Input event of the board search field.
  */
 function handleBoardSearchInput(event) {
-  const searchTerm = event.target.value.trim().toLowerCase();
+  const searchTerm = getTrimmedElementValue(event.target).toLowerCase();
   const filteredTasks = getBoardSearchResults(searchTerm);
   renderBoardColumns(filteredTasks);
   initBoardTaskDetails(filteredTasks);

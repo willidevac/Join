@@ -15,8 +15,8 @@ const touchedSignupFields = new Set();
 async function handleSignup(event) {
   event.preventDefault();
   if (signupSubmitPending) return;
-  touchAllSignupFields();
-  renderTouchedSignupErrors();
+  touchFields(signupFieldIds, touchedSignupFields);
+  renderTouchedFieldErrors(touchedSignupFields, getSignupFieldError);
   syncPrivacyConsent();
   if (!isSignupFormValid()) {
     showSignupMessage(getSignupErrorMessage());
@@ -61,7 +61,7 @@ async function saveSignedUpUser() {
  * Wires the signup form validation and the privacy consent handling.
  */
 function initSignupValidation() {
-  const form = document.getElementById("signupForm");
+  const form = getElement("signupForm");
   if (!form) return;
   touchedSignupFields.clear();
   form.addEventListener("submit", handleSignup);
@@ -70,14 +70,14 @@ function initSignupValidation() {
   getPrivacyLinks().forEach((link) => {
     link.addEventListener("click", handlePrivacyPolicyOpen);
   });
-  getPrivacyCheckbox().addEventListener("change", updateSignupButton);
+  getElement("privacyAccepted").addEventListener("change", updateSignupButton);
   syncPrivacyConsent();
 }
 
 
 /** Refreshes visible validation while the user corrects a touched field. */
 function handleSignupInput() {
-  renderTouchedSignupErrors();
+  renderTouchedFieldErrors(touchedSignupFields, getSignupFieldError);
   syncPrivacyConsent();
   refreshSignupFormMessage();
 }
@@ -85,7 +85,7 @@ function handleSignupInput() {
 
 /** Refreshes an already visible form-level signup message. */
 function refreshSignupFormMessage() {
-  const message = document.getElementById("signupMessage");
+  const message = getElement("signupMessage");
   if (message.textContent) showSignupMessage(getSignupErrorMessage());
 }
 
@@ -98,7 +98,7 @@ function handleSignupFieldBlur(event) {
   const fieldId = event.target && event.target.id;
   if (!signupFieldIds.includes(fieldId)) return;
   touchedSignupFields.add(fieldId);
-  renderSignupFieldError(fieldId);
+  setFieldValidationError(fieldId, getSignupFieldError(fieldId));
   syncPrivacyConsent();
 }
 
@@ -118,8 +118,8 @@ function handlePrivacyPolicyOpen(event) {
  */
 function syncPrivacyConsent() {
   const fieldsValid = areSignupFieldsValid();
-  getPrivacyCheckbox().disabled = !fieldsValid;
-  if (!fieldsValid) getPrivacyCheckbox().checked = false;
+  getElement("privacyAccepted").disabled = !fieldsValid;
+  if (!fieldsValid) getElement("privacyAccepted").checked = false;
   updateSignupButton();
 }
 
@@ -128,7 +128,7 @@ function syncPrivacyConsent() {
  * Enables the signup button only while the whole form is valid.
  */
 function updateSignupButton() {
-  getSignupButton().disabled = signupSubmitPending || !isSignupFormValid();
+  getElement("signupButton").disabled = signupSubmitPending || !isSignupFormValid();
   if (isSignupFormValid()) showSignupMessage("");
 }
 
@@ -139,7 +139,7 @@ function updateSignupButton() {
  */
 function setSignupSubmitPending(isPending) {
   signupSubmitPending = isPending;
-  getSignupButton().setAttribute("aria-busy", String(isPending));
+  getElement("signupButton").setAttribute("aria-busy", String(isPending));
   updateSignupButton();
 }
 
@@ -148,7 +148,7 @@ function setSignupSubmitPending(isPending) {
  * @returns {boolean} True when all signup fields and the consent are valid.
  */
 function isSignupFormValid() {
-  return areSignupFieldsValid() && getPrivacyCheckbox().checked;
+  return areSignupFieldsValid() && getElement("privacyAccepted").checked;
 }
 
 
@@ -171,31 +171,8 @@ function areSignupFieldsValid() {
  */
 function getSignupErrorMessage() {
   if (!areSignupFieldsValid()) return "Please correct the highlighted fields.";
-  if (!getPrivacyCheckbox().checked) return "Please accept the Privacy Policy.";
+  if (!getElement("privacyAccepted").checked) return "Please accept the Privacy Policy.";
   return "";
-}
-
-
-/** Marks every signup input as touched before submit validation. */
-function touchAllSignupFields() {
-  signupFieldIds.forEach((fieldId) => touchedSignupFields.add(fieldId));
-}
-
-
-/** Renders validation feedback for every field the user already left. */
-function renderTouchedSignupErrors() {
-  touchedSignupFields.forEach(renderSignupFieldError);
-}
-
-
-/**
- * Updates the message and accessibility state of one signup input.
- * @param {string} fieldId - Id of the input to validate.
- */
-function renderSignupFieldError(fieldId) {
-  const error = getSignupFieldError(fieldId);
-  document.getElementById(`${fieldId}Error`).textContent = error;
-  document.getElementById(fieldId).setAttribute("aria-invalid", String(Boolean(error)));
 }
 
 
@@ -262,14 +239,6 @@ function passwordsMatch() {
 
 
 /**
- * @returns {HTMLElement} The privacy consent checkbox.
- */
-function getPrivacyCheckbox() {
-  return document.getElementById("privacyAccepted");
-}
-
-
-/**
  * @returns {NodeList} All links that open the Privacy Policy page.
  */
 function getPrivacyLinks() {
@@ -278,17 +247,9 @@ function getPrivacyLinks() {
 
 
 /**
- * @returns {HTMLElement} The submit button of the signup form.
- */
-function getSignupButton() {
-  return document.getElementById("signupButton");
-}
-
-
-/**
  * Shows a feedback message below the signup form.
  * @param {string} message - The text to display, or an empty string to clear.
  */
 function showSignupMessage(message) {
-  document.getElementById("signupMessage").textContent = message;
+  setElementText("signupMessage", message);
 }

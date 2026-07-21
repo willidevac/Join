@@ -7,7 +7,7 @@ let addTaskRedirectTimer;
  * Initializes the Add Task form and its dynamic contact dropdown.
  */
 async function initAddTaskValidation() {
-  const form = document.getElementById("addTaskForm");
+  const form = getElement("addTaskForm");
   if (!form) return;
 
   initAddTaskDueDatePicker();
@@ -96,7 +96,7 @@ function handleAddTaskReset() {
  * Shows the short confirmation before the board route opens.
  */
 function showAddTaskSuccessMessage() {
-  const message = getAddTaskSuccessMessage();
+  const message = getElement("addTaskSuccessMessage");
   if (!message) return;
 
   message.hidden = false;
@@ -107,7 +107,7 @@ function showAddTaskSuccessMessage() {
  * Hides the confirmation while the form is being edited.
  */
 function hideAddTaskSuccessMessage() {
-  const message = getAddTaskSuccessMessage();
+  const message = getElement("addTaskSuccessMessage");
   if (!message) return;
 
   message.hidden = true;
@@ -118,7 +118,7 @@ function hideAddTaskSuccessMessage() {
  * Shows the save-failed feedback below the form actions.
  */
 function showAddTaskErrorMessage() {
-  const message = document.getElementById("addTaskErrorMessage");
+  const message = getElement("addTaskErrorMessage");
   if (message) message.hidden = false;
 }
 
@@ -127,7 +127,7 @@ function showAddTaskErrorMessage() {
  * Hides the save-failed feedback while the form is being edited.
  */
 function hideAddTaskErrorMessage() {
-  const message = document.getElementById("addTaskErrorMessage");
+  const message = getElement("addTaskErrorMessage");
   if (message) message.hidden = true;
 }
 
@@ -146,14 +146,6 @@ function redirectToBoardAfterSuccess() {
  */
 function clearAddTaskRedirect() {
   if (addTaskRedirectTimer) clearTimeout(addTaskRedirectTimer);
-}
-
-
-/**
- * @returns {HTMLElement|null} The success message element of the form.
- */
-function getAddTaskSuccessMessage() {
-  return document.getElementById("addTaskSuccessMessage");
 }
 
 
@@ -180,7 +172,7 @@ function getAddTaskData() {
  * Shows the close button when the page was opened from the board.
  */
 function initAddTaskCloseButton() {
-  const closeButton = document.getElementById("addTaskClose");
+  const closeButton = getElement("addTaskClose");
   if (!closeButton) return;
   const from = new URLSearchParams(window.location.search).get("from");
   if (from !== "board") return;
@@ -236,7 +228,7 @@ function getAddTaskAssignee() {
  * @returns {string} The selected category value, or an empty string.
  */
 function getAddTaskCategory() {
-  return normalizeTaskCategory(document.getElementById("taskCategory").value);
+  return normalizeTaskCategory(getElement("taskCategory").value);
 }
 
 

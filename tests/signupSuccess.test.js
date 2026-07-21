@@ -9,7 +9,10 @@ test("shows signup success feedback once for three seconds", () => {
   let hideFeedback;
   let timeoutDelay;
   let replacedUrl;
-  const context = loadBrowserScripts(["components/js/auth/login.js"], {
+  const context = loadBrowserScripts([
+    "components/js/core/shared.js",
+    "components/js/auth/login.js",
+  ], {
     document: { getElementById: () => feedback },
     window: createSuccessWindow((url) => (replacedUrl = url)),
     URL,

@@ -9,7 +9,10 @@ async function initContacts() {
   const contactsList = document.getElementById("contactsList");
   if (!contactsList) return;
   initContactActions();
-  activeContacts = await getContactsSafely();
+  activeContacts = await loadSortedContactsSafely(
+    showAccountContactError,
+    () => showTimedFeedback("contactToast", "Contacts could not be loaded."),
+  );
   const groups = groupContactsByLetter(sortContactsByName(activeContacts));
   contactsList.innerHTML = Object.keys(groups)
     .map((letter) => getContactGroupTemplate(letter, groups[letter]))
@@ -19,50 +22,10 @@ async function initContacts() {
 
 
 /**
- * Reads contacts through the store layer and keeps the active list in memory.
- */
-async function getContacts() {
-  activeContacts = await loadContactsFromStore(showAccountContactError);
-  return activeContacts;
-}
-
-
-/**
  * Shows feedback if only the signed-in account contact could not be added.
  */
 function showAccountContactError() {
-  showContactToast("Your account contact could not be loaded.");
-}
-
-
-/**
- * Keeps the contacts page usable if Firestore cannot load contacts.
- */
-async function getContactsSafely() {
-  try {
-    return await getContacts();
-  } catch (error) {
-    showContactToast("Contacts could not be loaded.");
-    return [];
-  }
-}
-
-
-/**
- * Builds the avatar initials from the first and last name part.
- */
-function getContactInitials(name) {
-  const parts = name.split(" ");
-  const initials = parts[0].charAt(0) + parts[parts.length - 1].charAt(0);
-  return initials.toUpperCase();
-}
-
-
-/**
- * Returns a copy of the contact list sorted alphabetically by name.
- */
-function sortContactsByName(contacts) {
-  return [...contacts].sort((a, b) => a.name.localeCompare(b.name));
+  showTimedFeedback("contactToast", "Your account contact could not be loaded.");
 }
 
 
@@ -97,7 +60,7 @@ function initContactDetails(contacts) {
  */
 function fillContactDetail(contact) {
   const avatar = document.getElementById("contactDetailAvatar");
-  avatar.textContent = getContactInitials(contact.name);
+  avatar.textContent = getInitials(contact.name);
   avatar.style.backgroundColor = contact.color;
   document.getElementById("contactDetailName").textContent = contact.name;
   document.getElementById("contactDetailPhone").textContent = contact.phone;
@@ -161,13 +124,13 @@ async function deleteActiveContact() {
   const contact = getActiveContact();
   if (!contact) return;
   if (isOwnAccountContact(contact)) {
-    showContactToast("Your account contact cannot be deleted.");
+    showTimedFeedback("contactToast", "Your account contact cannot be deleted.");
     return;
   }
   try {
     await performContactDeletion(contact);
   } catch (error) {
-    showContactToast("Contact could not be deleted.");
+    showTimedFeedback("contactToast", "Contact could not be deleted.");
   }
 }
 
@@ -181,7 +144,7 @@ async function performContactDeletion(contact) {
   await deleteContactFromStore(contact.id, updatedTasks);
   closeContactDetail();
   await initContacts();
-  showContactToast("Contact successfully deleted");
+  showTimedFeedback("contactToast", "Contact successfully deleted");
 }
 
 
@@ -245,18 +208,6 @@ function markActiveContactItem(contactId) {
       item.dataset.contactId === contactId,
     );
   });
-}
-
-
-/**
- * Shows a short feedback popup that hides itself after three seconds.
- */
-function showContactToast(message) {
-  const toast = document.getElementById("contactToast");
-  if (!toast) return;
-  toast.textContent = message;
-  toast.hidden = false;
-  setTimeout(() => (toast.hidden = true), 3000);
 }
 
 

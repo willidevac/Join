@@ -161,7 +161,7 @@ function getBoardAssignees(assignedTo) {
  * @returns {string} HTML markup for one initials avatar.
  */
 function getBoardAvatarTemplate(assignee) {
-  return `<span class="board-card__avatar" style="background-color: ${escapeHtmlText(assignee.color)}">${getBoardInitials(assignee.name)}</span>`;
+  return `<span class="board-card__avatar" style="background-color: ${escapeHtmlText(assignee.color)}">${getInitials(assignee.name)}</span>`;
 }
 
 
@@ -184,7 +184,7 @@ function getBoardAvatarOverflowTemplate(overflowCount) {
 function getBoardDetailAssigneeTemplate(assignee) {
   return `
     <div class="board-detail-assignee">
-      <span class="board-detail-assignee__avatar" style="background-color: ${escapeHtmlText(assignee.color)}">${getBoardInitials(assignee.name)}</span>
+      <span class="board-detail-assignee__avatar" style="background-color: ${escapeHtmlText(assignee.color)}">${getInitials(assignee.name)}</span>
       <span>${escapeHtmlText(assignee.name)}</span>
     </div>`;
 }
@@ -194,17 +194,6 @@ function getBoardDetailAssigneeTemplate(assignee) {
  * @param {string} name - Full contact name.
  * @returns {string} Up to two uppercase initials.
  */
-function getBoardInitials(name) {
-  return String(name)
-    .split(" ")
-    .filter(Boolean)
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
-
-
 /**
  * @param {string} priority - Stored task priority.
  * @returns {string} Icon path, falling back to the medium icon.
@@ -254,20 +243,10 @@ function getBoardDetailSubtaskTemplate(subtask, index) {
  * @returns {string} HTML markup for one dropdown option.
  */
 function getBoardEditAssigneeTemplate(contact, assignedTo) {
-  const checked = getTaskAssigneeReferences(assignedTo).some((assignee) =>
+  const isChecked = getTaskAssigneeReferences(assignedTo).some((assignee) =>
     isTaskAssigneeContact(assignee, contact),
-  )
-    ? "checked"
-    : "";
-  return `
-    <label class="contact-dropdown__option">
-      <span class="contact-dropdown__avatar" style="background-color: ${escapeHtmlText(contact.color || "var(--color-primary-auth)")}">
-        ${getContactInitials(contact.name)}
-      </span>
-      <span>${escapeHtmlText(contact.name)}</span>
-      <input type="checkbox" value="${escapeHtmlText(contact.id)}" ${checked} />
-    </label>
-  `;
+  );
+  return getAssigneeOptionTemplate(contact, isChecked);
 }
 
 

@@ -7,7 +7,7 @@ let boardDetailContacts = [];
  * @param {Object} task - The task whose subtasks are displayed.
  */
 function renderBoardDetailSubtasks(task) {
-  const container = getBoardDetailSubtasks();
+  const container = getElement("boardTaskDetailSubtasks");
   const subtasks = getNormalizedBoardSubtasks(task.subtasks);
   container.innerHTML = subtasks.length
     ? subtasks.map(getBoardDetailSubtaskTemplate).join("")
@@ -30,7 +30,7 @@ async function handleBoardDetailSubtaskChange(event) {
     await refreshBoardAfterEdit(updatedTask.id);
   } catch (error) {
     event.target.checked = !event.target.checked;
-    showBoardToast("Subtask could not be updated.");
+    showTimedFeedback("boardToast", "Subtask could not be updated.");
   }
 }
 
@@ -62,7 +62,7 @@ function getNormalizedBoardSubtasks(subtasks) {
     .map((subtask) =>
       typeof subtask === "string"
         ? { title: subtask.trim(), done: false }
-        : { title: String(subtask?.title || "").trim(), done: Boolean(subtask?.done) },
+        : { title: normalizeText(subtask?.title), done: Boolean(subtask?.done) },
     )
     .filter((subtask) => subtask.title);
 }
@@ -74,8 +74,8 @@ function getNormalizedBoardSubtasks(subtasks) {
  * @param {Array|string} assignedTo - Current or legacy task assignments.
  */
 async function renderBoardEditAssignees(assignedTo) {
-  const container = getBoardEditAssigneesPanel();
-  boardDetailContacts = await loadBoardDetailContacts();
+  const container = getElement("boardEditAssigneesPanel");
+  boardDetailContacts = await loadSortedContactsSafely();
   container.innerHTML = boardDetailContacts.length
     ? boardDetailContacts
         .map((contact) => getBoardEditAssigneeTemplate(contact, assignedTo))
@@ -88,23 +88,11 @@ async function renderBoardEditAssignees(assignedTo) {
 
 
 /**
- * @returns {Promise<Object[]>} Sorted contacts, or an empty list on errors.
- */
-async function loadBoardDetailContacts() {
-  try {
-    return sortContactsByName(await loadContactsFromStore());
-  } catch (error) {
-    return [];
-  }
-}
-
-
-/**
  * @returns {Object[]} The full contact objects for all checked contacts.
  */
 function getBoardEditedAssigneesFromContacts() {
   return [
-    ...getBoardEditAssigneesPanel().querySelectorAll("input:checked"),
+    ...getElement("boardEditAssigneesPanel").querySelectorAll("input:checked"),
   ]
     .map((input) => getBoardDetailContactById(input.value))
     .filter(Boolean);
@@ -125,11 +113,11 @@ function getBoardDetailContactById(contactId) {
  * Wires the edit assignee dropdown button and the outside click handling once.
  */
 function bindBoardEditAssigneesDropdown() {
-  const button = getBoardEditAssigneesButton();
+  const button = getElement("boardEditAssigneesButton");
   if (button.dataset.dropdownReady === "true") return;
   button.addEventListener("click", toggleBoardEditAssigneesDropdown);
   document.addEventListener("click", closeBoardEditAssigneesOnOutsideClick);
-  getBoardEditAssigneesPanel().addEventListener("change", updateBoardEditAssigneesSelection);
+  getElement("boardEditAssigneesPanel").addEventListener("change", updateBoardEditAssigneesSelection);
   button.dataset.dropdownReady = "true";
 }
 
@@ -138,7 +126,7 @@ function bindBoardEditAssigneesDropdown() {
  * Opens or closes the edit assignee dropdown from the trigger button.
  */
 function toggleBoardEditAssigneesDropdown() {
-  setBoardEditAssigneesOpen(getBoardEditAssigneesPanel().hidden);
+  setBoardEditAssigneesOpen(getElement("boardEditAssigneesPanel").hidden);
 }
 
 
@@ -148,7 +136,7 @@ function toggleBoardEditAssigneesDropdown() {
  * @param {MouseEvent} event - Document click event.
  */
 function closeBoardEditAssigneesOnOutsideClick(event) {
-  const dropdown = getBoardEditAssigneesDropdown();
+  const dropdown = getElement("boardEditAssigneesDropdown");
   if (dropdown && !dropdown.contains(event.target))
     setBoardEditAssigneesOpen(false);
 }
@@ -160,9 +148,9 @@ function closeBoardEditAssigneesOnOutsideClick(event) {
  * @param {boolean} isOpen - True to open, false to close the dropdown.
  */
 function setBoardEditAssigneesOpen(isOpen) {
-  getBoardEditAssigneesDropdown().classList.toggle("is-open", isOpen);
-  getBoardEditAssigneesPanel().hidden = !isOpen;
-  getBoardEditAssigneesButton().setAttribute("aria-expanded", String(isOpen));
+  getElement("boardEditAssigneesDropdown").classList.toggle("is-open", isOpen);
+  getElement("boardEditAssigneesPanel").hidden = !isOpen;
+  getElement("boardEditAssigneesButton").setAttribute("aria-expanded", String(isOpen));
 }
 
 
@@ -190,10 +178,10 @@ function renderBoardEditAssigneeChips(assignees) {
   const chips = visible
     .map(
       (item) =>
-        `<span class="board-detail-assignee__avatar" style="background-color: ${escapeHtmlText(item.color || "var(--color-primary-auth)")}">${getBoardInitials(item.name)}</span>`,
+        `<span class="board-detail-assignee__avatar" style="background-color: ${escapeHtmlText(item.color || "var(--color-primary-auth)")}">${getInitials(item.name)}</span>`,
     )
     .join("");
-  getBoardEditAssigneesSelected().innerHTML = chips + getBoardEditAssigneeOverflowTemplate(overflowCount);
+  getElement("boardEditAssigneesSelected").innerHTML = chips + getBoardEditAssigneeOverflowTemplate(overflowCount);
 }
 
 
@@ -206,44 +194,4 @@ function renderBoardEditAssigneeChips(assignees) {
 function getBoardEditAssigneeOverflowTemplate(overflowCount) {
   if (!overflowCount) return "";
   return `<span class="board-detail-assignee__avatar board-detail-assignee__avatar--overflow">+${overflowCount}</span>`;
-}
-
-
-/**
- * @returns {HTMLElement} The subtask container of the detail view.
- */
-function getBoardDetailSubtasks() {
-  return document.getElementById("boardTaskDetailSubtasks");
-}
-
-
-/**
- * @returns {HTMLElement} The dropdown panel that lists the edit assignees.
- */
-function getBoardEditAssigneesPanel() {
-  return document.getElementById("boardEditAssigneesPanel");
-}
-
-
-/**
- * @returns {HTMLElement} The edit assignee dropdown container.
- */
-function getBoardEditAssigneesDropdown() {
-  return document.getElementById("boardEditAssigneesDropdown");
-}
-
-
-/**
- * @returns {HTMLElement} The button that toggles the edit assignee dropdown.
- */
-function getBoardEditAssigneesButton() {
-  return document.getElementById("boardEditAssigneesButton");
-}
-
-
-/**
- * @returns {HTMLElement} The container for the selected edit assignee chips.
- */
-function getBoardEditAssigneesSelected() {
-  return document.getElementById("boardEditAssigneesSelected");
 }

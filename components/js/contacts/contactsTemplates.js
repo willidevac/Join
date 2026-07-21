@@ -11,7 +11,7 @@ function getContactItemTemplate(contact) {
       class="contacts-item-avatar"
       style="background-color: ${contact.color}"
     >
-      ${getContactInitials(contact.name)}
+      ${getInitials(contact.name)}
     </span>
     <div class="contacts-item-info">
       <p class="contacts-item-name" title="${fullName}">
@@ -44,7 +44,7 @@ async function createTemplateElement(templatePath) {
  * @returns {string} Short name for the mobile contact list.
  */
 function getAbbreviatedContactName(name) {
-  const nameParts = String(name).trim().split(/\s+/).filter(Boolean);
+  const nameParts = normalizeText(name).split(/\s+/).filter(Boolean);
   if (nameParts.length < 2) return nameParts[0] || "";
   const initials = nameParts
     .slice(1)

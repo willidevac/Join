@@ -17,14 +17,14 @@ async function initBoardTasks() {
     initBoardSearch();
     migrateBoardAssigneesInBackground();
   } catch (error) {
-    showBoardToast("Board tasks could not be loaded.");
+    showTimedFeedback("boardToast", "Board tasks could not be loaded.");
   }
 }
 
 
 /** Loads tasks and contacts in parallel for a faster first render. */
 async function loadBoardData() {
-  const boardRequests = [loadTasksFromStore(), loadBoardDetailContacts()];
+  const boardRequests = [loadTasksFromStore(), loadSortedContactsSafely()];
   [activeBoardTasks, activeBoardContacts] =
     await Promise.all(boardRequests);
 }
@@ -98,9 +98,9 @@ function addBoardCardListeners(card, tasks) {
  * Wires the edit, delete and form controls of the detail dialog.
  */
 function initBoardDetailControls() {
-  const overlay = getBoardDetailOverlay();
+  const overlay = getElement("boardTaskDetail");
   if (overlay.dataset.eventsReady === "true") return;
-  getBoardDetailCloseButton().addEventListener("click", closeBoardTaskDetail);
+  getElement("boardTaskDetailClose").addEventListener("click", closeBoardTaskDetail);
   overlay.addEventListener("click", handleBoardDetailBackdrop);
   document.addEventListener("keydown", handleBoardDetailEscape);
   document.addEventListener("click", closeAllBoardCardMoveMenus);
@@ -113,11 +113,11 @@ function initBoardDetailControls() {
  * Wires the edit, delete, form and status controls of the detail dialog.
  */
 function initBoardDetailActionControls() {
-  getBoardEditButton().addEventListener("click", showBoardEditMode);
-  getBoardDeleteButton().addEventListener("click", handleBoardDeleteClick);
-  getBoardEditForm().addEventListener("submit", handleBoardEditSubmit);
+  getElement("boardTaskEditButton").addEventListener("click", showBoardEditMode);
+  getElement("boardTaskDeleteButton").addEventListener("click", handleBoardDeleteClick);
+  getElement("boardTaskEditForm").addEventListener("submit", handleBoardEditSubmit);
   initBoardEditValidation();
-  getBoardDetailSubtasks().addEventListener(
+  getElement("boardTaskDetailSubtasks").addEventListener(
     "change",
     handleBoardDetailSubtaskChange,
   );
@@ -193,10 +193,16 @@ async function handleBoardCardMoveOption(event, card, tasks) {
   const status = event.currentTarget.dataset.moveStatus;
   const task = tasks.find((currentTask) => currentTask.id === card.dataset.taskId);
   if (!task) return;
+  await moveBoardTaskSafely(task, status);
+}
+
+
+/** Moves a task and reports a failed persistence attempt consistently. */
+async function moveBoardTaskSafely(task, status) {
   try {
     await moveBoardTaskToStatus(task, status);
   } catch (error) {
-    showBoardToast("Task status could not be updated.");
+    showTimedFeedback("boardToast", "Task status could not be updated.");
   }
 }
 
@@ -208,7 +214,7 @@ async function handleBoardCardMoveOption(event, card, tasks) {
  */
 function openBoardTaskDetail(taskId, tasks) {
   if (!showBoardTaskDetail(taskId, tasks)) return;
-  getBoardDetailCard().scrollTop = 0;
+  getElement("boardTaskDetailCard").scrollTop = 0;
   lockPageScroll();
 }
 
@@ -227,7 +233,7 @@ function showBoardTaskDetail(taskId, tasks) {
   activeBoardTaskId = task.id;
   fillBoardTaskDetail(task);
   showBoardDetailViewMode();
-  getBoardDetailOverlay().hidden = false;
+  getElement("boardTaskDetail").hidden = false;
   return true;
 }
 
@@ -236,7 +242,7 @@ function showBoardTaskDetail(taskId, tasks) {
  * Closes the detail dialog, restores page scrolling and resets it to view mode.
  */
 function closeBoardTaskDetail() {
-  getBoardDetailOverlay().hidden = true;
+  getElement("boardTaskDetail").hidden = true;
   unlockPageScroll();
   activeBoardTaskId = "";
   showBoardDetailViewMode();
@@ -248,7 +254,7 @@ function closeBoardTaskDetail() {
  * @param {MouseEvent} event - The click event.
  */
 function handleBoardDetailBackdrop(event) {
-  if (event.target === getBoardDetailOverlay()) closeBoardTaskDetail();
+  if (event.target === getElement("boardTaskDetail")) closeBoardTaskDetail();
 }
 
 
@@ -266,12 +272,12 @@ function handleBoardDetailEscape(event) {
  * @param {Object} task - The task shown in the detail view.
  */
 function fillBoardTaskDetail(task) {
-  setBoardDetailText(
+  setElementText(
     "boardTaskDetailCategory",
     formatBoardCategory(task.category),
   );
-  setBoardDetailText("boardTaskDetailTitle", task.title);
-  setBoardDetailText(
+  setElementText("boardTaskDetailTitle", task.title);
+  setElementText(
     "boardTaskDetailDescription",
     task.description || "No description",
   );
@@ -285,7 +291,7 @@ function fillBoardTaskDetail(task) {
  * @param {Object} task - The task providing the meta information.
  */
 function fillBoardDetailMetaFields(task) {
-  setBoardDetailText(
+  setElementText(
     "boardTaskDetailDueDate",
     formatTaskDueDate(task.dueDate) || "-",
   );
@@ -299,7 +305,7 @@ function fillBoardDetailMetaFields(task) {
  * @param {string} priority - Stored priority of the task.
  */
 function fillBoardDetailPriority(priority) {
-  setBoardDetailText("boardTaskDetailPriority", priority || "-");
+  setElementText("boardTaskDetailPriority", priority || "-");
   const icon = document.getElementById("boardTaskDetailPriorityIcon");
   icon.src = priority ? getBoardPriorityIcon(priority) : "";
   icon.hidden = !priority;
@@ -342,8 +348,8 @@ function resolveAssigneeDisplay(reference, contacts) {
  * Switches the detail dialog back to the read-only view.
  */
 function showBoardDetailViewMode() {
-  getBoardDetailView().hidden = false;
-  getBoardEditForm().hidden = true;
+  getElement("boardTaskDetailView").hidden = false;
+  getElement("boardTaskEditForm").hidden = true;
 }
 
 
@@ -353,62 +359,4 @@ function showBoardDetailViewMode() {
  */
 function getActiveBoardTask() {
   return activeBoardTasks.find((task) => task.id === activeBoardTaskId);
-}
-
-
-/**
- * Sets the text content of a detail dialog element.
- * @param {string} elementId - The id of the target element.
- * @param {string} text - The text to display.
- */
-function setBoardDetailText(elementId, text) {
-  document.getElementById(elementId).textContent = text;
-}
-
-
-/**
- * Returns the overlay element of the task detail dialog.
- * @returns {HTMLElement} The detail overlay.
- */
-function getBoardDetailOverlay() {
-  return document.getElementById("boardTaskDetail");
-}
-
-
-/**
- * Returns the close button of the task detail dialog.
- * @returns {HTMLElement} The close button.
- */
-function getBoardDetailCloseButton() {
-  return document.getElementById("boardTaskDetailClose");
-}
-
-
-/**
- * Returns the read-only view container of the task detail dialog.
- * @returns {HTMLElement} The detail view container.
- */
-function getBoardDetailView() {
-  return document.getElementById("boardTaskDetailView");
-}
-
-
-/**
- * @returns {HTMLElement} The scrollable card inside the task detail dialog.
- */
-function getBoardDetailCard() {
-  return document.getElementById("boardTaskDetailCard");
-}
-
-
-/**
- * Shows a short feedback popup that hides itself after three seconds.
- * @param {string} message - The feedback text to display.
- */
-function showBoardToast(message) {
-  const toast = document.getElementById("boardToast");
-  if (!toast) return;
-  toast.textContent = message;
-  toast.hidden = false;
-  setTimeout(() => (toast.hidden = true), 3000);
 }

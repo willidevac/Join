@@ -9,7 +9,7 @@ let boardEditSubtaskEditingIndex = -1;
 function initBoardEditSubtasks(subtasks) {
   boardEditSubtaskItems = getNormalizedBoardSubtasks(subtasks);
   boardEditSubtaskEditingIndex = -1;
-  getBoardEditSubtaskInput().value = "";
+  getElement("boardTaskEditSubtaskInput").value = "";
   updateBoardEditSubtaskAddState();
   renderBoardEditSubtasks();
   bindBoardEditSubtaskControls();
@@ -20,7 +20,7 @@ function initBoardEditSubtasks(subtasks) {
  * Wires the subtask input and list events once.
  */
 function bindBoardEditSubtaskControls() {
-  const input = getBoardEditSubtaskInput();
+  const input = getElement("boardTaskEditSubtaskInput");
   if (input.dataset.eventsReady === "true") return;
   input.addEventListener("keydown", handleBoardEditSubtaskInputKey);
   input.addEventListener("input", updateBoardEditSubtaskAddState);
@@ -34,7 +34,7 @@ function bindBoardEditSubtaskControls() {
  * Wires click and keyboard events of the editable subtask list.
  */
 function bindBoardEditSubtaskListEvents() {
-  const list = getBoardEditSubtaskList();
+  const list = getElement("boardTaskEditSubtaskList");
   list.addEventListener("click", handleBoardEditSubtaskListClick);
   list.addEventListener("keydown", handleBoardEditSubtaskListKey);
 }
@@ -44,7 +44,7 @@ function bindBoardEditSubtaskListEvents() {
  * Wires the plus button that adds the typed subtask.
  */
 function bindBoardEditSubtaskAddButton() {
-  getBoardEditSubtaskAddButton().addEventListener(
+  getElement("boardEditSubtaskAdd").addEventListener(
     "click",
     addBoardEditSubtask,
   );
@@ -64,8 +64,8 @@ function isValidBoardEditSubtaskTitle(title) {
  * Enables the plus button only while the input holds a valid title.
  */
 function updateBoardEditSubtaskAddState() {
-  getBoardEditSubtaskAddButton().disabled = !isValidBoardEditSubtaskTitle(
-    getBoardEditSubtaskInput().value.trim(),
+  getElement("boardEditSubtaskAdd").disabled = !isValidBoardEditSubtaskTitle(
+    getTrimmedInputValue("boardTaskEditSubtaskInput"),
   );
 }
 
@@ -85,8 +85,8 @@ function handleBoardEditSubtaskInputKey(event) {
  * Appends a new open subtask when the input holds a valid title.
  */
 function addBoardEditSubtask() {
-  const input = getBoardEditSubtaskInput();
-  const title = input.value.trim();
+  const input = getElement("boardTaskEditSubtaskInput");
+  const title = getTrimmedElementValue(input);
   if (!isValidBoardEditSubtaskTitle(title)) return;
   boardEditSubtaskItems.push({ title, done: false });
   input.value = "";
@@ -141,8 +141,8 @@ function handleBoardEditSubtaskListKey(event) {
  * @param {number} index - Position of the edited subtask.
  */
 function saveBoardEditSubtask(index) {
-  const input = getBoardEditSubtaskList().querySelector("[data-subtask-edit]");
-  const title = input.value.trim();
+  const input = getElement("boardTaskEditSubtaskList").querySelector("[data-subtask-edit]");
+  const title = getTrimmedElementValue(input);
   if (title) {
     boardEditSubtaskItems[index] = { ...boardEditSubtaskItems[index], title };
   }
@@ -155,58 +155,15 @@ function saveBoardEditSubtask(index) {
  * Renders all subtask rows in view or inline edit mode.
  */
 function renderBoardEditSubtasks() {
-  getBoardEditSubtaskList().innerHTML = boardEditSubtaskItems
-    .map(getBoardEditSubtaskTemplate)
+  getElement("boardTaskEditSubtaskList").innerHTML = boardEditSubtaskItems
+    .map((subtask, index) =>
+      getSubtaskItemTemplate(
+        subtask,
+        index,
+        index === boardEditSubtaskEditingIndex,
+      ),
+    )
     .join("");
-}
-
-
-/**
- * Returns the markup for one subtask row, using the shared add-task styles.
- * @param {Object} subtask - Subtask with title and done flag.
- * @param {number} index - Position of the subtask in the edit state.
- * @returns {string} HTML markup for the row.
- */
-function getBoardEditSubtaskTemplate(subtask, index) {
-  if (index === boardEditSubtaskEditingIndex) {
-    return getBoardEditSubtaskEditTemplate(subtask, index);
-  }
-  return `
-    <li class="add-task-subtask" data-subtask-index="${index}">
-      <span class="add-task-subtask__title">${escapeHtmlText(subtask.title)}</span>
-      <span class="add-task-subtask__actions">
-        <button type="button" class="add-task-subtask__action" data-subtask-action="edit" aria-label="Edit subtask">
-          <img src="./components/assets/img/icons/edit.svg" alt="" />
-        </button>
-        <span class="add-task-subtask__divider" aria-hidden="true"></span>
-        <button type="button" class="add-task-subtask__action" data-subtask-action="delete" aria-label="Delete subtask">
-          <img src="./components/assets/img/icons/delete.svg" alt="" />
-        </button>
-      </span>
-    </li>`;
-}
-
-
-/**
- * Returns the inline edit markup for the subtask that is being changed.
- * @param {Object} subtask - Subtask with title and done flag.
- * @param {number} index - Position of the subtask in the edit state.
- * @returns {string} HTML markup for the edit row.
- */
-function getBoardEditSubtaskEditTemplate(subtask, index) {
-  return `
-    <li class="add-task-subtask add-task-subtask--editing" data-subtask-index="${index}">
-      <input class="add-task-subtask__edit" type="text" value="${escapeHtmlText(subtask.title)}" data-subtask-edit aria-label="Edit subtask" />
-      <span class="add-task-subtask__actions">
-        <button type="button" class="add-task-subtask__action" data-subtask-action="delete" aria-label="Delete subtask">
-          <img src="./components/assets/img/icons/delete.svg" alt="" />
-        </button>
-        <span class="add-task-subtask__divider" aria-hidden="true"></span>
-        <button type="button" class="add-task-subtask__action" data-subtask-action="save" aria-label="Save subtask">
-          <img src="./components/assets/img/icons/check_edit_subtask.svg" alt="" />
-        </button>
-      </span>
-    </li>`;
 }
 
 
@@ -215,28 +172,4 @@ function getBoardEditSubtaskEditTemplate(subtask, index) {
  */
 function getBoardEditSubtaskItems() {
   return [...boardEditSubtaskItems];
-}
-
-
-/**
- * @returns {HTMLElement} The input for new subtasks in the edit form.
- */
-function getBoardEditSubtaskInput() {
-  return document.getElementById("boardTaskEditSubtaskInput");
-}
-
-
-/**
- * @returns {HTMLElement} The list container for the edit subtask rows.
- */
-function getBoardEditSubtaskList() {
-  return document.getElementById("boardTaskEditSubtaskList");
-}
-
-
-/**
- * @returns {HTMLElement} The plus button of the subtask input.
- */
-function getBoardEditSubtaskAddButton() {
-  return document.getElementById("boardEditSubtaskAdd");
 }

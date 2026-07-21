@@ -12,7 +12,7 @@ const minimumPhoneDigits = 6;
  * @returns {boolean} True when the complete address format is valid.
  */
 function isEmailAddressValid(email) {
-  const normalizedEmail = String(email || "").trim();
+  const normalizedEmail = normalizeText(email);
   const localPart = normalizedEmail.split("@")[0];
   return emailAddressPattern.test(normalizedEmail) &&
     !localPart.startsWith(".") &&
@@ -27,7 +27,19 @@ function isEmailAddressValid(email) {
  * @returns {string} The normalized input value.
  */
 function getTrimmedInputValue(inputId) {
-  return getElement(inputId).value.trim();
+  return getTrimmedElementValue(getElement(inputId));
+}
+
+
+/** Converts a value into text without surrounding whitespace. */
+function normalizeText(value) {
+  return String(value ?? "").trim();
+}
+
+
+/** Reads and trims the value of one form control. */
+function getTrimmedElementValue(element) {
+  return normalizeText(element?.value);
 }
 
 
@@ -38,6 +50,71 @@ function getTrimmedInputValue(inputId) {
  */
 function getElement(elementId) {
   return document.getElementById(elementId);
+}
+
+
+/**
+ * Reads JSON data from localStorage and returns a fallback when no value exists.
+ */
+function getStoredJson(storageKey, fallback = null) {
+  const storedValue = localStorage.getItem(storageKey);
+  return storedValue ? JSON.parse(storedValue) : fallback;
+}
+
+
+/** Persists one serializable value in localStorage. */
+function saveStoredJson(storageKey, value) {
+  localStorage.setItem(storageKey, JSON.stringify(value));
+}
+
+
+/** Returns up to two uppercase initials from a display name. */
+function getInitials(name) {
+  return normalizeText(name)
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((namePart) => namePart.charAt(0))
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+
+/** Updates an element's text when the target exists. */
+function setElementText(elementId, text) {
+  const element = getElement(elementId);
+  if (element) element.textContent = text;
+}
+
+
+/** Applies one field error message and its accessibility state. */
+function setFieldValidationError(fieldId, message) {
+  getElement(fieldId)?.setAttribute("aria-invalid", String(Boolean(message)));
+  setElementText(`${fieldId}Error`, message);
+}
+
+
+/** Marks a group of field ids as touched. */
+function touchFields(fieldIds, touchedFields) {
+  fieldIds.forEach((fieldId) => touchedFields.add(fieldId));
+}
+
+
+/** Renders every touched field through a caller-provided validator. */
+function renderTouchedFieldErrors(touchedFields, getError) {
+  touchedFields.forEach((fieldId) => {
+    setFieldValidationError(fieldId, getError(fieldId));
+  });
+}
+
+
+/** Shows feedback temporarily and optionally replaces its text. */
+function showTimedFeedback(target, message = null, duration = 3000) {
+  const element = typeof target === "string" ? getElement(target) : target;
+  if (!element) return;
+  if (message !== null) element.textContent = message;
+  element.hidden = false;
+  setTimeout(() => (element.hidden = true), duration);
 }
 
 
@@ -58,7 +135,7 @@ function sanitizePhoneNumber(value) {
  * @returns {boolean} True for a valid phone number.
  */
 function isPhoneNumberValid(value) {
-  const normalizedPhone = String(value || "").trim();
+  const normalizedPhone = normalizeText(value);
   const digitCount = normalizedPhone.replace(/\D/g, "").length;
   return phoneNumberPattern.test(normalizedPhone) && digitCount >= minimumPhoneDigits;
 }
@@ -68,7 +145,7 @@ function isPhoneNumberValid(value) {
  * @returns {Object|null} The signed-in user from localStorage, or null.
  */
 function getStoredUser() {
-  return JSON.parse(localStorage.getItem('joinUser'));
+  return getStoredJson("joinUser");
 }
 
 
@@ -78,7 +155,7 @@ function getStoredUser() {
  * @param {Object} user - User object to store in localStorage.
  */
 function saveStoredUser(user) {
-  localStorage.setItem('joinUser', JSON.stringify(user));
+  saveStoredJson("joinUser", user);
 }
 
 
@@ -86,7 +163,7 @@ function saveStoredUser(user) {
  * Removes the stored user on logout.
  */
 function clearStoredUser() {
-  localStorage.removeItem('joinUser');
+  localStorage.removeItem("joinUser");
 }
 
 
@@ -113,8 +190,8 @@ function escapeHtmlText(value) {
  */
 function createTaskAssigneeReference(contact) {
   return {
-    id: String(contact?.id || "").trim(),
-    name: String(contact?.name || "").trim(),
+    id: normalizeText(contact?.id),
+    name: normalizeText(contact?.name),
   };
 }
 
@@ -126,7 +203,7 @@ function createTaskAssigneeReference(contact) {
  */
 function normalizeTaskAssigneeReference(assignee) {
   if (typeof assignee === "string") {
-    return { id: "", name: assignee.trim() };
+    return { id: "", name: normalizeText(assignee) };
   }
   return createTaskAssigneeReference(assignee || {});
 }

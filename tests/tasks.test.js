@@ -8,6 +8,7 @@ const {
 } = require("./helpers/scriptContext");
 
 const tasksScript = "components/js/tasks/tasks.js";
+const sharedScript = "components/js/core/shared.js";
 const taskStoreScript = "components/js/tasks/tasksStore.js";
 const taskStorageKey = "joinTasks";
 
@@ -21,7 +22,7 @@ function createTaskContext(initialTasks) {
     ? { [taskStorageKey]: JSON.stringify(initialTasks) }
     : {};
   const localStorage = createMemoryStorage(initialEntries);
-  const context = loadBrowserScripts([tasksScript], { localStorage });
+  const context = loadBrowserScripts([sharedScript, tasksScript], { localStorage });
   return { context, localStorage };
 }
 
@@ -36,7 +37,7 @@ function createFirebaseTaskContext(firebaseTasks) {
   const sessionStorage = createMemoryStorage();
   const window = { joinFirebaseTasks: firebaseTasks };
   const context = loadBrowserScripts(
-    [tasksScript, taskStoreScript], { localStorage, sessionStorage, window }
+    [sharedScript, tasksScript, taskStoreScript], { localStorage, sessionStorage, window }
   );
   return { context, localStorage, sessionStorage };
 }

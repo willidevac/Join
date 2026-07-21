@@ -63,7 +63,7 @@ function handleContactOverlayClick(event) {
  */
 function fillContactEditForm(contact) {
   const avatar = document.getElementById("contactEditAvatar");
-  avatar.textContent = getContactInitials(contact.name);
+  avatar.textContent = getInitials(contact.name);
   avatar.style.backgroundColor = contact.color;
   document.getElementById("contactEditName").value = contact.name;
   document.getElementById("contactEditEmail").value = contact.email;
@@ -219,7 +219,7 @@ async function saveEditedContact() {
   await initContacts();
   openContactDetail(activeContactId);
   closeContactEditDialog();
-  showContactToast("Contact successfully edited");
+  showTimedFeedback("contactToast", "Contact successfully edited");
 }
 
 
@@ -269,7 +269,7 @@ async function handleContactAddSubmit(event) {
     event.target,
     "contactAddError",
     "Contact could not be created.",
-    () => createContact(values),
+    () => createContactRecord(values),
   );
 }
 
@@ -277,12 +277,12 @@ async function handleContactAddSubmit(event) {
 /**
  * Creates a new contact, saves it and opens its detail view.
  */
-async function createContact(values) {
+async function createContactRecord(values) {
   const newContact = await createContactInStore({ color: getRandomContactColor(), ...values });
   await initContacts();
   openContactDetail(newContact.id);
   closeContactAddDialog();
-  showContactToast("Contact successfully created");
+  showTimedFeedback("contactToast", "Contact successfully created");
 }
 
 
@@ -302,16 +302,6 @@ function getContactFormValues(idPrefix) {
     fieldName.toLowerCase(),
     getTrimmedInputValue(idPrefix + fieldName),
   ]));
-}
-
-
-/**
- * Returns the first validation error of the given values or an empty string.
- */
-function getContactErrorMessage(values) {
-  return getContactFieldError("Name", values.name)
-    || getContactFieldError("Email", values.email)
-    || getContactFieldError("Phone", values.phone);
 }
 
 

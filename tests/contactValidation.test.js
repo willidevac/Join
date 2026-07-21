@@ -16,14 +16,14 @@ const validContact = {
 
 
 test("accepts a contact email that passes signup validation", () => {
-  assert.equal(context.getContactErrorMessage(validContact), "");
+  assert.equal(context.getContactFieldError("Email", validContact.email), "");
 });
 
 
 test("rejects an incomplete contact email", () => {
   const values = { ...validContact, email: "a@.." };
   assert.equal(
-    context.getContactErrorMessage(values),
+    context.getContactFieldError("Email", values.email),
     "Please enter a valid email address.",
   );
 });

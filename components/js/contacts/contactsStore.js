@@ -144,7 +144,7 @@ function findAccountEmailDuplicates(contacts, email, accountId) {
  * @returns {string} The normalized email.
  */
 function normalizeContactEmail(email) {
-  return String(email || "").trim().toLowerCase();
+  return normalizeText(email).toLowerCase();
 }
 
 
@@ -286,6 +286,26 @@ async function deleteContactFromStore(contactId, updatedTasks) {
 
 
 /**
+ * Loads and sorts contacts, returning an empty list when the store is unavailable.
+ */
+async function loadSortedContactsSafely(onAccountContactError, onLoadError) {
+  try {
+    const contacts = await loadContactsFromStore(onAccountContactError);
+    return sortContactsByName(contacts);
+  } catch (error) {
+    if (onLoadError) onLoadError(error);
+    return [];
+  }
+}
+
+
+/** Returns an alphabetically sorted contact copy. */
+function sortContactsByName(contacts) {
+  return [...contacts].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+
+/**
  * Applies local task cleanup before deleting the contact and rolls back on error.
  */
 function deleteLocalContactWithTasks(contactId, updatedTasks) {
@@ -314,8 +334,7 @@ function isContactFirestoreReady() {
  * Reads and parses the stored contacts from localStorage.
  */
 function getLocalContacts() {
-  const storedContact = localStorage.getItem(contactStorageKey);
-  return storedContact ? JSON.parse(storedContact) : [];
+  return getStoredJson(contactStorageKey, []);
 }
 
 
@@ -323,5 +342,5 @@ function getLocalContacts() {
  * Writes the given contact list as JSON into localStorage.
  */
 function saveLocalContacts(contacts) {
-  localStorage.setItem(contactStorageKey, JSON.stringify(contacts));
+  saveStoredJson(contactStorageKey, contacts);
 }
