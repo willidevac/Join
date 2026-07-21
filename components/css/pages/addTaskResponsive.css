@@ -81,14 +81,14 @@ body[data-page="add-task"] .summary-topbar {
 
   body[data-page="add-task"] .summary-nav__item {
     min-height: 76px;
-    margin: 2px clamp(2px, 3vw, 12px);
+    margin: 2px 0;
     border-radius: 28px;
     font-size: 16px;
     white-space: nowrap;
   }
 
   .add-task-content {
-    padding: 52px 16px 164px;
+    padding: 52px 16px calc(var(--app-bottom-nav-height) + 180px);
   }
 
   .add-task-header {
