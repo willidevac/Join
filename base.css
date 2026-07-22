@@ -11,6 +11,7 @@
 @import url("./components/css/molecules/boardStatusPill.css");
 @import url("./components/css/organisms/appShell.css");
 @import url("./components/css/organisms/boardDetail.css");
+@import url("./components/css/organisms/addTaskDialog.css");
 @import url("./components/css/organisms/contactsDialog.css");
 @import url("./components/css/pages/login.css");
 @import url("./components/css/pages/signup.css");

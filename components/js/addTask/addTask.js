@@ -137,7 +137,10 @@ function hideAddTaskErrorMessage() {
  */
 function redirectToBoardAfterSuccess() {
   clearAddTaskRedirect();
-  addTaskRedirectTimer = setTimeout(() => navigateToPage("board"), addTaskRedirectDelay);
+  const afterSave = typeof completeAddTaskDialogSubmit === "function"
+    ? completeAddTaskDialogSubmit
+    : () => navigateToPage("board");
+  addTaskRedirectTimer = setTimeout(afterSave, addTaskRedirectDelay);
 }
 
 
@@ -185,6 +188,7 @@ function initAddTaskCloseButton() {
  * Uses a valid status passed by a board column and defaults to To do.
  */
 function getAddTaskStatus() {
+  if (typeof addTaskDialogTargetStatus !== "undefined") return addTaskDialogTargetStatus;
   const status = new URLSearchParams(window.location.search).get("status");
   return addTaskStatuses.includes(status) ? status : "todo";
 }

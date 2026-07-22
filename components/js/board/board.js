@@ -15,6 +15,7 @@ async function initBoardTasks() {
     playBoardIntroAnimation();
     initBoardTaskDetails(activeBoardTasks);
     initBoardSearch();
+    await initAddTaskDialog();
     migrateBoardAssigneesInBackground();
   } catch (error) {
     showTimedFeedback("boardToast", "Board tasks could not be loaded.");
