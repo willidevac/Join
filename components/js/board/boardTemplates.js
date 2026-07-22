@@ -16,8 +16,8 @@ function getBoardTaskTemplate(task) {
         ${formatBoardCategory(task.category)}
       </span>
 
-      <h3>${escapeHtmlText(task.title)}</h3>
-      <p>${getBoardShortText(task.description || "No description")}</p>
+      <h3 class="board-card__title">${escapeHtmlText(task.title)}</h3>
+      <p class="board-card__description">${getBoardShortText(task.description || "No description")}</p>
       ${getBoardSubtaskTemplate(task.subtasks)}
       <div class="board-card__footer">
         ${getBoardAssigneeTemplate(task.assignedTo)}
@@ -71,16 +71,23 @@ function getBoardCategoryClass(category) {
 
 
 /**
- * Escapes a text and truncates it to fit the card preview.
+ * Escapes card text, keeping links complete and shortening regular previews.
  *
  * @param {string} text - Raw description text.
- * @returns {string} Escaped text, shortened with an ellipsis above 72 characters.
+ * @returns {string} Complete link text or a 72-character escaped preview.
  */
 function getBoardShortText(text) {
   const cleanedText = escapeHtmlText(text);
+  if (hasBoardLink(text)) return cleanedText;
   return cleanedText.length > 72
     ? `${cleanedText.slice(0, 69)}...`
     : cleanedText;
+}
+
+
+/** Returns whether the text contains a web address that must stay complete. */
+function hasBoardLink(text) {
+  return /(?:https?:\/\/|www\.)\S+/i.test(String(text));
 }
 
 

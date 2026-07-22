@@ -25,6 +25,13 @@
   box-shadow: var(--shadow-soft);
 }
 
+.board-detail-title,
+.board-detail-description {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
 .board-detail-card::-webkit-scrollbar {
   width: 8px;
 }
@@ -162,6 +169,7 @@
 
 .board-detail-view,
 .board-detail-edit-form {
+  min-width: 0;
   display: grid;
   gap: 18px;
 }

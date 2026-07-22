@@ -218,31 +218,44 @@ async function saveEditedContact() {
   const updatedContact = getEditedContact(contact);
   const updatedTasks = await getTasksWithUpdatedContact(contact, updatedContact);
   await updateContactInStore(activeContactId, updatedContact, updatedTasks);
-  await syncStoredAccountContactName(contact, updatedContact);
+  const accountNameSynced = await syncStoredAccountContactName(contact, updatedContact);
   await initContacts();
   openContactDetail(activeContactId);
   closeContactEditDialog();
-  showTimedFeedback("contactToast", "Contact successfully edited");
+  showEditedContactFeedback(accountNameSynced);
 }
 
 
 /** Keeps the signed-in account display name aligned with its own contact. */
 async function syncStoredAccountContactName(contact, updatedContact) {
-  if (!isOwnAccountContact(contact)) return;
+  if (!isOwnAccountContact(contact)) return true;
   const user = getStoredUser();
-  if (!user) return;
-  await updateFirebaseAccountNameSafely(updatedContact.name);
+  if (!user) return true;
+  const accountNameSynced = await updateFirebaseAccountNameSafely(updatedContact.name);
   saveStoredUser({ ...user, name: updatedContact.name });
+  return accountNameSynced;
 }
 
 
 /** Updates Firebase Auth when available without undoing the saved contact. */
 async function updateFirebaseAccountNameSafely(name) {
+  const updateDisplayName = window.joinFirebaseAuth?.updateUserDisplayName;
+  if (!updateDisplayName) return true;
   try {
-    await window.joinFirebaseAuth?.updateUserDisplayName?.(name);
-  } catch (error) {
-    // The contact remains authoritative for app data if Auth is unavailable.
+    await updateDisplayName(name);
+    return true;
+  } catch {
+    return false;
   }
+}
+
+
+/** Shows whether the contact and its Firebase account name both updated. */
+function showEditedContactFeedback(accountNameSynced) {
+  const message = accountNameSynced
+    ? "Contact successfully edited"
+    : "Contact edited, but the account name could not be synchronized.";
+  showTimedFeedback("contactToast", message);
 }
 
 

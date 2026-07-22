@@ -33,9 +33,17 @@ async function loadBoardData() {
 
 /** Persists legacy assignee references without delaying the visible board. */
 function migrateBoardAssigneesInBackground() {
-  migrateTaskAssigneeReferences(activeBoardTasks, activeBoardContacts).catch(() => {
-    // Migration failure must not make an already loaded board unusable.
-  });
+  migrateTaskAssigneeReferences(activeBoardTasks, activeBoardContacts)
+    .catch(handleBoardAssigneeMigrationFailure);
+}
+
+
+/** Keeps the loaded board usable while reporting a failed data migration. */
+function handleBoardAssigneeMigrationFailure() {
+  showTimedFeedback(
+    "boardToast",
+    "Board loaded, but task assignments could not be synchronized.",
+  );
 }
 
 
