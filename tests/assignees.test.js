@@ -129,3 +129,38 @@ test("contact deletion removes only the matching assignee id", () => {
   const result = context.removeAssigneeFromTask(task, task.assignedTo[0]);
   assert.deepEqual(toPlainValue(result.assignedTo), [task.assignedTo[1]]);
 });
+
+
+test("contact rename updates the matching board assignee reference", () => {
+  const context = createContactContext();
+  const contact = { id: "contact-1", name: "Alex Kim" };
+  const updatedContact = { ...contact, name: "Alex Morgan" };
+  const task = {
+    id: "task-1",
+    assignedTo: [
+      contact,
+      { id: "contact-2", name: "Alex Kim" },
+    ],
+  };
+  const result = context.updateTaskContactReference(
+    task, contact, updatedContact, false,
+  );
+  assert.deepEqual(toPlainValue(result.assignedTo), [
+    { id: "contact-1", name: "Alex Morgan" },
+    { id: "contact-2", name: "Alex Kim" },
+  ]);
+});
+
+
+test("contact rename updates an unambiguous legacy assignee name", () => {
+  const context = createContactContext();
+  const contact = { id: "contact-1", name: "Anna Schmidt" };
+  const updatedContact = { ...contact, name: "Anna Berger" };
+  const task = { id: "task-1", assignedTo: ["Anna Schmidt"] };
+  const result = context.updateTaskContactReference(
+    task, contact, updatedContact, true,
+  );
+  assert.deepEqual(toPlainValue(result.assignedTo), [
+    { id: "contact-1", name: "Anna Berger" },
+  ]);
+});
