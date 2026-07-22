@@ -61,6 +61,7 @@ const routes = {
 };
 
 document.addEventListener("DOMContentLoaded", initApp);
+let pageTransitionRunning = false;
 
 
 /**
@@ -68,13 +69,11 @@ document.addEventListener("DOMContentLoaded", initApp);
  */
 async function initApp() {
   document.addEventListener("click", handlePageLinkClick);
-  if (shouldStartWithLoginTransition()) {
+  if (getValidPage() === "login") {
     await renderSignupWithTransition();
-    warmHtmlCache();
     return;
   }
   await renderCurrentPage();
-  warmHtmlCache();
 }
 
 
@@ -340,10 +339,13 @@ async function initPage(page) {
   initStaticPage(page);
   if (page === "contacts") await initContacts();
   if (usesAppShell(page) || isInternalLegalDocPage(page)) {
-    initSummaryUser();
+    initAppUser();
     initAppTopbar();
   }
-  if (page === "summary") await initSummaryMetrics();
+  if (page === "summary") {
+    initSummaryUser();
+    await initSummaryMetrics();
+  }
   if (page === "add-task") await initAddTaskValidation();
   if (page === "board") await initBoardTasks();
 }

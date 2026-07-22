@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   doc,
+  getFirestore,
   getDocs,
   runTransaction,
   serverTimestamp,
@@ -9,12 +10,13 @@ import {
   writeBatch,
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+const db = getFirestore();
+
 
 /**
  * Loads all contacts from Firestore with the document id attached.
  */
 async function loadContacts() {
-  const db = window.joinFirestore;
   const snapshot = await getDocs(collection(db, "contacts"));
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
@@ -24,7 +26,6 @@ async function loadContacts() {
  * Creates one contact in Firestore and adds server timestamps.
  */
 async function createContact(contact) {
-  const db = window.joinFirestore;
   const contactRef = await addDoc(collection(db, "contacts"), {
     ...contact,
     createdAt: serverTimestamp(),
@@ -38,7 +39,6 @@ async function createContact(contact) {
  * Creates the account contact under a stable id and removes email duplicates.
  */
 async function upsertAccountContact(contactId, duplicateIds, contact) {
-  const db = window.joinFirestore;
   return runTransaction(db, (transaction) =>
     saveAccountContact(transaction, db, contactId, duplicateIds, contact),
   );
@@ -98,7 +98,6 @@ function getNewContactData(contact) {
  * Updates one contact in Firestore without saving the local id field.
  */
 async function updateContact(contactId, contact) {
-  const db = window.joinFirestore;
   const { id, ...contactData } = contact;
   await updateDoc(doc(db, "contacts", contactId), {
     ...contactData,
@@ -113,7 +112,6 @@ async function updateContact(contactId, contact) {
  * @param {Object[]} updatedTasks - Tasks without the deleted assignee.
  */
 async function deleteContact(contactId, updatedTasks) {
-  const db = window.joinFirestore;
   const batch = writeBatch(db);
   batch.delete(doc(db, "contacts", contactId));
   updatedTasks.forEach((task) => queueTaskAssignmentUpdate(batch, db, task));

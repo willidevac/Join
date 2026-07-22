@@ -4,9 +4,6 @@ const signupTransition = {
   template: "./components/html/molecules/signupTransitionLoader.html",
 };
 
-let pageTransitionRunning = false;
-
-
 /**
  * Renders the current page behind the animated transition loader.
  */
@@ -46,14 +43,6 @@ function showTransitionLoader(loader) {
 
 
 /**
- * Tells whether the intro transition should run for a fresh login page load.
- */
-function shouldStartWithLoginTransition() {
-  return getValidPage() === "login";
-}
-
-
-/**
  * Fades the loader out and unlocks scrolling after the exit animation.
  * @param {HTMLElement} loader - The transition loader element to remove.
  */
@@ -79,8 +68,10 @@ function setTransitionOverflow(isLocked) {
 /**
  * @returns {Promise<HTMLElement>} The loader element built from its template.
  */
-function createSignupTransitionLoader() {
-  return createTemplateElement(signupTransition.template);
+async function createSignupTransitionLoader() {
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = await getHtmlContent(signupTransition.template);
+  return wrapper.firstElementChild;
 }
 
 

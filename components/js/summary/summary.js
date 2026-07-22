@@ -7,7 +7,6 @@ function initSummaryUser() {
 
   setElementText("summaryGreeting", getSummaryDisplayName(user));
   setElementText("summaryUserType", getSummaryUserTypeText(user));
-  setElementText("summaryUserInitials", getInitials(getSummaryDisplayName(user)));
   setElementText("summaryGreetingTime", getTimeGreeting());
   showMobileSummaryGreeting();
 }

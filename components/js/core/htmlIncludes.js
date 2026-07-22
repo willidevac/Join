@@ -43,39 +43,3 @@ async function fetchHtml(path) {
   const response = await fetch(path);
   return response.text();
 }
-
-
-/**
- * Preloads every route template and the transition loader in the background.
- */
-function warmHtmlCache() {
-  Object.values(routes).forEach((route) => warmHtmlPath(route.template));
-  warmHtmlPath(signupTransition.template);
-}
-
-
-/**
- * Caches one HTML file and its includes without ever blocking navigation.
- * @param {string} path - The path of the HTML file to preload.
- */
-async function warmHtmlPath(path) {
-  try {
-    const content = await getHtmlContent(path);
-    await warmIncludedHtml(content);
-  } catch (error) {
-  }
-}
-
-
-/**
- * Preloads all include files referenced inside already loaded HTML.
- * @param {string} content - The HTML text to scan for includes.
- */
-async function warmIncludedHtml(content) {
-  const wrapper = document.createElement("div");
-  wrapper.innerHTML = content;
-  const includePaths = [...wrapper.querySelectorAll("[data-include]")].map(
-    (include) => include.dataset.include,
-  );
-  await Promise.all(includePaths.map(warmHtmlPath));
-}

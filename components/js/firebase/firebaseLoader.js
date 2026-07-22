@@ -1,3 +1,9 @@
+const firebaseAdapterRoutes = {
+  contacts: new Set(["add-task", "board", "contacts"]),
+  tasks: new Set(["summary", "add-task", "board", "contacts"]),
+};
+
+
 window.joinFirebaseReady = loadFirebaseConfig();
 
 
@@ -10,12 +16,27 @@ async function loadFirebaseConfig() {
     if (!response.ok) return handleFirebaseLoadFailure();
     await loadScript("./components/js/firebase/firebaseConfig.js");
     await import("./firebaseAuth.mjs");
-    await import("./firebaseContacts.mjs");
-    await import("./firebaseTasks.mjs");
+    await loadFirebaseDataAdapters(document.body.dataset.page);
     return window.joinFirebaseAuth.waitForAuthReady();
   } catch {
     return handleFirebaseLoadFailure();
   }
+}
+
+
+/**
+ * Loads only the Firestore adapters required by the current page.
+ * @param {string} page - Route key declared on the document body.
+ */
+async function loadFirebaseDataAdapters(page) {
+  const adapterImports = [];
+  if (firebaseAdapterRoutes.contacts.has(page)) {
+    adapterImports.push(import("./firebaseContacts.mjs"));
+  }
+  if (firebaseAdapterRoutes.tasks.has(page)) {
+    adapterImports.push(import("./firebaseTasks.mjs"));
+  }
+  await Promise.all(adapterImports);
 }
 
 

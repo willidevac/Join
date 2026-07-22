@@ -10,11 +10,8 @@ import {
   signOut,
   updateProfile,
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
 const app = initializeApp(window.joinFirebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 const authPersistenceReady = setPersistence(auth, browserLocalPersistence);
 const authReady = authPersistenceReady.then(watchFirebaseAuthState);
 
@@ -111,5 +108,3 @@ window.joinFirebaseAuth = {
   registerFirebaseUser,
   waitForAuthReady: () => authReady,
 };
-
-window.joinFirestore = db;

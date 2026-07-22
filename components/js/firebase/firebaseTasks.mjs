@@ -3,17 +3,19 @@ import {
   collection,
   deleteDoc,
   doc,
+  getFirestore,
   getDocs,
   serverTimestamp,
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+const db = getFirestore();
 
 
 /**
  * Loads all tasks from Firestore with the document id attached.
  */
 async function loadTasks() {
-  const db = window.joinFirestore;
   const snapshot = await getDocs(collection(db, "tasks"));
   return snapshot.docs.map((taskDoc) => ({
     id: taskDoc.id,
@@ -26,7 +28,6 @@ async function loadTasks() {
  * Creates one task in Firestore and adds server timestamps.
  */
 async function createTask(task) {
-  const db = window.joinFirestore;
   const taskData = getWritableTaskData(task);
   const taskRef = await addDoc(collection(db, "tasks"), {
     ...taskData,
@@ -41,7 +42,6 @@ async function createTask(task) {
  * Updates one Firestore task without saving local-only fields.
  */
 async function updateTask(taskId, task) {
-  const db = window.joinFirestore;
   await updateDoc(doc(db, "tasks", taskId), {
     ...getWritableTaskData(task),
     updatedAt: serverTimestamp(),
@@ -53,7 +53,6 @@ async function updateTask(taskId, task) {
  * Updates only assignee references during a background data migration.
  */
 async function updateTaskAssignees(taskId, assignedTo) {
-  const db = window.joinFirestore;
   await updateDoc(doc(db, "tasks", taskId), {
     assignedTo: normalizeTaskAssignees(assignedTo),
     updatedAt: serverTimestamp(),
@@ -65,7 +64,6 @@ async function updateTaskAssignees(taskId, assignedTo) {
  * Deletes one task from Firestore.
  */
 async function deleteTask(taskId) {
-  const db = window.joinFirestore;
   await deleteDoc(doc(db, "tasks", taskId));
 }
 
