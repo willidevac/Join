@@ -285,8 +285,32 @@ body.board-dragging * {
   }
 
   .board-task-list {
-    grid-template-columns: clamp(244px, 60vw, 680px);
-    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .board-task-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .board-task-list .board-card {
+    flex: 0 0 clamp(240px, 78%, 320px);
+    cursor: pointer;
+    scroll-snap-align: start;
+  }
+
+  .board-task-list .board-card:active {
+    cursor: pointer;
+  }
+
+  .board-empty-state {
+    flex: 1 1 100%;
   }
 }
 
@@ -318,28 +342,6 @@ body.board-dragging * {
     gap: 32px;
   }
 
-  .board-task-list {
-    display: flex;
-    justify-content: flex-start;
-    min-width: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-  }
-
-  .board-task-list::-webkit-scrollbar {
-    display: none;
-  }
-
-  .board-task-list .board-card {
-    flex: 0 0 clamp(240px, 78%, 320px);
-    scroll-snap-align: start;
-  }
-
-  .board-empty-state {
-    flex: 1 1 100%;
-  }
 }
 
 .board-task-list--droppable {

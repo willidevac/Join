@@ -14,6 +14,7 @@ let boardDragActive = false;
  * @param {HTMLElement} card - The card under the pointer.
  */
 function handleBoardCardPointerDown(event, card) {
+  if (window.matchMedia("(max-width: 1279px)").matches) return;
   if (event.pointerType !== "mouse" || event.button !== 0) return;
   if (event.target.closest("button")) return;
   boardDragCard = card;
