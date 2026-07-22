@@ -19,7 +19,22 @@ function initLoginValidation() {
   loginForm.addEventListener("input", handleLoginInput);
   loginForm.addEventListener("blur", handleLoginFieldBlur, true);
   guestLoginButton.addEventListener("click", handleGuestLogin);
+  showLogoutFailureMessage();
   showSignupSuccessMessage();
+}
+
+
+/** Shows a safe message when only the local logout could be completed. */
+function showLogoutFailureMessage() {
+  if (!hasLogoutFailureParameter()) return;
+  removeLoginFeedbackParameter("logout");
+  showLoginError("Sign out could not be completed. Please check your connection.");
+}
+
+
+/** @returns {boolean} True after a failed remote logout redirected to login. */
+function hasLogoutFailureParameter() {
+  return new URLSearchParams(window.location.search).get("logout") === "failed";
 }
 
 
@@ -60,8 +75,14 @@ function hasSignupSuccessParameter() {
 
 /** Removes the consumed success marker without reloading the login page. */
 function removeSignupSuccessParameter() {
+  removeLoginFeedbackParameter("signup");
+}
+
+
+/** Removes one consumed login feedback marker without reloading the page. */
+function removeLoginFeedbackParameter(parameter) {
   const url = new URL(window.location.href);
-  url.searchParams.delete("signup");
+  url.searchParams.delete(parameter);
   window.history.replaceState({}, "", url.pathname + url.search + url.hash);
 }
 

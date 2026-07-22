@@ -1,5 +1,6 @@
 const tasksCacheKey = "joinTasksCache";
 let tasksLoadPromise = null;
+let tasksCacheAvailable = true;
 
 
 /**
@@ -33,10 +34,12 @@ async function fetchAndCacheTasks() {
  * @returns {Object[]|null} Cached tasks, or null without a usable cache.
  */
 function getCachedTasksSnapshot() {
+  if (!tasksCacheAvailable) return null;
   try {
     const cached = sessionStorage.getItem(tasksCacheKey);
     return cached ? JSON.parse(cached) : null;
-  } catch (error) {
+  } catch {
+    tasksCacheAvailable = false;
     return null;
   }
 }
@@ -47,10 +50,13 @@ function getCachedTasksSnapshot() {
  * @param {Object[]} tasks - Tasks to cache for instant rendering next time.
  */
 function cacheTasksSnapshot(tasks) {
+  if (!tasksCacheAvailable) return false;
   try {
     sessionStorage.setItem(tasksCacheKey, JSON.stringify(tasks));
-  } catch (error) {
-    // Caching is a nice-to-have; ignore quota or availability errors.
+    return true;
+  } catch {
+    tasksCacheAvailable = false;
+    return false;
   }
 }
 
@@ -59,10 +65,13 @@ function cacheTasksSnapshot(tasks) {
  * Clears the cached task snapshot after it no longer reflects the store.
  */
 function clearTasksCache() {
+  if (!tasksCacheAvailable) return false;
   try {
     sessionStorage.removeItem(tasksCacheKey);
-  } catch (error) {
-    // Ignore storage errors; the next load will simply refetch.
+    return true;
+  } catch {
+    tasksCacheAvailable = false;
+    return false;
   }
 }
 
@@ -108,7 +117,7 @@ async function updateTaskAssigneesInStore(task) {
 async function loadTaskMigrationContacts() {
   try {
     return await loadContactsFromStore();
-  } catch (error) {
+  } catch {
     return [];
   }
 }

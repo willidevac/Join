@@ -72,13 +72,24 @@ async function loginGuestUser() {
  * Signs out from Firebase, clears the local user and returns to login.
  */
 async function handleLogout() {
+  const logoutSucceeded = await logoutFirebaseUserSafely();
+  clearStoredUser();
+  const params = logoutSucceeded ? {} : { logout: "failed" };
+  navigateToPage("login", params);
+}
+
+
+/**
+ * Attempts the remote sign-out without blocking the local logout fallback.
+ * @returns {Promise<boolean>} True when no remote session remains to clear.
+ */
+async function logoutFirebaseUserSafely() {
+  if (!isFirebaseAuthReady()) return true;
   try {
-    if (isFirebaseAuthReady()) await window.joinFirebaseAuth.logoutFirebaseUser();
+    await window.joinFirebaseAuth.logoutFirebaseUser();
+    return true;
   } catch {
-    // A remote sign-out failure must not block clearing the local session.
-  } finally {
-    clearStoredUser();
-    navigateToPage("login");
+    return false;
   }
 }
 
