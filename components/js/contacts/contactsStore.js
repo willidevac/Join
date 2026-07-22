@@ -257,17 +257,39 @@ async function createContactInStore(contact) {
 
 
 /**
- * Updates one contact in Firestore or localStorage.
+ * Updates one contact and its affected task references together.
  */
-async function updateContactInStore(contactId, contact) {
+async function updateContactInStore(contactId, contact, updatedTasks = []) {
   if (isContactFirestoreReady()) {
-    await window.joinFirebaseContacts.updateContact(contactId, contact);
-    return;
+    await window.joinFirebaseContacts.updateContact(contactId, contact, updatedTasks);
+  } else {
+    updateLocalContactWithTasks(contactId, contact, updatedTasks);
   }
-  const contacts = getLocalContacts().map((item) =>
-    item.id === contactId ? { ...item, ...contact } : item,
-  );
-  saveLocalContacts(contacts);
+  if (updatedTasks.length) clearTasksCache();
+}
+
+
+/** Updates a local contact and task references with rollback on failure. */
+function updateLocalContactWithTasks(contactId, contact, updatedTasks) {
+  const contacts = getLocalContacts();
+  const tasks = getStoredTasks();
+  try {
+    saveLocalContacts(contacts.map((item) =>
+      item.id === contactId ? { ...item, ...contact } : item,
+    ));
+    saveUpdatedLocalContactTasks(tasks, updatedTasks);
+  } catch (error) {
+    saveLocalContacts(contacts);
+    saveStoredTasks(tasks);
+    throw error;
+  }
+}
+
+
+/** Replaces only tasks affected by the contact edit. */
+function saveUpdatedLocalContactTasks(tasks, updatedTasks) {
+  const updates = new Map(updatedTasks.map((task) => [task.id, task]));
+  saveStoredTasks(tasks.map((task) => updates.get(task.id) || task));
 }
 
 

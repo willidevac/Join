@@ -215,11 +215,34 @@ function getEditedContact(contact) {
 async function saveEditedContact() {
   const contact = getActiveContact();
   if (!contact) return;
-  await updateContactInStore(activeContactId, getEditedContact(contact));
+  const updatedContact = getEditedContact(contact);
+  const updatedTasks = await getTasksWithUpdatedContact(contact, updatedContact);
+  await updateContactInStore(activeContactId, updatedContact, updatedTasks);
+  await syncStoredAccountContactName(contact, updatedContact);
   await initContacts();
   openContactDetail(activeContactId);
   closeContactEditDialog();
   showTimedFeedback("contactToast", "Contact successfully edited");
+}
+
+
+/** Keeps the signed-in account display name aligned with its own contact. */
+async function syncStoredAccountContactName(contact, updatedContact) {
+  if (!isOwnAccountContact(contact)) return;
+  const user = getStoredUser();
+  if (!user) return;
+  await updateFirebaseAccountNameSafely(updatedContact.name);
+  saveStoredUser({ ...user, name: updatedContact.name });
+}
+
+
+/** Updates Firebase Auth when available without undoing the saved contact. */
+async function updateFirebaseAccountNameSafely(name) {
+  try {
+    await window.joinFirebaseAuth?.updateUserDisplayName?.(name);
+  } catch (error) {
+    // The contact remains authoritative for app data if Auth is unavailable.
+  }
 }
 
 

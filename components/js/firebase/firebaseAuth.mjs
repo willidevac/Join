@@ -55,6 +55,13 @@ async function logoutFirebaseUser() {
 }
 
 
+/** Updates the current regular user's display name. */
+async function updateUserDisplayName(name) {
+  if (!auth.currentUser || auth.currentUser.isAnonymous) return;
+  await updateProfile(auth.currentUser, { displayName: name });
+}
+
+
 /**
  * Waits for Firebase to tell us whether a user is logged in or logged out.
  */
@@ -106,5 +113,6 @@ window.joinFirebaseAuth = {
   loginGuestFirebaseUser,
   logoutFirebaseUser,
   registerFirebaseUser,
+  updateUserDisplayName,
   waitForAuthReady: () => authReady,
 };

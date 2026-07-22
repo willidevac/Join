@@ -185,6 +185,50 @@ function removeAssigneeFromTask(task, contact) {
 
 
 /**
+ * Returns tasks whose references must follow an edited contact name.
+ */
+async function getTasksWithUpdatedContact(contact, updatedContact) {
+  if (contact.name === updatedContact.name) return [];
+  const tasks = await loadTasksFromStore();
+  const canResolveLegacyName = hasUniqueContactName(contact);
+  return tasks
+    .map((task) => updateTaskContactReference(
+      task, contact, updatedContact, canResolveLegacyName,
+    ))
+    .filter(Boolean);
+}
+
+
+/** Checks whether a legacy name can identify exactly one contact. */
+function hasUniqueContactName(contact) {
+  return activeContacts.filter((item) => item.name === contact.name).length === 1;
+}
+
+
+/** Returns an updated task only when one of its assignees changed. */
+function updateTaskContactReference(task, contact, updatedContact, canResolveLegacyName) {
+  const references = getTaskAssigneeReferences(task.assignedTo);
+  const assignedTo = references.map((reference) =>
+    updateContactReference(reference, contact, updatedContact, canResolveLegacyName),
+  );
+  return JSON.stringify(references) === JSON.stringify(assignedTo)
+    ? null
+    : { ...task, assignedTo };
+}
+
+
+/** Updates an id match, or an unambiguous legacy name without an id. */
+function updateContactReference(reference, contact, updatedContact, canResolveLegacyName) {
+  const matchesId = reference.id && reference.id === String(contact.id);
+  const matchesLegacyName = !reference.id &&
+    canResolveLegacyName && reference.name === contact.name;
+  return matchesId || matchesLegacyName
+    ? createTaskAssigneeReference(updatedContact)
+    : reference;
+}
+
+
+/**
  * Wires the static contact controls once per page load.
  */
 function initContactActions() {
