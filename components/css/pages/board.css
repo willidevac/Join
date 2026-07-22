@@ -85,6 +85,7 @@
   position: relative;
   display: grid;
   gap: 14px;
+  min-width: 0;
   min-height: 218px;
   padding: 16px;
   cursor: grab;
@@ -134,19 +135,21 @@ body.board-dragging * {
   background: var(--color-category-technical);
 }
 
-.board-card h3,
-.board-card p {
+.board-card__title,
+.board-card__description {
   margin: 0;
+  min-width: 0;
   overflow-wrap: anywhere;
+  word-break: normal;
 }
 
-.board-card h3 {
+.board-card__title {
   color: var(--color-text-main);
   font-size: 16px;
   line-height: 1.15;
 }
 
-.board-card p,
+.board-card__description,
 .board-card__subtasks {
   color: var(--color-muted);
   font-size: 16px;
