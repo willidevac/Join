@@ -74,8 +74,20 @@ function getContactById(contactId) {
  * Updates every visible part of the current assignee selection.
  */
 function updateAssigneeSelection() {
+  syncAssigneeOptionChecks();
   updateAssigneeButtonText();
   renderSelectedAssigneeChips();
+}
+
+
+/**
+ * Keeps rendered checkboxes aligned with the in-memory assignee selection.
+ */
+function syncAssigneeOptionChecks() {
+  const selectedIds = new Set(selectedTaskAssignees.map((contact) => contact.id));
+  getElement("taskAssigneesPanel").querySelectorAll("input").forEach((input) => {
+    input.checked = selectedIds.has(input.value);
+  });
 }
 
 
@@ -143,9 +155,6 @@ function setAssigneeDropdownOpen(isOpen) {
  */
 function resetAddTaskAssignees() {
   selectedTaskAssignees = [];
-  getElement("taskAssigneesPanel").querySelectorAll("input").forEach((input) => {
-    input.checked = false;
-  });
   setAssigneeDropdownOpen(false);
   updateAssigneeSelection();
 }

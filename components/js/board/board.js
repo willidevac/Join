@@ -339,7 +339,7 @@ function renderBoardDetailAssignees(assignedTo) {
 function resolveAssigneeDisplay(reference, contacts) {
   const contact = contacts.find((item) => isTaskAssigneeContact(reference, item));
   return {
-    name: reference.name,
+    name: contact?.name || reference.name,
     color: (contact && contact.color) || "var(--color-primary-auth)",
   };
 }

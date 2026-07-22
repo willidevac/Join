@@ -3,7 +3,8 @@
 
 const emailAddressPattern = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
 const phoneNumberPattern = /^\+?[\d\s()-]+$/;
-const nameNumberPattern = /\p{N}/u;
+const personNamePattern = /^\p{L}[\p{L}\p{M}]*(?:[- '\u2019]\p{L}[\p{L}\p{M}]*)*$/u;
+const minimumPersonNameLength = 2;
 const minimumPhoneDigits = 6;
 
 
@@ -39,14 +40,23 @@ function normalizeText(value) {
 
 
 /**
- * Checks a person's name without restricting international letters or punctuation.
+ * Checks a person's name with international letters and common separators.
  * @param {string} name - Display name to validate.
- * @param {number} minimumLength - Required length after trimming.
- * @returns {boolean} True when the name is long enough and contains no numbers.
+ * @returns {boolean} True when the complete name format is valid.
  */
-function isPersonNameValid(name, minimumLength = 1) {
+function isPersonNameValid(name) {
   const normalizedName = normalizeText(name);
-  return normalizedName.length >= minimumLength && !nameNumberPattern.test(normalizedName);
+  return normalizedName.length >= minimumPersonNameLength &&
+    personNamePattern.test(normalizedName);
+}
+
+
+/** @returns {string} Shared validation feedback for a person's name. */
+function getPersonNameError(name) {
+  const normalizedName = normalizeText(name);
+  if (!normalizedName) return "Please enter a name.";
+  if (normalizedName.length < minimumPersonNameLength) return "Enter at least 2 characters.";
+  return isPersonNameValid(normalizedName) ? "" : "Use letters, spaces, hyphens, or apostrophes only.";
 }
 
 

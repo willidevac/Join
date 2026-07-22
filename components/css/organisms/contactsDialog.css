@@ -223,6 +223,7 @@
     width: min(calc(100vw - 32px), 396px);
     min-height: 0;
     height: min(760px, calc(100svh - 32px));
+    overflow-y: auto;
   }
   .contacts-dialog-side {
     flex: 0 0 352px;
@@ -258,11 +259,43 @@
   }
 }
 
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .contacts-dialog {
+    width: calc(100vw - 32px);
+  }
+
+  .contacts-dialog-side {
+    flex-basis: 36%;
+    padding: 32px;
+  }
+
+  .contacts-dialog-side h2 {
+    font-size: 47px;
+  }
+
+  .contacts-dialog-subtitle {
+    font-size: 20px;
+  }
+
+  .contacts-dialog-body {
+    gap: 24px;
+    padding: 56px 32px;
+  }
+
+  .contacts-dialog-avatar {
+    --avatar-size: 88px;
+    margin-bottom: 48px;
+  }
+
+  .contacts-dialog-actions {
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 479px) {
   .contacts-dialog {
     width: calc(100vw - 32px);
     max-height: calc(100vh - 32px);
-    overflow-y: auto;
   }
   .contacts-dialog-actions {
     justify-content: center;

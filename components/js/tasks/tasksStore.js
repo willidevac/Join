@@ -135,7 +135,10 @@ function migrateTaskAssignees(task, contacts) {
  * @returns {Object} Reference with a stable id whenever it can be resolved.
  */
 function resolveTaskAssigneeContact(assignee, contacts) {
-  if (assignee.id) return assignee;
+  if (assignee.id) {
+    const contact = contacts.find((item) => String(item.id) === assignee.id);
+    return contact ? createTaskAssigneeReference(contact) : assignee;
+  }
   const matches = contacts.filter((contact) => contact.name === assignee.name);
   return matches.length === 1
     ? createTaskAssigneeReference(matches[0])

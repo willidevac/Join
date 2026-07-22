@@ -20,13 +20,20 @@ test("accepts a contact email that passes signup validation", () => {
 });
 
 
-test("rejects numbers in contact names and accepts common name punctuation", () => {
-  assert.equal(
-    context.getContactFieldError("Name", "Ada2 Lovelace"),
-    "Names cannot contain numbers.",
-  );
-  assert.equal(context.getContactFieldError("Name", "Jörg Müller-Schmidt"), "");
-  assert.equal(context.getContactFieldError("Name", "Anne O'Connor"), "");
+test("rejects meaningless contact names", () => {
+  const invalidNames = ["...", "---", "1234", "Ada2 Lovelace", "Anna@Schmidt"];
+  invalidNames.forEach((name) => assert.equal(
+    context.getContactFieldError("Name", name),
+    "Use letters, spaces, hyphens, or apostrophes only.",
+  ));
+});
+
+
+test("accepts international names with common separators", () => {
+  const validNames = ["Anna Schmidt", "Diego García López", "Anne-Marie O'Neill"];
+  validNames.forEach((name) => {
+    assert.equal(context.getContactFieldError("Name", name), "");
+  });
 });
 
 

@@ -6,7 +6,6 @@ import {
   getDocs,
   runTransaction,
   serverTimestamp,
-  updateDoc,
   writeBatch,
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
@@ -95,14 +94,17 @@ function getNewContactData(contact) {
 
 
 /**
- * Updates one contact in Firestore without saving the local id field.
+ * Updates one contact and affected task references in a single batch.
  */
-async function updateContact(contactId, contact) {
+async function updateContact(contactId, contact, updatedTasks = []) {
   const { id, ...contactData } = contact;
-  await updateDoc(doc(db, "contacts", contactId), {
+  const batch = writeBatch(db);
+  batch.update(doc(db, "contacts", contactId), {
     ...contactData,
     updatedAt: serverTimestamp(),
   });
+  updatedTasks.forEach((task) => queueTaskAssignmentUpdate(batch, db, task));
+  await batch.commit();
 }
 
 

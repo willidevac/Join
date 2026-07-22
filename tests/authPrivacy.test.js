@@ -149,7 +149,17 @@ test("rejects numbers in the signup name after blur", () => {
   const { context, elements } = createAuthContext();
   elements.signupName.value = "Ada2 Lovelace";
   context.handleSignupFieldBlur({ target: elements.signupName });
-  assert.equal(elements.signupNameError.textContent, "Names cannot contain numbers.");
+  assert.equal(elements.signupNameError.textContent, "Use letters, spaces, hyphens, or apostrophes only.");
+  assert.equal(elements.signupName.attributes["aria-invalid"], "true");
+  assert.equal(elements.privacyAccepted.disabled, true);
+});
+
+
+test("rejects a signup name made only of special characters", () => {
+  const { context, elements } = createAuthContext();
+  elements.signupName.value = "...";
+  context.handleSignupFieldBlur({ target: elements.signupName });
+  assert.equal(elements.signupNameError.textContent, "Use letters, spaces, hyphens, or apostrophes only.");
   assert.equal(elements.signupName.attributes["aria-invalid"], "true");
   assert.equal(elements.privacyAccepted.disabled, true);
 });
